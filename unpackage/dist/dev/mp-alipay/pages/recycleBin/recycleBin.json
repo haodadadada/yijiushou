@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "回收站",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup"
+  }
+}

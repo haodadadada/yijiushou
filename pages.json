@@ -1,0 +1,224 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/placeOrder/placeOrder",
+			"style": {
+				"navigationBarTitleText": "下单",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/recycler/recycler",
+			"style": {
+				"navigationBarTitleText": "回收员",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/user/user",
+			"style": {
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/order-detail/order-detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/statistics/statistics",
+			"style": {
+				"navigationBarTitleText": "账户统计",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/address/address",
+			"style": {
+				"navigationBarTitleText": "地址管理",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/notice/notice",
+			"style": {
+				"navigationBarTitleText": "消息通知",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/calc/calc",
+			"style": {
+				"navigationBarTitleText": "计算",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/vip/vip",
+			"style": {
+				"navigationBarTitleText": "开通会员",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/guidePrice/guidePrice",
+			"style": {
+				"navigationBarTitleText": "今日上门价",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/takeOrders/takeOrders",
+			"style": {
+				"navigationBarTitleText": "抢单大厅",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/recycleBin/recycleBin",
+			"style": {
+				"navigationBarTitleText": "回收站",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/donate/donate",
+			"style": {
+				"navigationBarTitleText": "爱心积攒",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/benefitDetail/benefitDetail",
+			"style": {
+				"navigationBarTitleText": "爱心公益",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/recruit/recruit",
+			"style": {
+				"navigationBarTitleText": "招募入驻",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/applySuccess/applySuccess",
+			"style": {
+				"navigationBarTitleText": "申请成功",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/addAddress/addAddress",
+			"style": {
+				"navigationBarTitleText": "添加地址",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/recycleOrderDetail/recycleOrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/editUser/editUser",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/regaggrement/regaggrement",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/activeList/activeList",
+			"style": {
+				"navigationBarTitleText": "活动列表",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/angel/angel",
+			"style": {
+				"navigationBarTitleText": "天使人申请",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/myInvition/myInvition",
+			"style": {
+				"navigationBarTitleText": "推广中心",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/completeInfo/completeInfo",
+			"style": {
+				"navigationBarTitleText": "完善资料",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
+	"tabBar": {
+		"color": "#606060",
+		"selectedColor": "#3BB061",
+		"borderStyle": "white",
+		"backgroundColor": "#fff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabbar-1.png",
+				"selectedIconPath": "static/tabbar-1-cur.png",
+				"text": "首页"
+			}, {
+				"pagePath": "pages/placeOrder/placeOrder",
+				"iconPath": "static/tabbar-3.png",
+				"selectedIconPath": "static/tabbar-3-cur.png",
+				"text": "一键下单"
+			}, 
+			{
+				"pagePath": "pages/user/user",
+				"iconPath": "static/tabbar-5.png",
+				"selectedIconPath": "static/tabbar-5-cur.png",
+				"text": "我的"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "回收",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#F8F8F8"
+	}
+}

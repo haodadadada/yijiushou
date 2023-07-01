@@ -1,0 +1,1 @@
+<view class="p-20"><view class="p-20 border-radius-12 bg-white"><rich-text nodes="{{content}}"></rich-text></view></view>

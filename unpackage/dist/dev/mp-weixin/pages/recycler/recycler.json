@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "回收员",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "order-status": "/components/onTakeOrder/onTakeOrder"
+  }
+}

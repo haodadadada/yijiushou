@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "回收员",
+  "pullRefresh": true,
+  "usingComponents": {
+    "order-status": "/components/onTakeOrder/onTakeOrder"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "defaultTitle": "下单",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
+    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup",
+    "order-status": "/components/onTakeOrder/onTakeOrder",
+    "h-time-alert": "/components/h-time-alert/h-time-alert"
+  }
+}

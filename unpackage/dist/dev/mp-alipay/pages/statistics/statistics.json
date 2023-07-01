@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "账户统计",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-datetime-picker": "/uni_modules/uview-ui/components/u-datetime-picker/u-datetime-picker"
+  }
+}

@@ -1,0 +1,86 @@
+view{
+	color: #222;
+}
+.status-bg{
+	&-0{
+		background: #EC7C4C;	
+	}
+	&-1{
+		background: $color-primary;	
+	}
+	&-2{
+		background: $color-primary;
+	}
+	&-3{
+		background: $color-primary;
+	}
+	&-4{
+		background: #BFBFBF;
+	} 
+	&-6{
+		background: $color-primary;	
+	}
+}
+
+.status-text {
+	&-1{
+		color: $color-primary;
+	}
+	&-2{
+		color: #EC7C4C;
+	}
+	&-3{
+		color: #BFBFBF;
+	}
+}
+.btn{
+	line-height: 108upx;
+	width: 100%;
+	background: #3BB061;
+	border-radius: 12upx;
+	font-size: 32upx;
+	font-weight: 400;
+	color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	image{
+		width: 38upx;
+		height: 38upx;
+		margin-right: 18upx;
+	}
+}
+
+.badge{
+	font-size: 24upx;
+	font-weight: 400;
+	color: #0F7B32;
+	line-height: 44upx;
+	background: #EBFFF1;
+	border-radius: 44upx;
+	padding: 0 20upx;
+}
+
+.border-b{
+	border-bottom: 1upx solid #F6F6F6;
+}
+.border{
+	border: 1upx solid $color-primary;
+}
+
+.empty {
+	text-align: center;
+	margin: 100upx auto 120upx;
+
+	image {
+		width: 196upx;
+		height: 196upx;
+		margin-bottom: 36upx;
+	}
+
+	view {
+		font-size: 28upx;
+		font-weight: 400;
+		color: #C4C4C4;
+	}
+}

@@ -1,0 +1,277 @@
+// 颜色
+page{
+	background: #F6F6F6;
+}
+.primary {
+	color: $color-primary;
+}
+.sucess {
+	color: $color-success;
+}
+.error {
+	color: $color-error;
+}
+.price{
+	color: $color-price;
+}
+.white{
+	color: #fff;
+}
+.bg-primary{
+	background: $color-primary;
+}
+.bg-white{
+	background: #fff;
+}
+// 布局
+.flex {
+	display: flex;
+	align-items: center;
+	&-between {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	&-around {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+	}
+	&-center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	&-end {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	&-col{
+		display: flex;
+		flex-direction: column;
+	}
+	&-1 {
+		flex: 1;
+	}
+	&-wrap{
+		flex-wrap: wrap;
+	}
+}
+.self-end{
+	align-self: flex-end;
+}
+
+// padding margin
+@for $value from 0 through 100 {
+	.pt-#{$value},.p-#{$value},.py-#{$value} {
+		padding-top: $value * 1upx;
+	}
+	.pb-#{$value},.p-#{$value},.py-#{$value} {
+		padding-bottom: $value * 1upx;
+	}
+	.pl-#{$value},.p-#{$value},.px-#{$value}  {
+		padding-left: $value * 1upx;
+	}
+	.pr-#{$value},.p-#{$value},.px-#{$value}  {
+		padding-right: $value * 1upx;
+	}
+	
+	.m-#{$value}{
+		margin: $value * 1upx;
+	}
+	.mx-#{$value}{
+		margin: 0 $value * 1upx;
+	}
+	.my-#{$value}{
+		margin: $value * 1upx 0;
+	}
+	.mt-#{$value} {
+		margin-top: $value * 1upx;
+	}
+	.mb-#{$value} {
+		margin-bottom: $value * 1upx;
+	}
+	.ml-#{$value} {
+		margin-left: $value * 1upx;
+	}
+	.mr-#{$value} {
+		margin-right: $value * 1upx;
+	}
+}
+
+// size
+@for $value from 20 through 50 {
+	.size-#{$value} {
+		font-size: $value * 1upx;
+	}
+}
+@for $value from 1 through 40 {
+	.border-radius-#{$value}{
+		border-radius: $value * 1upx;
+	}
+}
+// 字体
+.text {
+	&-center {
+		text-align: center;
+	}
+	&-right {
+		text-align: right;
+	}
+	&-bold {
+		font-weight: bold !important;
+	}
+	&-med {
+		font-weight: 500 !important;
+	}
+}
+
+.gray {
+	&-0 {
+		color: #000;
+	}
+	&-1 {
+		color: #111;
+	}
+	&-2 {
+		color: #222;
+	}
+	&-3 {
+		color: #333;
+	}
+	&-5 {
+		color: #555;
+	}
+	&-6 {
+		color: #666;
+	}
+	&-7 {
+		color: #777;
+	}
+	&-8 {
+		color: #888;
+	}
+	&-9 {
+		color: #999;
+	}
+	&-c {
+		color: #ccc;
+	}
+	&-d {
+		color: #D0CECE;
+	}
+}
+// 按钮
+.n-btn-primary{
+	flex: 1;
+	text-align: center;
+	background: #014099;
+	border-radius: 90upx;
+	line-height: 90upx;
+	font-size: 28upx;
+	font-weight: 400;
+	color: #FFFFFF;
+	background: $uni-color-primary;
+	border: 1upx solid #fff;
+}
+.n-btn-plain{
+	flex: 1;
+	text-align: center;
+	background: #fff;
+	border-radius: 90upx;
+	line-height: 90upx;
+	font-size: 28upx;
+	font-weight: 400;
+	color: $uni-color-primary;
+	background: #fff;
+	border: 1upx solid $uni-color-primary;
+}
+// 数据没有更多了
+.no-more {
+	text-align: center;
+	color: #999;
+	font-size: 24upx;
+	width: 100%;
+	padding: 20upx 0;
+}
+// 控制隐藏行数
+.line-clamp {
+	text-overflow: -o-ellipsis-lastline;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	&-2 {
+		text-overflow: -o-ellipsis-lastline;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+	&-3 {
+		text-overflow: -o-ellipsis-lastline;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+	}
+}
+// uview 按钮
+.u-size-default{
+	height: 92upx !important;
+	line-height: 92upx !important;
+}
+
+.solt-right {
+	flex: 1;
+	align-self: flex-end;
+}
+/deep/.u-dropdown__menu__item {
+	justify-content: flex-end !important;
+	.u-flex {
+		margin-right: 20upx;
+		background: #f5f5f5;
+		border-radius: 50upx;
+		padding: 10upx;
+		.u-dropdown__menu__item__text {
+			font-size: 20upx !important;
+			color: #111 !important;
+		}
+	}
+}
+
+.filter-list {
+	background: #fff;
+	padding: 20upx;
+	.item {
+		margin-bottom: 10upx;
+	}
+	.title {
+		font-size: 28upx;
+		font-weight: bold;
+		color: #201e1e;
+		line-height: 34upx;
+		border-left: 4upx solid $color-primary;
+		padding-left: 10upx;
+		margin-bottom: 10upx;
+	}
+	.badge {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		view {
+			line-height: 48upx;
+			background: #f5f5f5;
+			border-radius: 24upx;
+			padding: 0 16upx;
+			font-size: 24upx;
+			font-weight: 500;
+			color: #262424;
+			margin: 0 10upx 16upx 0;
+		}
+	}
+}

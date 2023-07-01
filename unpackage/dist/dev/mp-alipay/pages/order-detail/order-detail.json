@@ -1,0 +1,9 @@
+{
+  "defaultTitle": "订单详情",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup",
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon"
+  }
+}

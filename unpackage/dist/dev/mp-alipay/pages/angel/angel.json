@@ -1,0 +1,8 @@
+{
+  "defaultTitle": "天使人申请",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
+    "u-textarea": "/uni_modules/uview-ui/components/u-textarea/u-textarea"
+  }
+}

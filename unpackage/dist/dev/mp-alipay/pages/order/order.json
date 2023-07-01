@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "订单",
+  "pullRefresh": true,
+  "usingComponents": {
+    "order-status": "/components/onTakeOrder/onTakeOrder"
+  }
+}

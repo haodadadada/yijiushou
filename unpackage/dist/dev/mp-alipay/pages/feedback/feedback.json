@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "意见反馈",
+  "pullRefresh": false,
+  "usingComponents": {
+    "u-textarea": "/uni_modules/uview-ui/components/u-textarea/u-textarea"
+  }
+}
