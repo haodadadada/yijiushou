@@ -1,9 +1,0 @@
-{
-  "defaultTitle": "完善资料",
-  "pullRefresh": false,
-  "usingComponents": {
-    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
-    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
-    "u-datetime-picker": "/uni_modules/uview-ui/components/u-datetime-picker/u-datetime-picker"
-  }
-}

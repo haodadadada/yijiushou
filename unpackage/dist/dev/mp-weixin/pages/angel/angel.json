@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "天使人申请",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
-    "u-textarea": "/uni_modules/uview-ui/components/u-textarea/u-textarea"
-  }
-}

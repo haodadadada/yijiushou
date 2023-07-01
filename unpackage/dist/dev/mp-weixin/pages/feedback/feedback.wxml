@@ -1,1 +1,0 @@
-<view class="p-24"><u-textarea bind:input="__e" vue-id="2d23d9a0-1" height="280" border="none" placeholder="请描述您的问题" value="{{content}}" data-event-opts="{{[['^input',[['__set_model',['','content','$event',[]]]]]]}}" bind:__l="__l"></u-textarea><view data-event-opts="{{[['tap',[['submit',['$event']]]]]}}" class="btn mt-24" bindtap="__e">提交</view></view>

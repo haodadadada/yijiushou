@@ -1,7 +1,0 @@
-{
-  "defaultTitle": "订单详情",
-  "pullRefresh": false,
-  "usingComponents": {
-    "calc": "/components/calc/calc"
-  }
-}

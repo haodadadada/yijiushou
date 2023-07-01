@@ -1,7 +1,0 @@
-{
-  "defaultTitle": "今日上门价",
-  "pullRefresh": false,
-  "usingComponents": {
-    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup"
-  }
-}

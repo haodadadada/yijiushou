@@ -1,1 +1,0 @@
-<view class="container data-v-95dc93b4"><image src="../../static/success-apply.png" mode="widthFix" class="data-v-95dc93b4"></image><view class="mt-36 data-v-95dc93b4">申请成功</view><navigator class="btn mt-80 data-v-95dc93b4" hover-class="none" open-type="switchTab" url="../index/index">返回</navigator></view>
