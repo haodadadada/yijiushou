@@ -92,9 +92,6 @@ export default {
 	onShareTimeline() {},
 	onLoad(e) {
 		this.openid = uni.getStorageSync('openid');
-		console.log(this.openid);
-		this.getBanner();
-		console.log(e);
 		if (e.scene) {
 			this.user_id = e.scene;
 			uni.setStorageSync('invition_id', this.user_id);
