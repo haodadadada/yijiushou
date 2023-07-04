@@ -1,5 +1,6 @@
 <template>
 	<view class="content pb-30">
+		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;"></map>
 		<view class="input">
 			<text>联系人</text>
 			<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
@@ -17,16 +18,8 @@
 		</view>
 		<view class="input" @click="toggleCommunitySelection">
 		  <text>社区信息</text>
-		  <input v-model="areaName" placeholder="请输入社区" @input="searchCommunity" />
-		  <view class="icon" @click="isCommunitySelectionOpen = !isCommunitySelectionOpen"></view>
+		  <input v-model="areaName" />
 		</view>
-		<view class="community-options" v-if="isCommunitySelectionOpen">
-		  <view v-for="option in communityOptions" :key="option.id" class="option-item" @click="selectCommunity(option)">
-		    {{ option.community }}
-		  </view>
-		</view>
-
-
 
 		<view class="input">
 			<text>详细地址</text>
@@ -41,6 +34,8 @@
 	export default {
 		data() {
 			return {
+				longitude: 0, // 经度
+				latitude: 0, // 纬度
 
 				region: '',
 				txt: '选择社区',
@@ -82,8 +77,39 @@
 				this.getCommunity()
 			}
 			this.getCommunity()
+			this.getLocation()
+			this.initMap()
 		},
 		methods: {
+			initMap(){
+				uni.getLocation({
+				    type: 'gcj02',
+				    success: res => {
+				        this.longitude = res.longitude;
+				        this.latitude = res.latitude;
+				    },
+				    fail: res => {
+				          console.error(res);
+				        }
+				      });
+			},
+			getLocation(){
+				// 调用定位方法
+				this.qqMap.reverseGeocoder({
+				  success: (res) => {
+				    // 获取定位成功的结果
+				    const community = res.result.formatted_addresses.recommend;
+					this.areaName = community;
+				    // 其他逻辑处理
+				    // ...
+				  },
+				  fail: (error) => {
+				    // 定位失败的处理
+				    console.log('定位失败', error)
+				  }
+				})
+
+			},
 			toggleCommunitySelection(){
 				this.isCommunitySelectionOpen = !this.isCommunitySelectionOpen;
 			},
