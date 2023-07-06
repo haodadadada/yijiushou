@@ -8,10 +8,10 @@
 			<view class="item" v-for="item in list" :key="item.id" @click="editAddress(item.id)">
 				<view class="flex-between">
 					<view class="size-30">{{item.userName}}<text class="ml-30 gray-2">{{item.userPhone}}</text></view>
-					<image class="icon" src="../../static/edit@2x.png" mode=""></image>
+					<image class="icon" src="../../static/edit@2x.png" mode="aspectFill"></image>
 				</view>
 				<view class="address mt-30 pb-38 border-b">
-					<image class="icon mr-8" src="../../static/map-pin@2x.png" mode=""></image>
+					<image class="icon mr-8" src="../../static/map-pin@2x.png" mode="aspectFill"></image>
 					<view class="size-30 gray-9">{{item.areaName}}{{item.address}}</view>
 				</view>
 				<view class="flex-between mt-32">
@@ -20,7 +20,7 @@
 			</view>
 		</view>
 		<view class="btn" @click="addAddress">
-			<image src="../../static/address_btn_add_new@2x.png" mode=""></image>
+			<image src="../../static/address_btn_add_new@2x.png" mode="aspectFill"></image>
 			添加地址
 		</view>
 	</view>

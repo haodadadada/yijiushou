@@ -14,7 +14,7 @@
 					</view>
 				</view>
 			</view>
-			<swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
+			<!-- <swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
 				<swiper-item v-for="item in noticeList" :key="item.id">
 					<view class="swiper-item">
 						<view class="title">接单大厅</view>
@@ -23,12 +23,13 @@
 						<view class="size-18">预约上门回收成功</view>
 					</view>
 				</swiper-item>
-			</swiper>
+			</swiper> -->
 
 			<view class="menu">
 				<view class="item" v-for="item in menuList" :key="item.id" @click="routerPush(item.url,item.id)">
 					<image :src="item.icon" mode="aspectFill"></image>
 					<view class="title">{{ item.title }}</view>
+					<view class="title">{{ item.prize }} 元/公斤</view>
 				</view>
 			</view>
 
@@ -54,7 +55,7 @@
 				</view>
 			</view> -->
 
-			<view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view>
+			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 		</view>
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
@@ -78,27 +79,27 @@ export default {
 				{
 					id: 1,
 					title: '衣物',
-					desc: '可查看详细回收价格',
-					icon: require('../../static/clothes.png'),
+					prize: '1.1',
+					icon: '../../static/clothes.png',
 				},
 				{
 					id: 2,
 					title: '鞋子',
-					desc: '快速接单 高效执行',
-					icon: require('../../static/shoe.png'),
+					prize: '60',
+					icon: '../../static/shoe.png',
 				},
 				{
 					id: 3,
 					title: '被子',
-					desc: '附近废品到站价',
-					icon: require('../../static/beizi.png'),
+					prize: '1.2',
+					icon: '../../static/beizi.png',
 				},
 				{
 					id: 4,
 					title: '窗帘',
-					desc: '献爱心 得好物',
+					prize: '1.6',
 					icon: '../../static/curtain.png',
-				}
+				},
 			],
 			noticeList: [],
 			userInfo: ''

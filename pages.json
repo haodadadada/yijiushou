@@ -190,7 +190,25 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/balance/balance",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/withdraw/withdraw",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"color": "#606060",
 		"selectedColor": "#3BB061",

@@ -2,12 +2,12 @@
 	<view>
 		<view class="p-32 bg-white">
 			<view class="flex address mt-20" @click="addressPopupShow = true">
-				<image class="icon" src="../../static/location-1.png" mode=""></image>
+				<image class="icon" src="../../static/location-1.png" mode="aspectFill"></image>
 				<view>请选择地址</view>
 			</view>
 			<view class="user pb-20 border-b">
 				<view class="icon" @click="addressPopupShow = true">
-					<image src="../../static/cae_list_btn_more@2x.png" mode=""></image>
+					<image src="../../static/cae_list_btn_more@2x.png" mode="aspectFill"></image>
 					<view>地址簿</view>
 				</view>
 				<view>{{ userName }}</view>
@@ -45,7 +45,7 @@
 		<!-- 选择地址 -->
 		<u-popup :show="addressPopupShow" mode="bottom" @close="addressPopupShow = false">
 			<view class="empty" v-if="list.length == 0">
-				<image src="../../static/empty.png" mode=""></image>
+				<image src="../../static/empty.png" mode="aspectFill"></image>
 				<view>添加地址，预约你的回收天使～</view>
 			</view>
 			<view class="card">
@@ -58,13 +58,13 @@
 						<!-- <image class="icon" src="../../static/edit@2x.png" mode=""></image> -->
 					</view>
 					<view class="address mt-30 pb-38 border-b">
-						<image class="icon mr-8" src="../../static/map-pin@2x.png" mode=""></image>
+						<image class="icon mr-8" src="../../static/map-pin@2x.png" mode="aspectFill"></image>
 						<view class="size-30 gray-9">{{ item.areaName }}{{ item.address }}</view>
 					</view>
 				</view>
 			</view>
 			<view class="btn-3 btn" @click="addAddress">
-				<image src="../../static/address_btn_add_new@2x.png" mode=""></image>
+				<image src="../../static/address_btn_add_new@2x.png" mode="aspectFill"></image>
 				添加地址
 			</view>
 		</u-popup>
