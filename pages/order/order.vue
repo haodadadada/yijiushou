@@ -33,7 +33,7 @@
 				</view>
 			</view>
 			<view class="empty" v-if="list.length==0">
-				<image src="../../static/empty.png" mode=""></image>
+				<image src="../../static/empty.png" mode="aspectFill"></image>
 				<view>暂无相关订单～～</view>
 			</view>
 		</view>
@@ -64,10 +64,6 @@
 						id: 2,
 						name: '已完成'
 					},
-					{
-						id: 3,
-						name: '已取消'
-					}
 				],
 				orderStatus: 0,
 				list: [],

@@ -82,6 +82,12 @@ export default {
 					icon: require('../../static/tools-3.png'),
 					title: '意见反馈',
 					show: true
+				},
+				{
+					url: '../balance/balance',
+					icon: require('../../static/yue.png'),
+					title: '余额管理',
+					show: true
 				}
 			],
 			bannerList: [],
@@ -168,7 +174,7 @@ export default {
 						}
 					});
 			    }  else {
-					uni.login({
+					/* uni.login({
 					  provider: 'alipay',
 					  success: loginRes => {
 					    var authCode = loginRes.code;
@@ -190,8 +196,8 @@ export default {
 					  fail: function (error) {
 					    console.log('获取支付宝用户的 code 失败:', error);
 					  }
-					});
-
+					}); */
+					uni.setStorageSync('openid', 'oOw3S5P0_8c9kTQz58gwiqj1YqvE');
 			    }
 			  },
 			  fail: function (error) {
