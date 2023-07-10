@@ -1,6 +1,6 @@
 <template>
 	<view class="content pb-30">
-		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;"></map>
+		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
 		<view class="input">
 			<text>联系人</text>
 			<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
@@ -60,7 +60,15 @@
 				userPhone: '',
 				address: '',				
 				id:'',
-				source:''
+				source:'',
+				covers: [{
+					latitude: 0,
+					longitude: 0,
+					id: 1,
+					width: 0,
+					height: 0,
+					iconPath: '../../static/location.png',
+				}],
 			};
 		},
 		onLoad(e) {
@@ -77,7 +85,6 @@
 				this.getCommunity()
 			}
 			this.getCommunity()
-			this.getLocation()
 			this.initMap()
 		},
 		methods: {
@@ -87,6 +94,16 @@
 				    success: res => {
 				        this.longitude = res.longitude;
 				        this.latitude = res.latitude;
+						this.covers = [{
+							latitude: res.latitude,
+							longitude: res.longitude,
+							id: 1,
+							width: 20,
+							height: 20,
+							iconPath: '../../static/location.png',	
+						}]
+						// 等待异步回调结果返回后再调用
+						this.getLocation()
 				    },
 				    fail: res => {
 				          console.error(res);
@@ -94,8 +111,13 @@
 				      });
 			},
 			getLocation(){
+				const params = {
+				  location: this.latitude+','+this.longitude,
+				  sig: '4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
+				};
 				// 调用定位方法
 				this.qqMap.reverseGeocoder({
+					...params,
 				  success: (res) => {
 				    // 获取定位成功的结果
 				    const community = res.result.formatted_addresses.recommend;
@@ -205,6 +227,20 @@
 						icon: 'none'
 					});
 				}
+			},
+			clickMap(p) {
+				// console.log(p.detail)
+				this.longitude = p.detail.longitude
+				this.latitude =  p.detail.latitude
+				this.getLocation()
+				this.covers = [{
+					latitude: p.detail.latitude,
+					longitude: p.detail.longitude,
+					id: 2,
+					width: 20,
+					height: 20,
+					iconPath: '../../static/location.png',	
+				}]
 			}
 		}
 	};
