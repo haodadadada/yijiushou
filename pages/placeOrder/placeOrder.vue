@@ -453,12 +453,12 @@ export default {
 					if (res.code == 200) {
 						this.$tools.toast('下单成功');
 							setTimeout(() => {
-								uni.switchTab({
+								//跳转到订单页面
+								uni.navigateTo({
 									url: '../order/order',
 									success() {
 										var page = getCurrentPages().pop();
 										if (page == undefined || page == null) return;
-										page.onLoad();
 									}
 								});
 							}, 10);
