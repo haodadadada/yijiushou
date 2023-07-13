@@ -1,6 +1,10 @@
 <template>
 	<view class="content pb-30">
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
+		 <view class="search-container">
+		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" />
+		      <button class="search-button" @click="searchAddress">搜索地址</button>
+		    </view>
 		<view class="input">
 			<text>联系人</text>
 			<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
@@ -16,9 +20,9 @@
 			<text>手机号码</text>
 			<input type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
 		</view>
-		<view class="input" @click="toggleCommunitySelection">
+		<view class="input">
 		  <text>社区信息</text>
-		  <input v-model="areaName" />
+		  <input v-model="community" />
 		</view>
 
 		<view class="input">
@@ -40,10 +44,8 @@
 				region: '',
 				txt: '选择社区',
 				customItem: '',
-				areaName: '', // 存储选中的社区
+				community: '', // 存储选中的社区
 				areaId:'',
-				communityOptions: [],          // 存储社区选项列表
-				isCommunitySelectionOpen: false, // 控制社区选项列表的显示与隐藏
 				userId:'',
 				sexList:[
 					{
@@ -61,13 +63,14 @@
 				address: '',				
 				id:'',
 				source:'',
+				searchKeyword:'',
 				covers: [{
 					latitude: 0,
 					longitude: 0,
 					id: 1,
 					width: 0,
 					height: 0,
-					iconPath: '../../static/location.png',
+					iconPath: '../../static/location-1.png',
 				}],
 			};
 		},
@@ -78,14 +81,12 @@
 			}
 			if(e.id){
 				this.getAddress(e.id)
-				uni.setNavigationBarTitle({
-					title:'编辑地址'
-				})
 			}else{
-				this.getCommunity()
+				this.getAuthorize();
+				this.initMap()
 			}
-			this.getCommunity()
-			this.initMap()
+			// this.getSite();
+			
 		},
 		methods: {
 			initMap(){
@@ -100,16 +101,60 @@
 							id: 1,
 							width: 20,
 							height: 20,
-							iconPath: '../../static/location.png',	
+							iconPath: '../../static/location-1.png',	
 						}]
 						// 等待异步回调结果返回后再调用
 						this.getLocation()
+						
 				    },
 				    fail: res => {
-				          console.error(res);
 				        }
 				      });
 			},
+			getAuthorize() {
+			            uni.authorize({
+			              scope: 'scope.userLocation',
+			              success: () => {
+			                this.initMap()
+			              },
+			              fail: (err) => {
+			                err = err['errMsg']
+			                uni
+			                  .showModal({
+			                    content: '需要授权位置信息',
+			                    confirmText: '确认授权'
+			                  })
+							  .then((res) => {
+							        if (res[1]['confirm']) {
+										uni.openSetting({
+							            success: (res) => {
+							            if (res.authSetting['scope.userLocation']) {
+							                // 授权成功
+											uni.showToast({
+							                    title: '授权成功',
+							                    icon: 'none'
+							                })
+							            } else {
+							                // 未授权
+											uni.showToast({
+							                    title: '授权失败',
+							                    icon: 'none'
+							                })
+							            }
+							            this.initMap()
+							        }
+							    })
+							}
+							if (res[1]['cancel']) {
+							// 取消授权
+							console.log('取消')
+							this.initMap()
+							}
+						})
+					}
+				})
+			},
+
 			getLocation(){
 				const params = {
 				  location: this.latitude+','+this.longitude,
@@ -121,7 +166,7 @@
 				  success: (res) => {
 				    // 获取定位成功的结果
 				    const community = res.result.formatted_addresses.recommend;
-					this.areaName = community;
+					this.community = community;
 				    // 其他逻辑处理
 				    // ...
 				  },
@@ -132,23 +177,59 @@
 				})
 
 			},
-			toggleCommunitySelection(){
-				this.isCommunitySelectionOpen = !this.isCommunitySelectionOpen;
+			getSite() {
+			var ok = 0;
+			this.$api.getAllArea().then(res => {
+			    const locationList = res.data;
+				console.log("data:",locationList)
+			    for (const location of locationList) {
+			      const location1 = location.location.split(',');
+			      const lat1 = parseFloat(location1[0]);
+			      const lon1 = parseFloat(location1[1]);
+			      const lat2 = parseFloat(this.latitude);
+			      const lon2 = parseFloat(this.longitude);
+			      const R = 6371; // 地球半径（单位：公里）
+			
+			      const dLat = toRad(lat2 - lat1);
+			      const dLon = toRad(lon2 - lon1);
+				  console.log(dLat);
+				  console.log(dLon);
+			
+			      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+			        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+			        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+			
+			      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			      const distance = R * c;
+			
+			      if (distance <= 5 && distance >= -5) {
+			        console.log('距离为' + distance);
+			        this.areaId = location.id;
+					ok=1;
+			        console.log(this.areaId);
+			        console.log(location.name);
+			        break;
+			      }else{
+					  console.log("区间之内");
+					  ok = 2;
+				  }
+			    }
+				console.log("ok"+ok);
+				if (ok==0) {
+				  uni.showToast({
+				    title: '当前位置未开通服务',
+				    icon: 'none'
+				  });
+				}
+			  });
+			
+			  function toRad(value) {
+			    return value * Math.PI / 180;
+			  }
 			},
-			getCommunity(){
-				this.$api.getCommunity().then(res=>{
-					this.communityOptions = res.data
-					console.log(this.communityOptions);
-				})
-			},
-			searchCommunity(){
-				this.isCommunitySelectionOpen = true;
-			},
-			selectCommunity(option) {
-				this.areaId = option.areaId;
-			    this.areaName = option.community;  // 将选中的社区赋值给 community
-			    this.isCommunitySelectionOpen = false;  // 关闭社区选项列表
-			  },
+
+
+
 			// 获取修改地址信息
 			getAddress(id){
 				this.id = id;
@@ -159,10 +240,23 @@
 					this.userPhone = res.data.userPhone
 					this.gender = res.data.gender
 					this.areaId = res.data.areaId
-					this.areaName = res.data.areaName
+					this.community = res.data.community
 					this.address = res.data.address
 					this.userId = res.data.userId
+					var location = res.data.location
+					var location1 = location.split(',');
+					this.latitude = location1[0];
+					this.longitude = location1[1];
+					this.covers = [{
+						latitude: this.latitude,
+						longitude: this.longitude,
+						id: 1,
+						width: 20,
+						height: 20,
+						iconPath: '../../static/location-1.png',	
+					}]
 				})
+				// this.getSite();
 			},
 			change(data) {
 				this.txt = data.data.join('');
@@ -177,8 +271,9 @@
 						userPhone : this.userPhone,
 						gender : this.gender,
 						areaId : this.areaId,
-						areaName : this.areaName,
-						address : this.address 
+						community : this.community,
+						address : this.address,
+						location : this.latitude+','+this.longitude
 					}).then(res=>{
 						this.$tools.toast(res.msg)
 						if(res.code==200){
@@ -210,9 +305,10 @@
 						userPhone: this.userPhone,
 						gender: this.gender,
 						areaId:this.areaId,
-						areaName: this.areaName,
+						community: this.community,
 						address: this.address,  
-						id:this.id
+						id:this.id,
+						location: this.latitude+','+this.longitude
 					}).then(res=>{
 						this.$tools.toast(res.msg)
 						if(res.code==200){
@@ -232,21 +328,77 @@
 				// console.log(p.detail)
 				this.longitude = p.detail.longitude
 				this.latitude =  p.detail.latitude
+				this.getSite()
 				this.getLocation()
 				this.covers = [{
 					latitude: p.detail.latitude,
 					longitude: p.detail.longitude,
-					id: 2,
+					id: 1,
 					width: 20,
 					height: 20,
-					iconPath: '../../static/location.png',	
+					iconPath: '../../static/location-1.png',	
 				}]
+			},
+			 searchAddress() {
+			    this.qqMap.geocoder({
+			        address: '浙江省湖州市'+this.searchKeyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
+			              success: (res) => {//成功后的回调
+			                console.log(res);
+			                this.latitude = res.result.location.lat;
+			                this.longitude = res.result.location.lng;
+							this.community = res.result.title;
+							this.covers = [{
+								latitude: res.result.location.lat,
+								longitude: res.result.location.lng,
+								id: 0,
+								width: 20,
+								height: 20,
+								iconPath: '../../static/location-1.png',	
+							}];
+			              },
+			              fail: function(error) {
+			                uni.showToast({
+			                	title: '地址有误，请输入完整',
+			                	icon: 'none'
+			                });
+			              },
+			      })
+				  // this.getSite();
 			}
+			
 		}
 	};
 </script>
 
 <style lang="scss">
+	.search-container {
+	  display: flex;
+	  align-items: center;
+	  margin-bottom: 10px;
+	}
+	
+	.search-input {
+	  flex: 1;
+	  height: 36px;
+	  padding: 0 20px;
+	  border: 1px solid #ccc;
+	  border-radius: 4px;
+	}
+	
+	.search-button {
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  height: 36px;
+	  padding: 0 20px;
+	  background-color: #007AFF;
+	  color: #fff;
+	  border: none;
+	  border-radius: 4px;
+	  cursor: pointer;
+	}
+
 	page {
 		background-color: #fff;
 	}
