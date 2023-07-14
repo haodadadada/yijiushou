@@ -3,17 +3,18 @@
 		<view class="navbar"></view>
 		<view class="location flex">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
-			<span> 吴兴区</span>
+			<span> {{community}}</span>
 			<text class="size-30 ml-8">{{ area }}</text>
 		</view>
 		<view>
 			<view class="main-banner">
-				<view class="left pl-10">
+				<img src="../../static/new15.png" alt="" class="img-banner">
+<!-- 				<view class="left pl-10">
 					<view class="title">环保公益 你我同行</view>
 					<view class="btn-1 flex-center">
 						<navigator url="../placeOrder/placeOrder" open-type="switchTab"><image src="../../static/home-btn.png" mode="aspectFill"></image></navigator>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<!-- <swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
 				<swiper-item v-for="item in noticeList" :key="item.id">
@@ -151,7 +152,10 @@ export default {
 				},
 			],
 			noticeList: [],
-			userInfo: ''
+			userInfo: '',
+			longitude: 0,
+			latitude: 0,
+			community: ''
 		};
 	},
 	onShareAppMessage() {},
@@ -173,6 +177,7 @@ export default {
 	onLoad() {
 		this.baseUrl = this.$tools.baseUrl;
 		this.getNoticeList();
+		this.initMap();
 	},
 	methods: {
 		getNoticeList() {
@@ -217,6 +222,42 @@ export default {
 			uni.switchTab({
 				url: "../placeOrder/placeOrder"
 			})
+		},
+		getLocation(){
+			const params = {
+			  location: this.latitude+','+this.longitude,
+			  sig: '4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
+			};
+			// 调用定位方法
+			this.qqMap.reverseGeocoder({
+				...params,
+			  success: (res) => {
+			    // 获取定位成功的结果
+			    const community = res.result.address_component.district;
+				this.community = community;
+				// console.log(community)
+			    // 其他逻辑处理
+			    // ...
+			  },
+			  fail: (error) => {
+			    // 定位失败的处理
+			    console.log('定位失败', error)
+			  }
+			})
+		},
+		initMap(){
+			uni.getLocation({
+			    type: 'gcj02',
+			    success: res => {
+			        this.longitude = res.longitude;
+			        this.latitude = res.latitude;
+					// 等待异步回调结果返回后再调用
+					this.getLocation()
+					
+			    },
+			    fail: res => {
+			        }
+			      });
 		}
 	}
 };
@@ -251,14 +292,17 @@ export default {
 		}
 			
 		.main-banner {
-			background: url(https://youjin.phpcaff.cn/uploads/20220503/2d46dd07ab6430295e32156d08fbe588.png) no-repeat;
+			// background: url(https://youjin.phpcaff.cn/uploads/20220503/2d46dd07ab6430295e32156d08fbe588.png) no-repeat;
 			background-size: 100% 100%;
-			border-radius: 30upx;
-			overflow: hidden;
 			color: #fff;
 			display: flex;
 			justify-content: center;
 			height: 480upx;
+			.img-banner {
+				margin-top: 30upx;
+				width: 100%;
+				border-radius: 30upx;
+			}
 			.left {
 				padding-top: 30upx;
 				flex: 1;
@@ -353,7 +397,7 @@ export default {
 				text-align: center;
 				image {
 					width: 96upx;
-					height: 107upx;
+					height: 96upx;
 				}
 				.title {
 					margin-top: 10upx;
@@ -393,7 +437,7 @@ export default {
 					// margin-top: 30upx;
 					image {
 						width: 60upx;
-						height: 54upx;
+						height: 60upx;
 					}
 					view {
 						font-size: 20upx;
