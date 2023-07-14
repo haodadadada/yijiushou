@@ -450,11 +450,12 @@ export default {
 					estimateWeight:this.estimateWeight
 				})
 				.then(res => {
+					console.log(res.code)
 					if (res.code == 200) {
 						this.$tools.toast('下单成功');
 							setTimeout(() => {
 								//跳转到订单页面
-								uni.navigateTo({
+								uni.switchTab({
 									url: '../order/order',
 									success() {
 										var page = getCurrentPages().pop();
