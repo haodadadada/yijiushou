@@ -11,7 +11,7 @@
 		<view class="order">
 			<view class="flex-between">
 				<view class="title">我的订单</view>
-				<navigator url="../order/order" hover-class="none" class="flex">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator>
+				<navigator url="../order/order" hover-class="none" class="flex" @click="goOrder(0)">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator>
 			</view>
 			<view class="list">
 				<view class="item" v-for="item in orders" :key="item.id" @click="goOrder(item.id)">
@@ -118,7 +118,7 @@ export default {
 				this.$tools.toast('请先登录');
 				return;
 			}
-			uni.navigateTo({
+			uni.switchTab({
 				url:'../order/order?status=' + id
 			});
 		},
