@@ -216,19 +216,25 @@
 		"backgroundColor": "#fff",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/tabbar-1.png",
-				"selectedIconPath": "static/tabbar-1-cur.png",
+				"iconPath": "static/new7.png",
+				"selectedIconPath": "static/new8.png",
 				"text": "首页"
 			}, {
 				"pagePath": "pages/placeOrder/placeOrder",
-				"iconPath": "static/tabbar-3.png",
-				"selectedIconPath": "static/tabbar-3-cur.png",
-				"text": "一键下单"
+				"iconPath": "static/new9.png",
+				"selectedIconPath": "static/new10.png",
+				"text": "预约"
 			}, 
 			{
+				"pagePath": "pages/order/order",
+				"iconPath": "static/new11.png",
+				"selectedIconPath": "static/new12.png",
+				"text": "订单"
+			},
+			{
 				"pagePath": "pages/user/user",
-				"iconPath": "static/tabbar-5.png",
-				"selectedIconPath": "static/tabbar-5-cur.png",
+				"iconPath": "static/new13.png",
+				"selectedIconPath": "static/new14.png",
 				"text": "我的"
 			}
 		]
