@@ -118,7 +118,8 @@
 					userId:uni.getStorageSync('openid'),
 					orderStatus:this.orderStatus
 				}).then(res=>{
-					this.list.push(...res.data)
+					// this.list.push(...res.data)
+					this.list = [...res.data]
 				})
 			},
 			goDetail(id){
