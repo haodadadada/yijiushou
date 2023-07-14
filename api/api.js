@@ -1,4 +1,5 @@
 import http from '../common/http.js'
+import { data } from '../uni_modules/uview-ui/libs/mixin/mixin.js'
 
 // 上传图片
 const uploadImg = data => {
@@ -281,6 +282,12 @@ const getAliOpenid = (data) => {
 		data:{
 			...data
 		}
+	})
+}
+
+const getAllArea = (data) => {
+	return http.post({
+		url: '/area/getAll',
 	})
 }
 
@@ -686,5 +693,6 @@ export default {
 	feedback,
 	statistics,
 	configCard,
-	getCommunity
+	getCommunity,
+	getAllArea
 }
