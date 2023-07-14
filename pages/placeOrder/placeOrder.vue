@@ -157,12 +157,19 @@ export default {
 		}
 	},
 	onLoad() {
-		
+		if (!uni.getStorageSync('openid')) {
+			uni.switchTab({
+				url: '../user/user'
+			});
+		}
+		else{
+			this.getAuthorize();
+			this.initMap();
+		}
 
 		this.baseUrl = this.$tools.baseUrl;
 		this.userInfo = uni.getStorageSync('userInfo');
-		this.getAuthorize();
-		this.initMap();
+		
 		
 		
 	},
