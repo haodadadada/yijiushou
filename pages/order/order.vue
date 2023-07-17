@@ -9,28 +9,53 @@
 		</view>
 		<view class="card-list">
 			<view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)">
-				<view class="header flex-between size-28 white" 
-				:class="'status-bg-' + item.orderStatus"
-				>
-					<view class="white" v-if="item.orderStatus==1">等待骑手上门收货</view>
-					<view class="white" v-if="item.orderStatus==3">订单已取消</view>
-					<view class="white" v-if="item.orderStatus==1">待上门</view>
+				<view class="header flex-between size-28 white" >
+				<!-- :class="'status-bg-' + item.orderStatus" -->
+					<view>纸张</view>
+					<!-- <view class="white" v-if="item.orderStatus==1">骑手待上门</view> -->
+					<view v-if="item.orderStatus==3" class="item-font">已取消</view>
+					<view v-if="item.orderStatus==1" class="item-font">待回收</view>
 					<!-- <view class="white" v-if="item.status==2">待评价</view> -->
-					<view class="white" v-if="item.orderStatus==2">已完成</view>
-					<view class="white" v-if="item.orderStatus==3">已取消</view>
+					<view v-if="item.orderStatus==2" class="item-font">已完成</view>
+					<!-- <view class="white" v-if="item.orderStatus==3">已取消</view> -->
 				</view>
-				<view class="body px-26">
-					<view class="py-36">
-						订单号：{{item.id}}
+				<view class="main-contain">
+					<view class="body px-26" >
+						<view class="py-16 item-font">
+							预约时间: 
+						</view>
+						<view class="py-16 item-font">
+							预约地址:
+						</view>
+						<view class="py-16 item-font">
+							物品称重:
+						</view>
+						<view class="py-16 item-font">
+							创建时间:
+						</view>
+						<view class="py-16 item-font">
+							订单号：{{item.id}}
+						</view>
+					<!--	<view class="user flex mb-36" v-if="item.status!=3">
+							<view class="ml-18 size-32 gray-2">{{item.userName}}</view>
+						</view> -->
 					</view>
-					<view class="user flex mb-36" v-if="item.status!=3">
-						<view class="ml-18 size-32 gray-2">{{item.userName}}</view>
+					<view class="main-icon">
+						<view class="item-icon">
+							<img src="../../static/new-order2.png" alt="">
+							<span class="item-font">取消订单</span>
+						</view>
+						<view class="item-icon">
+							<img src="../../static/new-order1.png" alt="">
+							<span class="item-font">修改时间</span>
+						</view>
 					</view>
 				</view>
-				<view class="footer pb-32 " v-if="item.orderStatus==1">
-					<!-- <view class="btn" @click.stop="handldeReminder(item.id)">催单</view> -->
+
+				<!-- <view class="footer pb-32 " v-if="item.orderStatus==1">
+					<view class="btn" @click.stop="handldeReminder(item.id)">催单</view>
 					<view class="btn" @click.stop="handldeChat(item.riderPhone)">联系骑手</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="empty" v-if="list.length==0">
 				<image src="../../static/empty.png" mode="aspectFill"></image>
@@ -52,18 +77,24 @@
 		data() {
 			return {
 				show:false,
-				tabs: [{
+				tabs: [
+					{
 						id: 0,
 						name: '全部'
 					},
 					{
 						id: 1,
-						name: '待服务'
+						name: '待回收'
 					},
 					{
 						id: 2,
 						name: '已完成'
 					},
+					{
+						id: 3,
+						name: '已取消'
+						
+					}
 				],
 				orderStatus: 0,
 				list: [],
@@ -177,9 +208,15 @@
 			margin-top: 20upx;
 			background: #FFFFFF;
 			overflow: hidden;
-			
+		
+			.item-font {
+				color: #bbb;
+				font-size: 25upx
+			}
+		
 			.header {
 				padding: 22upx 26upx;
+				border-bottom: 1upx #bbb dashed;
 			}
 
 			
@@ -209,6 +246,33 @@
 					margin-right: 16px;
 				}
 			}
+			
+			.main-contain {
+				display: flex;
+				justify-content: space-between;
+				
+				.main-icon {
+					display: flex;
+					flex-direction: column;
+					margin-right: 20upx;
+					margin-top: 20upx;
+					.item-icon {
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						margin-top: 20upx;
+						img {
+							margin: 0 auto;
+							width: 52upx;
+							height: 52upx;
+						}
+					}
+					
+
+				}
+			}
+			
+
 		}
 	}
 </style>
