@@ -1,5 +1,7 @@
 <template>
 	<view class="container">
+		<view class="bgc">
+		</view>
 		<view class="navbar"></view>
 		<view class="location flex">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
@@ -34,52 +36,53 @@
 					<view class="title">{{ item.prize }} 元/公斤</view>
 				</view>
 			</view> -->
-			
-			<view class="menu">
-				<view class="item">
-					<img src="../../static/new4.png" alt="指南">
-					<span class="title">回收指南</span>
-				</view>
-				<view class="item">
-					<img src="../../static/new5.png" alt="分类">
-					<span class="title">回收分类</span>
-				</view>
-				<view class="item">
-					<img src="../../static/new6.png" alt="客服">
-					<span class="title">客服中心</span>
-				</view>
-			</view>
-			
-			<view class="process">
-				<view class="process-top">
-					<view class="process-img">
-						<img src="../../static/new1.png" alt="预约">
-						<view>预约下单</view>
+			<view class="clearfix" style="">
+				<view class="menu" >
+					<view class="item">
+						<img src="../../static/new4.png" alt="指南">
+						<span class="title">回收指南</span>
 					</view>
-					<view class="line">
-						<span>----></span>
+					<view class="item">
+						<img src="../../static/new5.png" alt="分类">
+						<span class="title">回收分类</span>
 					</view>
-					<view class="process-img">
-						<img src="../../static/new2.png" alt="上门">
-						<view>免费上门</view>
-					</view>
-					<view class="line">
-						<span>----></span>
-					</view>
-					<view class="process-img">
-						<img src="../../static/new3.png" alt="完成">
-						<view>完成订单</view>
+					<view class="item">
+						<img src="../../static/new6.png" alt="客服">
+						<span class="title">客服中心</span>
 					</view>
 				</view>
-				<view class="process-recycle">
-					<view class="recycle-top" @click="navTo">
-						<!-- <span>预约回收</span> -->
-						<span>预约回收</span>
+				
+				<view class="process">
+					<view class="process-top">
+						<view class="process-img">
+							<img src="../../static/new1.png" alt="预约">
+							<view>预约下单</view>
+						</view>
+						<view class="line">
+							<span>----></span>
+						</view>
+						<view class="process-img">
+							<img src="../../static/new2.png" alt="上门">
+							<view>免费上门</view>
+						</view>
+						<view class="line">
+							<span>----></span>
+						</view>
+						<view class="process-img">
+							<img src="../../static/new3.png" alt="完成">
+							<view>完成订单</view>
+						</view>
 					</view>
-					<view class="recycle-footer">
-						<span>专业回收</span>
-						<span>免费上门</span>
-						<span>保护隐私</span>
+					<view class="process-recycle">
+						<view class="recycle-top" @click="navTo">
+							<!-- <span>预约回收</span> -->
+							<span>预约回收</span>
+						</view>
+						<view class="recycle-footer">
+							<span>专业回收</span>
+							<span>免费上门</span>
+							<span>保护隐私</span>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -107,8 +110,8 @@
 
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 		</view>
-		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
-	</view> 
+		<!-- <orderStatus :show="show" @closePopup="closePopup"></orderStatus> -->
+	</view>
 </template>
 
 <script>
@@ -265,7 +268,22 @@ export default {
 
 <style lang="scss">
 	body {
+		background-color: #fff;
+	}
+	.clearfix::after {
+	  content: "";
+	  display: table;
+	  clear: both;
+	}
+	.bgc {
+		position: absolute;
 		background: linear-gradient(to top, #80f9bc, #ffffff);
+		background-clip: content-box;
+		top: 560upx;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: -1;
 	}
 	.container {
 		// background-color: #02c99a;
@@ -297,11 +315,14 @@ export default {
 			color: #fff;
 			display: flex;
 			justify-content: center;
-			height: 480upx;
+			overflow: hidden;
+			// height: 480upx;
 			.img-banner {
 				margin-top: 30upx;
 				width: 100%;
 				border-radius: 30upx;
+				height: 300upx;
+				max-height: 100%;
 			}
 			.left {
 				padding-top: 30upx;
@@ -381,23 +402,29 @@ export default {
 				}
 			}
 		}
-	
+		
 		.menu {
 			display: flex;
 			justify-content: space-between;
+			overflow: hidden;
 			margin: 0 auto;
 			// background-color: red;
 			width: 90%;
 			margin-top: 40upx;
+			margin-bottom: 40upx;
 			// @include menu-list(4);
 			// background: #f8f8f8;
+
 			.item {
 				display: flex;
 				flex-direction: column;
+				justify-content: center;
 				text-align: center;
+				margin-top: 40upx;
 				image {
-					width: 96upx;
-					height: 96upx;
+					margin: 0 auto;
+					width: 64upx;
+					height: 64upx;
 				}
 				.title {
 					margin-top: 10upx;
@@ -413,6 +440,7 @@ export default {
 			border-radius: 30upx;
 			width: 100%;
 			height: 350upx;
+			margin-bottom: 10upx;
 			image {
 				background-size: 100% 100%
 			}
@@ -451,11 +479,12 @@ export default {
 				display: flex;
 				flex-direction: column;
 				width: 100%;
-				height: 100%;
+				height: 50%;
 				// background-color: red;
 				.recycle-top {
 					display: flex;
-					flex-grow: 1;
+					height: 50%;
+					// flex-grow: 1;
 					justify-content: center;
 					align-items: center;
 					width: 60%;
@@ -471,7 +500,7 @@ export default {
 				.recycle-footer {
 					display: flex;
 					justify-content: center;
-					flex-grow: 2;
+					// flex-grow: 2;
 					// background-color: yellow;
 					// margin-top: 30upx;
 					height: 50%;
