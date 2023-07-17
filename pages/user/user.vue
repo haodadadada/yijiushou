@@ -1,21 +1,61 @@
 <template>
 	<view class="container">
 		<u-navbar title="个人中心" leftIconSize="0" :bgColor="bgColor"></u-navbar>
+		<view class="bgc1">
+		</view>
+		<view class="bgc2">
+		</view>
 		<view class="header">
 			<view class="userInfo" @click="editUser" v-if="openid">
+				<img src="../../static/new-user2.png" alt="指南" class="user-img">
 				<view class="name" v-if="userInfo.name!=null" style="text-align: center; font-size: 40px; color: #29D8D0;">{{ userInfo.name }}</view>
-				<view v-else></view>
+				<view v-else>admin</view>
 			</view>
-			<view class="userInfo" v-else><view @click="getCode" class="login-btn">立即登录</view></view>
+			<view class="userInfo" v-else>
+				<view @click="getCode" class="login-btn">
+					<img src="../../static/new-user1.png" alt="指南" class="user-img">
+					<span>立即登录</span>
+					<span class="header-right">></span>
+				</view>
+			</view>
+		</view>
+		<view class="information">
+			<ul class="shadow">
+				<li>
+					<view>
+						<span class="info-header">我的收入</span>
+					</view>
+					<view>
+						<span class="info-login" v-if="!openid">登录后可查看</span>
+					</view>
+				</li>
+				<li>
+					<view>
+						<span class="info-header">回收次数</span>
+					</view>
+					<view>
+						<span class="info-login" v-if="!openid">登录后可查看</span>
+					</view>
+				</li>				
+				<li>
+					<view>
+						<span class="info-header">活跃天数</span>
+					</view>
+					<view>
+						<span class="info-login" v-if="!openid">登录后可查看</span>
+					</view>
+				</li>
+			</ul>
 		</view>
 		<view class="order">
 			<view class="flex-between">
-				<view class="title">我的订单</view>
-				<navigator url="../order/order" hover-class="none" class="flex" @click="goOrder(0)">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator>
+				<view class="title">我的回收</view>
+				<!-- <navigator url="../order/order" hover-class="none" class="flex" @click="goOrder(0)">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator> -->
 			</view>
 			<view class="list">
-				<view class="item" v-for="item in orders" :key="item.id" @click="goOrder(item.id)">
-					<image :src="item.icon" mode="aspectFill"></image>
+				<!-- <view class="item" v-for="item in orders" :key="item.id" @click="goOrder(item.id)"> -->
+				<view class="item" v-for="item in orders" :key="item.id" @click="goDetail(item.url)">
+					<image :src="this.openid === '' ? item.icon1 : item.icon2" mode="aspectFill"></image>
 					<view>{{item.title}}</view>
 				</view>
 			</view>
@@ -26,7 +66,7 @@
 				<view class="item" v-for="(item, index) in tools" :key="index" @click="goDetail(item.url)">
 					<block v-if="item.show">
 						<block v-if="item.statusFlag"><view v-if="item.status == 1" class="tip"></view></block>
-						<image :src="item.icon" mode="aspectFill"></image>
+						<image :src="this.openid === '' ? item.icon1 : item.icon2" mode="aspectFill"></image>
 						<view>{{ item.title }}</view>
 					</block>
 				</view>
@@ -51,42 +91,60 @@ export default {
 			orders:[
 				{
 					id: 1,
-					icon: require('../../static/order-1.png'),
-					title: '全部',
+					url: "/pages/balance/balance",
+					icon1: require('../../static/new-user7.png'),
+					icon2: require('../../static/new-user8.png'),
+					title: '我的钱包',
 				},
 				{
 					id: 2,
-					icon: require('../../static/order-2.png'),
-					title: '待服务',
+					url: "#",
+					icon1: require('../../static/new-user9.png'),
+					icon2: require('../../static/new-user10.png'),
+					title: '回收记录',
 				},
 				{
 					id: 3,
-					icon: require('../../static/order-5.png'),
-					title: '已完成',
+					url: "#",
+					icon1: require('../../static/new-user11.png'),
+					icon2: require('../../static/new-user12.png'),
+					title: '我的评价',
 				},
-				/* {
+				{
 					id: 4,
-					icon: require('../../static/order-4.png'),
-					title: '已取消',
-				} */
+					url: "#",
+					icon1: require('../../static/new-user15.png'),
+					icon2: require('../../static/new-user16.png'),
+					title: '我的售后',
+				}
 			],
 			tools: [
 				{
 					url: '../address/address',
-					icon: require('../../static/tools-2.png'),
-					title: '地址管理',
+					icon1: require('../../static/new-user5.png'),
+					icon2: require('../../static/new-user6.png'),
+					title: '我的地址',
 					show: true
 				},
 				{
 					url: '../feedback/feedback',
-					icon: require('../../static/tools-3.png'),
+					icon1: require('../../static/new-user1.png'),
+					icon2: require('../../static/new-user2.png'),
 					title: '意见反馈',
 					show: true
 				},
 				{
 					url: '../balance/balance',
-					icon: require('../../static/yue.png'),
-					title: '余额管理',
+					icon1: require('../../static/new-user3.png'),
+					icon2: require('../../static/new-user4.png'),
+					title: '常见问题',
+					show: true
+				},
+				{
+					url: '#',
+					icon1: require('../../static/new-user13.png'),
+					icon2: require('../../static/new-user14.png'),
+					title: '关于我们',
 					show: true
 				}
 			],
@@ -149,62 +207,62 @@ export default {
 		},
 		getCode() {
 			uni.getSystemInfo({
-			  success: (res) => {
-			    // 获取平台信息
-			    var platform = res.uniPlatform;
-			    
-			    // 判断平台
-			    if (platform === 'mp-weixin') {
-					uni.login({
-						onlyAuthorize: true,
-						success: res => {
-						this.$api.getVxOpenid({
-								code: res.code,
-								name: '微信用户'
+				success: (res) => {
+					// 获取平台信息
+					var platform = res.uniPlatform;
+					
+					// 判断平台
+					if (platform === 'mp-weixin') {
+						uni.login({
+							onlyAuthorize: true,
+							success: res => {
+							this.$api.getVxOpenid({
+									code: res.code,
+									name: '微信用户'
+								})
+								.then(res1 => {
+								if (res1.code == 200) {
+									console.log(res1);
+									this.openid = res1.data;
+									uni.setStorageSync('openid', this.openid);
+									} else {
+										this.$tools.toast('登录失败，请稍后重试');
+									}
+								});
+							}
+						});
+					}  else {
+						/* uni.login({
+						  provider: 'alipay',
+						  success: loginRes => {
+							var authCode = loginRes.code;
+							console.log('支付宝用户的 code:', authCode);
+							this.$api.getAliOpenid({
+							  code: authCode,
+							  name: '支付宝用户'
 							})
-							.then(res1 => {
-							if (res1.code == 200) {
-								console.log(res1);
-								this.openid = res1.data;
+							.then((res) => {
+							  if (res.code == 200) {
+								console.log(res);
+								this.openid = res.data;
 								uni.setStorageSync('openid', this.openid);
-								} else {
-									this.$tools.toast('登录失败，请稍后重试');
-								}
+							  } else {
+								this.$tools.toast('登录失败，请稍后重试');
+							  }
 							});
-						}
-					});
-			    }  else {
-					/* uni.login({
-					  provider: 'alipay',
-					  success: loginRes => {
-					    var authCode = loginRes.code;
-					    console.log('支付宝用户的 code:', authCode);
-					    this.$api.getAliOpenid({
-					      code: authCode,
-					      name: '支付宝用户'
-					    })
-					    .then((res) => {
-					      if (res.code == 200) {
-					        console.log(res);
-					        this.openid = res.data;
-					        uni.setStorageSync('openid', this.openid);
-					      } else {
-					        this.$tools.toast('登录失败，请稍后重试');
-					      }
-					    });
-					  },
-					  fail: function (error) {
-					    console.log('获取支付宝用户的 code 失败:', error);
-					  }
-					}); */
-					uni.setStorageSync('openid', 'oOw3S5P0_8c9kTQz58gwiqj1YqvE');
-			    }
-			  },
+						  },
+						  fail: function (error) {
+							console.log('获取支付宝用户的 code 失败:', error);
+						  }
+						}); */
+						uni.setStorageSync('openid', 'oOw3S5P0_8c9kTQz58gwiqj1YqvE');
+					}
+				  },
 			  fail: function (error) {
 			    console.log('获取系统信息失败', error);
 			  }
 			});
-
+			
 			return;
 		},
 		getUserInfo() {
@@ -226,13 +284,41 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+	background-color: #fff;
+}
+.container {
+	margin: 0 20upx;
+}
+
+.bgc1 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 415upx;
+	background: linear-gradient(45deg, #70c9ae, #77c9b0);
+	z-index: -1;
+}
+
+.bgc2 {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 850upx;
+	background: linear-gradient(to top, #9fe6ce, #fff);
+	z-index: -1;
+}
+
 .header{
-	background: url(https://youjin.phpcaff.cn/uploads/20220503/38638bc88a85e10507bdffbbacd1fff8.png) no-repeat;
-	background-size: cover;
-	padding-top: var(--status-bar-height);
+	// background: url(https://youjin.phpcaff.cn/uploads/20220503/38638bc88a85e10507bdffbbacd1fff8.png) no-repeat;
+	// background-size: cover;
+	// padding-top: var(--status-bar-height);
+	padding-top: 90upx;
 }
 .userInfo {
-	padding: 60px 30upx 0;
+	padding: 60px 10upx 0;
 	border-radius: 12upx 12upx 0px 0px;
 	height: 160upx;
 	display: flex;
@@ -259,15 +345,76 @@ export default {
 		font-weight: 500;
 		color: #000000;
 	}
-
+	
+	.user-img {
+		width: 80upx;
+		height: 80upx;
+		margin-right: 10upx;
+		margin-left: 20upx;
+	}
+	
 	.login-btn {
+		display: flex;
+		position: relative;
+		align-items: center;
+		// padding-left: 20upx;
+		height: 100%;
+		width: 100%;
 		flex: 1;
 		font-size: 32upx;
-		font-weight: 500;
-		color: #3bb061;
-		line-height: 176upx;
-		text-align: center;
+		font-weight: 600;
+		// color: #3bb061;
+		color: #fff;
+		// line-height: 176upx;
+		// text-align: center;
+		.header-right {
+			position: absolute;
+			right: 20upx;
+		}
 	}
+}
+
+.information {
+	width: 100%;
+	border-radius: 20upx;
+	background-color: #fff;
+	margin-bottom: 80upx;
+	ul {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		li {
+			flex-basis: 0;
+			flex-grow: 1;
+			margin: 25upx 0;
+			padding: 0 25upx;
+			text-align: center;
+			.info-header {
+				font-size: 27upx;
+				color: #9f9f9f;
+			}
+			.info-login {
+				font-size: 20upx;
+				color: #1bc488;
+			}
+		}
+	}
+	ul > li:not(:last-child) {
+		border-right: 1upx dashed #7bc8b1;
+	}
+}
+
+.shadow::after {
+	  content: '';
+	  position: absolute;
+	  left: 0;
+	  top: 50%;
+	  width: 100%;
+	  height: 100%;
+	  background-color: rgba(0, 0, 0, 0.4);
+	  transform: translateY(-45%) rotate(0deg);
+	  filter: blur(8px);
+	  z-index: -1;
 }
 
 .card-group {
@@ -303,9 +450,10 @@ export default {
 .order{
 	background: #FFFFFF;
 	border-radius: 16upx;
-	margin: 30upx;
+	margin: 10upx 0;
+	padding: 15upx 0;
 	.title {
-		font-size: 34upx;
+		font-size: 25upx;
 		font-weight: bold;
 		color: #333333;
 		padding: 42upx 32upx 46upx;
@@ -317,6 +465,9 @@ export default {
 	}
 	.list{
 		@include menu-list(5);
+		display: flex;
+		justify-content: space-between;
+		padding: 0 40upx;
 		padding-bottom: 30upx;
 		.item{
 			image{
@@ -324,7 +475,7 @@ export default {
 				height: 52upx;
 			}
 			view{
-				font-size: 26upx;
+				font-size: 20upx;
 				color: #666666;
 				margin-top: 10upx;
 			}
@@ -341,9 +492,10 @@ export default {
 .tool-list {
 	background: #fff;
 	border-radius: 16upx;
-	margin: 30upx;
+	margin: 20upx 0;
+	padding: 15upx 0;
 	.title {
-		font-size: 34upx;
+		font-size: 25upx;
 		font-weight: bold;
 		color: #333333;
 		padding: 42upx 32upx 46upx;
@@ -355,7 +507,7 @@ export default {
 		width: 25%;
 		text-align: center;
 		margin-bottom: 60upx;
-		font-size: 28upx;
+		font-size: 20upx;
 		font-weight: 400;
 		color: #222222;
 		position: relative;
@@ -370,8 +522,8 @@ export default {
 			background: $color-error;
 		}
 		image {
-			width: 60upx;
-			height: 60upx;
+			width: 52upx;
+			height: 52upx;
 			margin-bottom: 10upx;
 		}
 	}
