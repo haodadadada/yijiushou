@@ -338,7 +338,7 @@
 					iconPath: '../../static/location-1.png',	
 				}]
 			},
-			 searchAddress() {
+			searchAddress() {
 			    this.qqMap.geocoder({
 			        address: '浙江省湖州市'+this.searchKeyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
