@@ -216,18 +216,17 @@ export default {
 						uni.login({
 							onlyAuthorize: true,
 							success: res => {
-							this.$api.getVxOpenid({
-									code: res.code,
-									name: '微信用户'
-								})
+								this.$api.getVxOpenid({
+										code: res.code,
+										name: '微信用户'
+									})
 								.then(res1 => {
-								if (res1.code == 200) {
-									console.log(res1);
-									this.openid = res1.data;
-									uni.setStorageSync('openid', this.openid);
-									} else {
-										this.$tools.toast('登录失败，请稍后重试');
-									}
+									if (res1.code == 200) {
+										this.openid = res1.data;
+										uni.setStorageSync('openid', this.openid);
+										} else {
+											this.$tools.toast('登录失败，请稍后重试');
+										}
 								});
 							}
 						});
@@ -260,9 +259,8 @@ export default {
 				  },
 			  fail: function (error) {
 			    console.log('获取系统信息失败', error);
-			  }
+			  },
 			});
-			
 			return;
 		},
 		getUserInfo() {
