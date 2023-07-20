@@ -12,14 +12,16 @@
 			"path": "pages/order/order",
 			"style": {
 				"navigationBarTitleText": "订单",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#34cd99"
 			}
 
 		}, {
 			"path": "pages/placeOrder/placeOrder",
 			"style": {
-				"navigationBarTitleText": "下单",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "预约下单",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#34cd99"
 			}
 
 		}, {
@@ -204,6 +206,15 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/booking/booking",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "预约",
                 "enablePullDownRefresh": false
             }
             
