@@ -7,13 +7,14 @@
 		</view>
 		<view class="header">
 			<view class="userInfo" @click="editUser" v-if="openid">
-				<img src="../../static/new-user2.png" alt="指南" class="user-img">
+				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
+				<img src="https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c" alt="头像" class="user-img">
 				<view class="name" v-if="userInfo.name!=null" style="text-align: center; font-size: 40px; color: #29D8D0;">{{ userInfo.name }}</view>
 				<view v-else>admin</view>
 			</view>
 			<view class="userInfo" v-else>
 				<view @click="getCode" class="login-btn">
-					<img src="../../static/new-user1.png" alt="指南" class="user-img">
+					<img src="https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c" alt="头像" class="user-img">
 					<span>立即登录</span>
 					<span class="header-right">></span>
 				</view>
@@ -149,7 +150,7 @@ export default {
 				}
 			],
 			bannerList: [],
-			user_id: ''
+			user_id: '',
 		};
 	},
 	onShareAppMessage() {},
@@ -218,7 +219,7 @@ export default {
 							success: res => {
 								this.$api.getVxOpenid({
 										code: res.code,
-										name: '微信用户'
+										name: '微信用户',
 									})
 								.then(res1 => {
 									if (res1.code == 200) {
@@ -261,6 +262,7 @@ export default {
 			    console.log('获取系统信息失败', error);
 			  },
 			});
+			this.getUserProfile()
 			return;
 		},
 		getUserInfo() {
@@ -276,6 +278,19 @@ export default {
 					}
 					uni.setStorageSync('userInfo', this.userInfo);
 				});
+		},
+		getUserProfile() {
+			uni.getUserProfile({
+			      provider: 'weixin',
+				  desc: '用于展示',
+			      success: (infoRes) => {
+					  console.log(infoRes.userInfo.avatarUrl)
+					  // this.avatarUrl = infoRes.userInfo.avatarUrl
+			      },
+				  fail(res) {
+					  console.log(res)
+				  }
+			});
 		}
 	}
 };
@@ -306,7 +321,7 @@ body {
 	right: 0;
 	height: 850upx;
 	background: linear-gradient(to top, #9fe6ce, #fff);
-	z-index: -1;
+	z-index: -2;
 }
 
 .header{
@@ -345,6 +360,7 @@ body {
 	}
 	
 	.user-img {
+		border-radius: 80upx;
 		width: 80upx;
 		height: 80upx;
 		margin-right: 10upx;
