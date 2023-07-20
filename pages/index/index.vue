@@ -52,6 +52,7 @@
 					</view>
 				</view>
 				
+				<!-- 这里是靠内部撑开的很难去量百分比 -->
 				<view class="process">
 					<view class="process-top">
 						<view class="process-img">
