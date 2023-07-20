@@ -169,8 +169,8 @@ const setAddress = (data) => {
 
 // 取消订单
 const delOrder = (data) => {
-	return http.post({
-		url: 'api/Index/delOrder',
+	return http.get({
+		url: '/order/cancelOrder',
 		data:{
 			...data
 		}
