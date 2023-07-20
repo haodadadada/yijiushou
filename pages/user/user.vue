@@ -8,13 +8,13 @@
 		<view class="header">
 			<view class="userInfo" @click="editUser" v-if="openid">
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
-				<img src="https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c" alt="头像" class="user-img">
+				<img :src="avatarUrl" alt="头像" class="user-img">
 				<view class="name" v-if="userInfo.name!=null" style="text-align: center; font-size: 40px; color: #29D8D0;">{{ userInfo.name }}</view>
 				<view v-else>admin</view>
 			</view>
 			<view class="userInfo" v-else>
 				<view @click="getCode" class="login-btn">
-					<img src="https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c" alt="头像" class="user-img">
+					<img :src="avatarUrl" alt="头像" class="user-img">
 					<span>立即登录</span>
 					<span class="header-right">></span>
 				</view>
@@ -62,7 +62,7 @@
 			</view>
 		</view>
 		<view class="tool-list">
-			<view class="title">常用工具</view> 
+			<view class="title">常用工具</view>
 			<view class="flex">
 				<view class="item" v-for="(item, index) in tools" :key="index" @click="goDetail(item.url)">
 					<block v-if="item.show">
@@ -151,6 +151,7 @@ export default {
 			],
 			bannerList: [],
 			user_id: '',
+			avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c'
 		};
 	},
 	onShareAppMessage() {},
@@ -220,7 +221,7 @@ export default {
 								this.$api.getVxOpenid({
 										code: res.code,
 										name: '微信用户',
-										avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c'
+										avatarUrl: this.avatarUrl
 									})
 								.then(res1 => {
 									if (res1.code == 200) {
