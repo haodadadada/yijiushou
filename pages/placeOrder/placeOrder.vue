@@ -1,87 +1,43 @@
 <template>
-	<view>
-		<view class="p-32 bg-white">
-			<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 250px;" :markers="covers" @click="clickMap"></map>
-			<view class="flex address mt-20" @click="addressPopupShow = true">
-				<image class="icon" src="../../static/location-1.png" mode="aspectFill"></image>
-				<view>请选择地址</view>
+	<view class="container">
+		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 100%; position: absolute;" :markers="covers" @click="clickMap"></map>
+		<view class="contain">
+			<view class="search">
+				<span class="iconfont">&#xeafe;</span>
 			</view>
-			<view class="user pb-20 border-b">
-				<view class="icon" @click="addressPopupShow = true">
-					<image src="../../static/cae_list_btn_more@2x.png" mode="aspectFill"></image>
-					<view>地址簿</view>
+			<view class="info">
+				<view class="info-contain">
+					<view class="info-header">
+						<span style="font-weight: 600;">废品回收</span>
+						<span class="iconfont" style="color: green;">&#xe628;1.2km</span>
+					</view>
+					<view class="info-address">
+						<span class="iconfont">&#xe652;</span>
+						<span style="margin-left: 1upx;">浙江省湖州市</span>
+					</view>
+					<view class="info-phone">
+						<span class="iconfont">&#xe88b;</span>
+						<span style="margin-left: 1upx;">123456</span>
+					</view>
+					<view class="info-date">
+						<span class="iconfont">&#xe64d;</span>
+						<span style="margin-left: 1upx;">8:00 - 11:00</span>
+					</view>
 				</view>
-			</view>
-			<view>
-			  <view class="size-30 gray-2 py-28">联系人</view>
-			  <input type="text" class="input-field" v-model="userName" placeholder="请输入姓名">
-			</view>
-			<view>
-			  <view class="size-30 gray-2 py-28">联系号码</view>
-			  <input type="text" class="input-field" v-model="userPhone" placeholder="请输入手机号">
-			</view>
-			<view>
-			  <view class="size-30 gray-2 py-28">社区信息</view>
-			  <input type="text" class="input-field" v-model="userCommunity" placeholder="">
-			</view>
-			<view>
-			  <view class="size-30 gray-2 py-28">详细地址</view>
-			  <input type="text" class="input-field" v-model="userAddress" placeholder="例如:1幢1单元">
-			</view>
-			<view @click="this.isShow=true">
-				<view class="size-30 gray-2 py-28">预约上门时间</view>
-				<u-input v-model="currentTime" placeholder="请选择" disabled disabledColor="#ffffff"></u-input>				
-				<hTimeAlert title="预约时间" subhead='请选择需要上门服务的时间' rangeDay="5" intervalTime="60" :isShow="isShow" @closeAlert="handelClose"></hTimeAlert>
-			</view>
-			<view>
-			  <view class="size-30 gray-2 py-28">预估重量</view>
-			  <input type="text" class="input-field" v-model="estimateWeight" placeholder="请输入预估重量">
-			</view>
-			<!-- <view @click="dateShow = true">
-				<view class="size-30 gray-2 py-28">预约上门时间</view>
-				<u-input v-model="reserveTime" placeholder="请选择" disabled disabledColor="#ffffff"></u-input>
-				<u-datetime-picker
-					ref="datetimePicker"
-					:show="dateShow"
-					v-model="reserveTime"
-					:minDate="curTime"
-					@close="dateShow = false"
-					@cancel="dateShow = false"
-					@confirm="dateShow = false"
-					mode="time"
-				></u-datetime-picker>
 
-			</view> -->
-			<view class="btn-group">
-				<view @click="submit(2)" class="btn btn-2">立即下单</view>
+				<view class="info-footer">
+					<view class="info-footer-left">
+						<span class="iconfont">&#xe74c;</span>
+						<span style="margin-left: 1upx;">定位</span>
+					</view>
+					<view class="info-footer-right">
+						<span class="iconfont">&#xe625;</span>
+						<span style="margin-left: 1upx;" @click="goBooking">预约</span>
+					</view>
+					
+				</view>
 			</view>
 		</view>
-		<!-- 选择地址 -->
-		<u-popup :show="addressPopupShow" mode="bottom" @close="addressPopupShow = false">
-			<view class="empty" v-if="list.length == 0">
-				<image src="../../static/empty.png" mode="aspectFill"></image>
-				<view>添加地址，预约你的回收天使～</view>
-			</view>
-			<view class="card">
-				<view class="item" v-for="item in list" :key="item.id" @click="selectAddress(item)">
-					<view class="flex-between">
-						<view class="size-30">
-							{{ item.userName }}
-							<text class="ml-30 gray-2">{{ item.userPhone }}</text>
-						</view>
-						<!-- <image class="icon" src="../../static/edit@2x.png" mode=""></image> -->
-					</view>
-					<view class="address mt-30 pb-38 border-b">
-						<image class="icon mr-8" src="../../static/map-pin@2x.png" mode="aspectFill"></image>
-						<view class="size-30 gray-9">{{ item.community }}{{ item.address }}</view>
-					</view>
-				</view>
-			</view>
-			<view class="btn-3 btn" @click="addAddress">
-				<image src="../../static/address_btn_add_new@2x.png" mode="aspectFill"></image>
-				添加地址
-			</view>
-		</u-popup>
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
 </template>
@@ -90,10 +46,6 @@
 import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
 import hTimeAlert from '../../components/h-time-alert/h-time-alert.vue';
 export default {
-	components: {
-		orderStatus,
-		hTimeAlert
-	},
 	data() {
 		return {
 			show: false,
@@ -169,7 +121,7 @@ export default {
 
 		this.baseUrl = this.$tools.baseUrl;
 		this.userInfo = uni.getStorageSync('userInfo');
-		
+
 		
 		
 	},
@@ -481,229 +433,325 @@ export default {
 						icon: 'none'
 					});
 				}
+		},
+		goBooking() {
+			uni.navigateTo({
+				url: '../booking/booking'
+			})
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.map {
-	width: 100%;
-	height: 588upx;
-}
-
-.address {
-	border-radius: 16upx;
-	margin-top: -16upx;
-	padding: 32upx 0;
-
-	.icon {
-		width: 31upx;
-		height: 37upx;
-		min-width: 31upx;
-		margin-right: 20upx;
+	@font-face {
+	  font-family: 'iconfont';  /* Project id 4143017 */
+	  src: url('//at.alicdn.com/t/c/font_4143017_f018g5hwvye.woff2?t=1689766998043') format('woff2'),
+		   url('//at.alicdn.com/t/c/font_4143017_f018g5hwvye.woff?t=1689766998043') format('woff'),
+		   url('//at.alicdn.com/t/c/font_4143017_f018g5hwvye.ttf?t=1689766998043') format('truetype');
 	}
-}
-
-.user {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-
-	.icon {
-		font-size: 24upx;
-		color: #3bb061;
-		text-align: center;
-
-		image {
-			width: 40upx;
-			height: 40upx;
-		}
+	.iconfont {
+	  font-family: "iconfont" !important;
+	  font-size: 26upx;
+	  font-style: normal;
+	  -webkit-font-smoothing: antialiased;
+	  -moz-osx-font-smoothing: grayscale;
 	}
-}
-
-.border-b {
-	border-bottom: 1upx solid #efefef;
-}
-.input {
-			margin: 0 20upx;
-			padding: 0 20upx;
-			line-height: 100upx;
-			display: flex;
-			align-items: center;
-			font-size: 30upx;
-			color: #999999;
-			border-bottom: 2upx solid #ededed;
-			background: #fff;
+	.container {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		.contain {
+			// 相对定位让子元素有间隔但是地图组件没法拖动
 			position: relative;
-			.sex{
+			top: 50%;
+			height: 50%;
+			margin: 0 20upx;
+			.search {
 				display: flex;
-				margin: 20upx 0;
-				.item{
-					font-size: 32upx;
-					color: #C4C4C4;
-					width: 128upx;
-					line-height: 72upx;
-					text-align: center;
-					background: #FFFFFF;
-					border-radius: 12upx;
-					border: 1upx solid #C4C4C4;
-					margin-right: 32upx;
+				align-items: center;
+				position: absolute;
+				// bottom: 450upx;
+				bottom: 70%;
+				width: 60%;
+				// height: 40upx;
+				height: 7%;
+				border-radius: 20upx;
+				background-color: #fff;
+				span {
+					margin-left: 10upx;
 				}
-				.cur{
-					color: #3BB061;
-					border: 1upx solid #3BB061;
-				}
-			}
-			text {
-				font-size: 30upx;
-				width: 170upx;
-				min-width: 170upx;
-				color: #222;
 			}
 			
-			.text-1{
-				padding-right: 50upx;
-				line-height: 1.6;
-				margin: 10upx 0;
-			}
+			.info {
+				position: absolute;
+				// bottom: 100upx;
+				bottom: 10%;
+				// height: 300upx;
+				height: 50%;
+				width: 100%;
+				border-radius: 20upx;
+				background-color: #fff;
+				box-sizing: border-box;
+				overflow: hidden;
+				font-size: 26upx;
+				.info-contain {
+					padding: 20upx;
+					.info-header {
+						display: flex;
+						justify-content: space-between;
+						margin-bottom: 10upx;
+					}
+					.info-address {
+						color: #898989
+					}
+					.info-phone {
+						color: #898989
+					}
+					.info-date {
+						color: #898989
+					}
+				}
 
-			input {
-				font-size: 28upx;
-				color: #999999;
-			}
-		}
-
-.type-list {
-	white-space: nowrap;
-
-	.item {
-		display: inline-block;
-		width: 138upx;
-		height: 172upx;
-		background: #ffffff;
-		box-shadow: 0px 0px 10upx 0 rgba(96, 202, 130, 0.29);
-		border-radius: 12upx;
-		margin: 24upx 7upx;
-		text-align: center;
-		font-size: 28upx;
-		color: #606060;
-		line-height: 1.2;
-		box-sizing: border-box;
-	}
-
-	.cur {
-		color: #3bb061;
-		border: 4upx solid #3bb061;
-	}
-
-	image {
-		width: 100upx;
-		height: 100upx;
-		margin-top: 12upx;
-	}
-}
-
-.weight-list {
-	display: flex;
-	// justify-content: space-between;
-	flex-wrap: wrap;
-
-	.item {
-		margin-bottom: 14upx;
-		text-align: center;
-		font-size: 30upx;
-		color: #c4c4c4;
-		width: 216upx;
-		line-height: 80upx;
-		background: #ffffff;
-		border-radius: 16upx;
-		border: 2upx solid #c4c4c4;
-	}
-
-	.item:not(:nth-child(3n)) {
-		margin-right: 12upx;
-	}
-
-	.cur {
-		color: #3bb061;
-		border: 2upx solid #3bb061;
-	}
-}
-
-.btn-group {
-	display: flex;
-	justify-content: space-between;
-	padding: 32upx 0;
-
-	.btn {
-		width: 320upx;
-		border-radius: 12upx;
-		font-size: 32upx;
-		font-weight: 400;
-		color: #ffffff;
-		line-height: 88upx;
-	}
-
-	.btn-1 {
-		background: #f3f3f3;
-		color: #666666;
-	}
-	.btn-1:after {
-		border: 0;
-	}
-
-	.btn-2 {
- 		background: #0b8f3a;
-	}
-}
-
-.empty {
-	text-align: center;
-	margin: 100upx auto 120upx;
-
-	image {
-		width: 196upx;
-		height: 196upx;
-		margin-bottom: 36upx;
-	}
-
-	view {
-		font-size: 28upx;
-		font-weight: 400;
-		color: #c4c4c4;
-	}
-}
-
-.card {
-	.item {
-		background: #fff;
-		padding: 28upx;
-		margin-bottom: 16upx;
-		border-radius: 12upx;
-
-		.address {
-			display: flex;
-
-			.icon {
-				margin-top: 4upx;
+				.info-footer {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					position: absolute;
+					padding: 3% 0;
+					bottom: 0;
+					width: 100%;
+					background: linear-gradient(to right, #4eb777, #00e1b4);
+					text-align: center;
+					.info-footer-left {
+						flex: 1;
+						border-right: 1upx #fff dashed;
+						color: #fff;
+					}
+					.info-footer-right {
+						flex: 1;
+						color: #fff;
+					}
+				}
 			}
 		}
 
-		.icon {
-			min-width: 32upx;
-			width: 32upx;
-			height: 32upx;
-		}
-
-		.radio {
-			transform: scale(0.9);
-		}
 	}
-}
 
-.btn-3 {
-	width: 700upx;
-	margin: 0 auto 30upx;
-}
+
+// .address {
+// 	border-radius: 16upx;
+// 	margin-top: -16upx;
+// 	padding: 32upx 0;
+
+// 	.icon {
+// 		width: 31upx;
+// 		height: 37upx;
+// 		min-width: 31upx;
+// 		margin-right: 20upx;
+// 	}
+// }
+
+// .user {
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: space-between;
+
+// 	.icon {
+// 		font-size: 24upx;
+// 		color: #3bb061;
+// 		text-align: center;
+
+// 		image {
+// 			width: 40upx;
+// 			height: 40upx;
+// 		}
+// 	}
+// }
+
+// .border-b {
+// 	border-bottom: 1upx solid #efefef;
+// }
+// .input {
+// 			margin: 0 20upx;
+// 			padding: 0 20upx;
+// 			line-height: 100upx;
+// 			display: flex;
+// 			align-items: center;
+// 			font-size: 30upx;
+// 			color: #999999;
+// 			border-bottom: 2upx solid #ededed;
+// 			background: #fff;
+// 			position: relative;
+// 			.sex{
+// 				display: flex;
+// 				margin: 20upx 0;
+// 				.item{
+// 					font-size: 32upx;
+// 					color: #C4C4C4;
+// 					width: 128upx;
+// 					line-height: 72upx;
+// 					text-align: center;
+// 					background: #FFFFFF;
+// 					border-radius: 12upx;
+// 					border: 1upx solid #C4C4C4;
+// 					margin-right: 32upx;
+// 				}
+// 				.cur{
+// 					color: #3BB061;
+// 					border: 1upx solid #3BB061;
+// 				}
+// 			}
+// 			text {
+// 				font-size: 30upx;
+// 				width: 170upx;
+// 				min-width: 170upx;
+// 				color: #222;
+// 			}
+			
+// 			.text-1{
+// 				padding-right: 50upx;
+// 				line-height: 1.6;
+// 				margin: 10upx 0;
+// 			}
+
+// 			input {
+// 				font-size: 28upx;
+// 				color: #999999;
+// 			}
+// 		}
+
+// .type-list {
+// 	white-space: nowrap;
+
+// 	.item {
+// 		display: inline-block;
+// 		width: 138upx;
+// 		height: 172upx;
+// 		background: #ffffff;
+// 		box-shadow: 0px 0px 10upx 0 rgba(96, 202, 130, 0.29);
+// 		border-radius: 12upx;
+// 		margin: 24upx 7upx;
+// 		text-align: center;
+// 		font-size: 28upx;
+// 		color: #606060;
+// 		line-height: 1.2;
+// 		box-sizing: border-box;
+// 	}
+
+// 	.cur {
+// 		color: #3bb061;
+// 		border: 4upx solid #3bb061;
+// 	}
+
+// 	image {
+// 		width: 100upx;
+// 		height: 100upx;
+// 		margin-top: 12upx;
+// 	}
+// }
+
+// .weight-list {
+// 	display: flex;
+// 	// justify-content: space-between;
+// 	flex-wrap: wrap;
+
+// 	.item {
+// 		margin-bottom: 14upx;
+// 		text-align: center;
+// 		font-size: 30upx;
+// 		color: #c4c4c4;
+// 		width: 216upx;
+// 		line-height: 80upx;
+// 		background: #ffffff;
+// 		border-radius: 16upx;
+// 		border: 2upx solid #c4c4c4;
+// 	}
+
+// 	.item:not(:nth-child(3n)) {
+// 		margin-right: 12upx;
+// 	}
+
+// 	.cur {
+// 		color: #3bb061;
+// 		border: 2upx solid #3bb061;
+// 	}
+// }
+
+// .btn-group {
+// 	display: flex;
+// 	justify-content: space-between;
+// 	padding: 32upx 0;
+
+// 	.btn {
+// 		width: 320upx;
+// 		border-radius: 12upx;
+// 		font-size: 32upx;
+// 		font-weight: 400;
+// 		color: #ffffff;
+// 		line-height: 88upx;
+// 	}
+
+// 	.btn-1 {
+// 		background: #f3f3f3;
+// 		color: #666666;
+// 	}
+// 	.btn-1:after {
+// 		border: 0;
+// 	}
+
+// 	.btn-2 {
+//  		background: #0b8f3a;
+// 	}
+// }
+
+// .empty {
+// 	text-align: center;
+// 	margin: 100upx auto 120upx;
+
+// 	image {
+// 		width: 196upx;
+// 		height: 196upx;
+// 		margin-bottom: 36upx;
+// 	}
+
+// 	view {
+// 		font-size: 28upx;
+// 		font-weight: 400;
+// 		color: #c4c4c4;
+// 	}
+// }
+
+// .card {
+// 	.item {
+// 		background: #fff;
+// 		padding: 28upx;
+// 		margin-bottom: 16upx;
+// 		border-radius: 12upx;
+
+// 		.address {
+// 			display: flex;
+
+// 			.icon {
+// 				margin-top: 4upx;
+// 			}
+// 		}
+
+// 		.icon {
+// 			min-width: 32upx;
+// 			width: 32upx;
+// 			height: 32upx;
+// 		}
+
+// 		.radio {
+// 			transform: scale(0.9);
+// 		}
+// 	}
+// }
+
+// .btn-3 {
+// 	width: 700upx;
+// 	margin: 0 auto 30upx;
+// }
 </style>
