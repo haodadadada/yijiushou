@@ -62,7 +62,7 @@
 			</view>
 		</view>
 		<view class="tool-list">
-			<view class="title">常用工具</view>
+			<view class="title">常用工具</view> 
 			<view class="flex">
 				<view class="item" v-for="(item, index) in tools" :key="index" @click="goDetail(item.url)">
 					<block v-if="item.show">
@@ -220,6 +220,7 @@ export default {
 								this.$api.getVxOpenid({
 										code: res.code,
 										name: '微信用户',
+										avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c'
 									})
 								.then(res1 => {
 									if (res1.code == 200) {
