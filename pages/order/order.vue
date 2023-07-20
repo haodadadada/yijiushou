@@ -8,7 +8,8 @@
 			</view>
 		</view>
 		<view class="card-list">
-			<view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)">
+			<!-- <view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)"> -->
+			<view class="card" v-for="item in list" :key="item.id">
 				<view class="header flex-between size-28 white" >
 				<!-- :class="'status-bg-' + item.orderStatus" -->
 					<view>纸张</view>
@@ -22,16 +23,16 @@
 				<view class="main-contain">
 					<view class="body px-26" >
 						<view class="py-16 item-font">
-							预约时间: 
+							预约时间: {{dateInit(item.reserveTime)}}
 						</view>
 						<view class="py-16 item-font">
-							预约地址:
+							预约地址: {{item.userCommunity}}
 						</view>
 						<view class="py-16 item-font">
-							物品称重:
+							物品称重: {{item.estimateWeight}}
 						</view>
 						<view class="py-16 item-font">
-							创建时间:
+							创建时间: {{dateInit(item.createTime)}}
 						</view>
 						<view class="py-16 item-font">
 							订单号：{{item.id}}
@@ -41,7 +42,7 @@
 						</view> -->
 					</view>
 					<view class="main-icon">
-						<view class="item-icon">
+						<view class="item-icon" @click="delOrder(item.id)">
 							<img src="../../static/new-order2.png" alt="">
 							<span class="item-font">取消订单</span>
 						</view>
@@ -97,7 +98,7 @@
 					}
 				],
 				orderStatus: 0,
-				list: [],
+				list: []
 			};
 		},
 		onShareAppMessage() {},
@@ -166,6 +167,20 @@
 			handldeChat(phone){
 				uni.makePhoneCall({
 					phoneNumber:phone
+				})
+			},
+			// 转换日期格式
+			dateInit(date) {
+				return new Date(date).toLocaleString('zh', {hour12: false})
+			},
+			// 清除订单
+			delOrder(id) {
+				console.log(id)
+				// this.$api.delOrder({orderId: id}).then(res => this.list = this.list.filter(item => item.id !== res.data))
+				this.$api.delOrder({orderId: id}).then(
+				res => {
+					this.list = [] 
+					this.getList()
 				})
 			}
 		}
