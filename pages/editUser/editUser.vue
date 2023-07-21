@@ -78,12 +78,14 @@
 				if(!this.$tools.verifyTelPhone(this.phone)){
 					return
 				}
+				console.log(uni.getStorageSync('openid'))
 				this.$api.editInfo({
 					name: this.name,
 					gender: this.gender,
 					phone: this.phone,
 					openid: uni.getStorageSync('openid')
 				}).then(res => {
+					console.log(res)
 					this.$tools.toast(res.msg)
 					if (res.code == 200) {
 						setTimeout(() => {
