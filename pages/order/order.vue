@@ -9,7 +9,7 @@
 		</view>
 		<view class="card-list">
 			<!-- <view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)"> -->
-			<view class="card" v-for="item in list" :key="item.id">
+			<view class="card" v-for="item in list" :key="item.id" v-show="item.orderStatus !== 3 || orderStatus !== 0 ">
 				<view class="header flex-between size-28 white" >
 				<!-- :class="'status-bg-' + item.orderStatus" -->
 					<view>纸张</view>
