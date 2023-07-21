@@ -384,7 +384,7 @@ const evaluate = (data) => {
 // 反馈信息
 const feedback = (data) => {
 	return http.post({
-		url: 'api/User/feedback',
+		url: '/opinion/create',
 		data:{
 			...data
 		}
