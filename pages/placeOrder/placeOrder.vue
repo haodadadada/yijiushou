@@ -3,7 +3,8 @@
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 100%; position: absolute;" :markers="covers" @click="clickMap"></map>
 		<view class="contain">
 			<view class="search">
-				<span class="iconfont">&#xeafe;</span>
+				<span class="iconfont" @click="searchAddress">&#xeafe;</span>
+				<input type="text" v-model="searchKeyword">
 			</view>
 			<view class="info">
 				<view class="info-contain">
@@ -90,6 +91,7 @@ export default {
 				}
 			],
 			gender:0,
+			searchKeyword: ''
 		};
 	},
 	watch: {
@@ -438,6 +440,33 @@ export default {
 			uni.navigateTo({
 				url: '../booking/booking'
 			})
+		},
+		searchAddress() {
+		    this.qqMap.geocoder({
+		        address: '浙江省湖州市'+this.searchKeyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+				sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
+		              success: (res) => {//成功后的回调
+		                console.log(res);
+		                this.latitude = res.result.location.lat;
+		                this.longitude = res.result.location.lng;
+						this.community = res.result.title;
+						this.covers = [{
+							latitude: res.result.location.lat,
+							longitude: res.result.location.lng,
+							id: 0,
+							width: 20,
+							height: 20,
+							iconPath: '../../static/location-1.png',	
+						}];
+		              },
+		              fail: function(error) {
+		                uni.showToast({
+		                	title: '地址有误，请输入完整',
+		                	icon: 'none'
+		                });
+		              },
+		      })
+			  // this.getSite();
 		}
 	}
 };
@@ -481,6 +510,12 @@ export default {
 				background-color: #fff;
 				span {
 					margin-left: 10upx;
+				}
+				input {
+					padding: 10upx 0 10upx 10upx;
+					height: 100%;
+					box-sizing: border-box;
+					font-size: 26upx;
 				}
 			}
 			
