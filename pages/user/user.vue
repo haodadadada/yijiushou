@@ -210,9 +210,9 @@ export default {
 		getCode() {
 			uni.getSystemInfo({
 				success: (res) => {
+					this.getUserInfo()
 					// 获取平台信息
 					var platform = res.uniPlatform;
-					
 					// 判断平台
 					if (platform === 'mp-weixin') {
 						uni.login({
@@ -273,7 +273,7 @@ export default {
 					openid: this.openid
 				})
 				.then(res => {
-					this.userInfo = res.data;
+					this.userInfo = res.data.user == null ? null : res.data.user.name;
 					if (res.data.rstatus == 1) {
 						this.tools[5].show = true;
 						this.tools[6].show = true;
