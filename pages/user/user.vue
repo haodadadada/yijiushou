@@ -9,7 +9,7 @@
 			<view class="userInfo" @click="editUser" v-if="openid">
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
 				<img :src="avatarUrl" alt="头像" class="user-img">
-				<view class="name" v-if="userInfo.name!=null" style="text-align: center; font-size: 40px; color: #29D8D0;">{{ userInfo.name }}</view>
+				<view class="name" v-if="userInfo.name!=null">{{ userInfo.name }}</view>
 				<view v-else>admin</view>
 			</view>
 			<view class="userInfo" v-else>
@@ -210,7 +210,6 @@ export default {
 		getCode() {
 			uni.getSystemInfo({
 				success: (res) => {
-					this.getUserInfo()
 					// 获取平台信息
 					var platform = res.uniPlatform;
 					// 判断平台
@@ -227,6 +226,7 @@ export default {
 									if (res1.code == 200) {
 										this.openid = res1.data;
 										uni.setStorageSync('openid', this.openid);
+										this.getUserInfo()
 										} else {
 											this.$tools.toast('登录失败，请稍后重试');
 										}
@@ -273,7 +273,8 @@ export default {
 					openid: this.openid
 				})
 				.then(res => {
-					this.userInfo = res.data.user == null ? null : res.data.user.name;
+					console.log(res.data.user)
+					this.userInfo = res.data.user;
 					if (res.data.rstatus == 1) {
 						this.tools[5].show = true;
 						this.tools[6].show = true;
