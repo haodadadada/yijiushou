@@ -4,7 +4,7 @@
 		<view class="contain">
 			<view class="search">
 				<span class="iconfont" @click="searchAddress">&#xeafe;</span>
-				<input type="text" v-model="searchKeyword">
+				<input type="text" v-model="searchKeyword" placeholder="浙江省湖州市">
 			</view>
 			<view class="info">
 				<view class="info-contain">
