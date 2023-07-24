@@ -111,7 +111,7 @@
 
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 		</view>
-		<!-- <orderStatus :show="show" @closePopup="closePopup"></orderStatus> -->
+		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
 </template>
 
