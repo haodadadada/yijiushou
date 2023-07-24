@@ -171,7 +171,15 @@
 			},
 			// 转换日期格式
 			dateInit(date) {
-				return new Date(date).toLocaleString('zh', {hour12: false})
+				// 有兼容性问题
+				// return new Date(date).toLocaleString('zh-CN', {hour12: false})
+				const originalDate = new Date(date);
+				const formattedDate = `${originalDate.getFullYear()}/${originalDate.getMonth() + 1}/${originalDate.getDate()} ${this.addLeadingZero(originalDate.getHours())}:${this.addLeadingZero(originalDate.getMinutes())}`;
+				return formattedDate;
+			},
+			// 检查时间是否小于10 
+			addLeadingZero(value) {
+			  return value < 10 ? `0${value}` : value;
 			},
 			// 清除订单
 			delOrder(id) {
