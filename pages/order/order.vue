@@ -28,8 +28,8 @@
 						<view class="py-16 item-font">
 							预约地址: {{item.userCommunity}}
 						</view>
-						<view class="py-16 item-font">
-							物品称重: {{item.estimateWeight}}
+						<view class="py-16 item-font" >
+							物品称重: {{item.estimateWeight || ''}}
 						</view>
 						<view class="py-16 item-font">
 							创建时间: {{dateInit(item.createTime)}}
