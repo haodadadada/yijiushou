@@ -10,7 +10,7 @@
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
 				<img :src="avatarUrl" alt="头像" class="user-img">
 				<view class="name" v-if="userInfo.name!=null">{{ userInfo.name }}</view>
-				<view v-else>admin</view>
+				<view v-else>微信用户</view>
 			</view>
 			<view class="userInfo" v-else>
 				<view @click="getCode" class="login-btn">
@@ -273,7 +273,7 @@ export default {
 					openid: this.openid
 				})
 				.then(res => {
-					console.log(res.data.user)
+					// console.log(res.data.user)
 					this.userInfo = res.data.user;
 					if (res.data.rstatus == 1) {
 						this.tools[5].show = true;
