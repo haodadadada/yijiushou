@@ -12,7 +12,7 @@
 				</view>
 				<view class="address mt-30 pb-38 border-b">
 					<image class="icon mr-8" src="../../static/map-pin@2x.png" mode="aspectFill"></image>
-					<view class="size-30 gray-9">{{item.areaName}}{{item.address}}</view>
+					<view class="size-30 gray-9">{{item.community}}{{item.address}}</view>
 				</view>
 				<view class="flex-between mt-32">
 					<view class="error size-30" @click.stop="delAddress(item.id)">删除</view>
@@ -53,8 +53,7 @@
 					userId: uni.getStorageSync('openid'),
 					// page:this.page
 				}).then(res => {
-					this.list.push(...res.data)
-					console.log(res)
+					this.list = [...res.data].reverse()
 				})
 			},
 			// 删除地址

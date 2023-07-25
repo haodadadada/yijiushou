@@ -170,8 +170,6 @@ export default {
 		this.baseUrl = this.$tools.baseUrl;
 		this.userInfo = uni.getStorageSync('userInfo');
 		
-		
-		
 	},
 	onShareTimeline() {},
 	onShareAppMessage() {},
@@ -413,6 +411,7 @@ export default {
 					userId: uni.getStorageSync('openid')
 				})
 				.then(res => {
+					console.log(res.data)
 					this.list = res.data;
 				});
 		},
@@ -423,7 +422,6 @@ export default {
 			});
 		},
 		selectAddress(item) {
-			console.log(111,item)
 			this.userName = item.userName;
 			this.userPhone = item.userPhone;
 			this.userCommunity = item.community;

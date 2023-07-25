@@ -3,8 +3,8 @@
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
 		 <view class="search-container">
 		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" />
-		      <button class="search-button" @click="searchAddress">搜索地址</button>
-		    </view>
+		      <button class="search-button" @click="searchAddress(searchKeyword)">搜索地址</button>
+		</view>
 		<view class="input">
 			<text>联系人</text>
 			<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
@@ -22,7 +22,7 @@
 		</view>
 		<view class="input">
 		  <text>社区信息</text>
-		  <input v-model="community" />
+		  <input v-model="community" @blur="searchAddress(community)"/>
 		</view>
 
 		<view class="input">
@@ -177,57 +177,54 @@
 				})
 			},
 			getSite() {
-			var ok = 0;
-			this.$api.getAllArea().then(res => {
-			    const locationList = res.data;
-				console.log("data:",locationList)
-			    for (const location of locationList) {
-			      const location1 = location.location.split(',');
-			      const lat1 = parseFloat(location1[0]);
-			      const lon1 = parseFloat(location1[1]);
-			      const lat2 = parseFloat(this.latitude);
-			      const lon2 = parseFloat(this.longitude);
-			      const R = 6371; // 地球半径（单位：公里）
+				var ok = 0;
+				this.$api.getAllArea().then(res => {
+				  const locationList = res.data;
+				  for (const location of locationList) {
+					const location1 = location.location.split(",");
+					const lat1 = parseFloat(location1[0]);
+					const lon1 = parseFloat(location1[1]);
+					const lat2 = parseFloat(this.latitude);
+					const lon2 = parseFloat(this.longitude);
+					const R = 6371; // 地球半径（单位：公里）
 			
-			      const dLat = toRad(lat2 - lat1);
-			      const dLon = toRad(lon2 - lon1);
-				  console.log(dLat);
-				  console.log(dLon);
+					const dLat = toRad(lat2 - lat1);
+					const dLon = toRad(lon2 - lon1);
 			
-			      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-			        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-			        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+					const a =
+					  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+					  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+					  Math.sin(dLon / 2) * Math.sin(dLon / 2);
 			
-			      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-			      const distance = R * c;
+					const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+					const distance = R * c;
 			
-			      if (distance <= 5 && distance >= -5) {
-			        console.log('距离为' + distance);
-			        this.areaId = location.id;
-					ok=1;
-			        console.log(this.areaId);
-			        console.log(location.name);
-			        break;
-			      }else{
-					  console.log("区间之内");
+					if (distance <= 5 && distance >= -5) {
+					  console.log("距离为" + distance);
+					  this.areaId = location.id;
+					  ok = 1;
+					  console.log(this.areaId);
+					  console.log(location.name);
+					  break;
+					} else {
+					  console.log("区间之外");
 					  ok = 2;
+					}
 				  }
-			    }
-				console.log("ok"+ok);
-				if (ok==0) {
-				  uni.showToast({
-				    title: '当前位置未开通服务',
-				    icon: 'none'
-				  });
+				  console.log("ok" + ok);
+				  if (ok == 0) {
+					uni.showToast({
+					  title: "当前位置未开通服务",
+					  icon: "none"
+					});
+				  }
+			
+			
+				function toRad(value) {
+				  return value * Math.PI / 180;
 				}
 			  });
-			
-			  function toRad(value) {
-			    return value * Math.PI / 180;
-			  }
 			},
-
-
 
 			// 获取修改地址信息
 			getAddress(id){
@@ -263,31 +260,31 @@
 			},
 			submit() {
 				if (this.userName && this.userPhone && this.address) {
-					this.$api.addAddress({
-						userId: uni.getStorageSync('openid'),
-						id : this.id,
-						userName : this.userName,
-						userPhone : this.userPhone,
-						gender : this.gender,
-						areaId : this.areaId,
-						community : this.community,
-						address : this.address,
-						location : this.latitude+','+this.longitude
-					}).then(res=>{
-						this.$tools.toast(res.msg)
-						if(res.code==200){
-							if(this.source=='placeOrder'){
-								uni.navigateBack({
-									delta:1
-								})
-							}else{
-								uni.redirectTo({
-									url:'../address/address'
-								})
+						this.$api.addAddress({
+							userId: uni.getStorageSync('openid'),
+							id : this.id,
+							userName : this.userName,
+							userPhone : this.userPhone,
+							gender : this.gender,
+							areaId : this.areaId,
+							community : this.community,
+							address : this.address,
+							location : this.latitude+','+this.longitude
+						}).then(res=>{
+							// this.$tools.toast(res.msg)
+							console.log(res)
+							if(res.code==200){
+								if(this.source=='placeOrder'){
+									uni.navigateBack({
+										delta:1
+									})
+								}else{
+									uni.redirectTo({
+										url:'../address/address'
+									})
+								}
 							}
-							
-						}
-					})
+						})
 				} else {
 					uni.showToast({
 						title: '请填写地址信息',
@@ -338,12 +335,11 @@
 					iconPath: '../../static/location-1.png',	
 				}]
 			},
-			searchAddress() {
+			searchAddress(keyword) {
 			    this.qqMap.geocoder({
-			        address: '浙江省湖州市'+this.searchKeyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+			        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
 			              success: (res) => {//成功后的回调
-			                console.log(res);
 			                this.latitude = res.result.location.lat;
 			                this.longitude = res.result.location.lng;
 							this.community = res.result.title;
@@ -355,6 +351,7 @@
 								height: 20,
 								iconPath: '../../static/location-1.png',	
 							}];
+							this.getSite()
 			              },
 			              fail: function(error) {
 			                uni.showToast({
@@ -363,7 +360,6 @@
 			                });
 			              },
 			      })
-				  // this.getSite();
 			}
 			
 		}

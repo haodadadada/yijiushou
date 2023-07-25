@@ -151,7 +151,8 @@
 					orderStatus:this.orderStatus
 				}).then(res=>{
 					// this.list.push(...res.data)
-					this.list = [...res.data]
+					// 翻转数组按创建时间从上到下排列
+					this.list = [...res.data].reverse()
 				})
 			},
 			goDetail(id){

@@ -355,6 +355,7 @@ export default {
 				  const location1 = location.location.split(',');
 				  const lat1 = parseFloat(location1[0]);
 				  const lon1 = parseFloat(location1[1]);
+				  // 获得经纬度比较
 				  const lat2 = parseFloat(this.latitude);
 				  const lon2 = parseFloat(this.longitude);
 				  const R = 6371; // 地球半径（单位：公里）
@@ -454,7 +455,6 @@ export default {
 					recycleCategory:this.recycleCategory
 				})
 				.then(res => {
-					console.log(this.latitude,'***',this.longitude)
 					if (res.code == 200) {
 						this.$tools.toast('下单成功');
 							setTimeout(() => {
@@ -485,6 +485,7 @@ export default {
 			})
 		},
 		searchAddress(keyword) {
+			console.log(this.latitude)
 		    this.qqMap.geocoder({
 		        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 				sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
@@ -492,7 +493,7 @@ export default {
 		                // console.log(res);
 		                this.latitude = res.result.location.lat;
 		                this.longitude = res.result.location.lng;
-						this.community = res.result.title;
+						// this.community = res.result.title;
 						this.covers = [{
 							latitude: res.result.location.lat,
 							longitude: res.result.location.lng,
@@ -501,6 +502,7 @@ export default {
 							height: 20,
 							iconPath: '../../static/location-1.png',	
 						}];
+						this.getSite();
 		              },
 		              fail: function(error) {
 		                uni.showToast({
@@ -509,7 +511,6 @@ export default {
 		                });
 		              },
 		      })
-			  // this.getSite();
 		}
 	}
 };

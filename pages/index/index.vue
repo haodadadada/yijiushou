@@ -5,7 +5,7 @@
 		<view class="navbar"></view>
 		<view class="location flex">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
-			<span> {{community}}</span>
+			<span> {{community}} </span>
 			<text class="size-30 ml-8">{{ area }}</text>
 		</view>
 		<view>
