@@ -272,7 +272,6 @@
 							location : this.latitude+','+this.longitude
 						}).then(res=>{
 							// this.$tools.toast(res.msg)
-							console.log(res)
 							if(res.code==200){
 								if(this.source=='placeOrder'){
 									uni.navigateBack({
