@@ -161,10 +161,7 @@ export default {
 				url: '../user/user'
 			});
 		}
-		else{
-			this.getAuthorize();
-			this.initMap();
-		}
+		else{}
 
 		this.baseUrl = this.$tools.baseUrl;
 	},

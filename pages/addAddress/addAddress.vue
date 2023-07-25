@@ -179,51 +179,49 @@
 			getSite() {
 				var ok = 0;
 				this.$api.getAllArea().then(res => {
-				  const locationList = res.data;
-				  for (const location of locationList) {
-					const location1 = location.location.split(",");
-					const lat1 = parseFloat(location1[0]);
-					const lon1 = parseFloat(location1[1]);
-					const lat2 = parseFloat(this.latitude);
-					const lon2 = parseFloat(this.longitude);
-					const R = 6371; // 地球半径（单位：公里）
-			
-					const dLat = toRad(lat2 - lat1);
-					const dLon = toRad(lon2 - lon1);
-			
-					const a =
-					  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-					  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-					  Math.sin(dLon / 2) * Math.sin(dLon / 2);
-			
-					const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-					const distance = R * c;
-			
-					if (distance <= 5 && distance >= -5) {
-					  console.log("距离为" + distance);
-					  this.areaId = location.id;
-					  ok = 1;
-					  console.log(this.areaId);
-					  console.log(location.name);
-					  break;
-					} else {
-					  console.log("区间之外");
-					  ok = 2;
+					const locationList = res.data;
+					// console.log("data:",locationList)
+					for (const location of locationList) {
+					  const location1 = location.location.split(',');
+					  const lat1 = parseFloat(location1[0]);
+					  const lon1 = parseFloat(location1[1]);
+					  // 获得经纬度比较
+					  const lat2 = parseFloat(this.latitude);
+					  const lon2 = parseFloat(this.longitude);
+					  const R = 6371; // 地球半径（单位：公里）
+				
+					  const dLat = toRad(lat2 - lat1);
+					  const dLon = toRad(lon2 - lon1);
+					  // console.log(dLat);
+					  // console.log(dLon);
+				
+					  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+						Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+						Math.sin(dLon / 2) * Math.sin(dLon / 2);
+				
+					  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+					  const distance = R * c;
+					  // console.log(distance)
+				
+					  if (distance <= 5 && distance >= -5) {
+						this.areaId = location.id;
+						ok=1;
+						break;
+					  }else{
+						  ok = 2;
+					  }
 					}
+					if (ok==2) {
+					  uni.showToast({
+						title: '当前位置未开通服务',
+						icon: 'none'
+					  });
+					}
+				  });
+				
+				  function toRad(value) {
+					return value * Math.PI / 180;
 				  }
-				  console.log("ok" + ok);
-				  if (ok == 0) {
-					uni.showToast({
-					  title: "当前位置未开通服务",
-					  icon: "none"
-					});
-				  }
-			
-			
-				function toRad(value) {
-				  return value * Math.PI / 180;
-				}
-			  });
 			},
 
 			// 获取修改地址信息
@@ -250,16 +248,17 @@
 						width: 20,
 						height: 20,
 						iconPath: '../../static/location-1.png',	
-					}]
+					}];
+					this.getSite();
 				})
-				// this.getSite();
+				// 
 			},
 			change(data) {
 				this.txt = data.data.join('');
 				console.log(data.data.join(''));
 			},
 			submit() {
-				if (this.userName && this.userPhone && this.address) {
+				if (this.userName && this.userPhone && this.address&&this.areaId) {
 						this.$api.addAddress({
 							userId: uni.getStorageSync('openid'),
 							id : this.id,
@@ -294,7 +293,7 @@
 			},
 			// 修改地址
 			edit() {
-				if (this.userName && this.userPhone && this.address) {
+				if (this.userName && this.userPhone && this.address &&this.areaId) {
 					this.$api.siteAddres({
 						userId: uni.getStorageSync('openid'),
 						userName: this.userName,
@@ -336,6 +335,7 @@
 				}]
 			},
 			searchAddress(keyword) {
+				console.log(this.latitude)
 			    this.qqMap.geocoder({
 			        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
@@ -351,6 +351,7 @@
 								height: 20,
 								iconPath: '../../static/location-1.png',	
 							}];
+							console.log(this.latitude)
 							this.getSite()
 			              },
 			              fail: function(error) {

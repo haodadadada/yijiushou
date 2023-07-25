@@ -20,7 +20,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="information">
+		<!-- <view class="information">
 			<ul class="shadow">
 				<li>
 					<view>
@@ -47,7 +47,7 @@
 					</view>
 				</li>
 			</ul>
-		</view>
+		</view> -->
 		<view class="order">
 			<view class="flex-between">
 				<view class="title">我的回收</view>
