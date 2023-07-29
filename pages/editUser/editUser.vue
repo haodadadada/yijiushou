@@ -11,7 +11,7 @@
 			</view>
 			<view class="item">
 				<view class="label">性别</view>
-				<view @click="show = true">{{gender==0?'男':'女'}}</view>
+				<view @click="show = true">{{gender==0?'女':'男'}}</view>
 				<u-picker :show="show" :columns="columns" @cancel="show=false" @close="show=false" @confirm="selectSex">
 				</u-picker>
 			</view>
@@ -51,7 +51,7 @@
 				show: false,
 				openid:'',
 				name: '',
-				gender: '',
+				gender: 0,
 				columns: [
 					['女', '男']
 				],
@@ -100,16 +100,17 @@
 				this.$api.getUserInfo({
 					openid: uni.getStorageSync('openid')
 				}).then(res => {
-					let userInfo = res.data
+					let userInfo = res.data.user
 					this.name = userInfo.name
 					this.gender = userInfo.gender
 					this.phone = userInfo.phone
+					// console.log(res.data.user)
 				})
 			},
 			selectSex(e) {
 				this.show = false
 				this.gender = e.indexs[0]
-				console.log(e)
+				// console.log(e)
 			}
 		}
 	}
