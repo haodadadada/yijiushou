@@ -1,27 +1,43 @@
 <template>
 	<view class="container">
-		<view class="p-36 border-radius-12" :class="'status-bg-' + item.orderStatus">
+		<view class="header" :class="'header-bg-' + item.orderStatus">
 
-			<block v-if="item.orderStatus == 1"><view class="size-32 white">等待骑手上门收货</view></block>
+			<block v-if="item.orderStatus == 1">
+				<view class="size-32 white" style="margin-bottom: 5px; font-size: 16px;">待回收</view>
+				<view class="size-32 white" style="font-size: 10px;">订单待回收</view>
+			</block>
 
 			<!-- 			<block v-if="item.status==2">
 				<view class="size-32 white">待评价</view>
 				<view class="size-28 white mt-24">上门时间：15：54</view>
 			</block> -->
 
-			<block v-if="item.orderStatus == 2"><view class="size-32 white">已完成</view></block>
+			<block v-if="item.orderStatus == 2">
+				<view class="size-32 white">已完成</view>
+				<view class="size-26 white">订单已完成,欢迎下次预约</view>
+			</block>
 			<block v-if="item.orderStatus == 3">
 				<view class="size-32 white">已取消</view>
+				<view class="size-26 white">订单已取消,欢迎下次预约</view>
 			</block>
 
 		</view>
-		<view class="px-26 py-32 mt-14 bg-white border-radius-12" v-if="item.status != 0 && item.status != 3">
-			<view class="size-30 text-bold">骑手</view>
-			<view class="flex mt-20">
-				<view class="ml-18 size-32">{{ item.riderName }}</view>
+		<view class="userinfo" v-if="item.status != 0">
+			<view class="left">
+				<img :src="avatarUrl" alt="">
+			</view>
+			<view class="right">
+				<view class="right-top">
+					<view class="right-top-name">{{item.userName}}</view>
+					<view class="right-top-phone">{{item.userPhone}}</view>
+				</view>
+				<view class="right-footer">
+					<span class="iconfont">&#xe652;</span>
+					<view>{{item.userCommunity}}</view>
+				</view>
 			</view>
 		</view>
-		<view class="px-26 py-32 mt-14 bg-white border-radius-12">
+<!-- 		<view class="px-26 py-32 mt-14 bg-white border-radius-12">
 			<view class="size-28 mt-30 flex-between">
 				<view>预估重量：</view>
 				<view>{{ item.estimateWeight }}kg</view>
@@ -32,8 +48,8 @@
 				<view>总金额：</view>
 				<view v-if="item.orderStatus==2">{{ item.price }}元</view>
 			</view>
-		</view>
-		<view class="px-26 py-32 mt-14 bg-white border-radius-12">
+		</view> -->
+<!-- 		<view class="px-26 py-32 mt-14 bg-white border-radius-12">
 			<view class="size-30 gray-2">
 				<text>{{ item.userName }}</text>
 				<text class="ml-30">{{ item.userPhone }}</text>
@@ -43,25 +59,56 @@
 				<text class="size-30 gray-9">{{ item.userAreaName }}</text>
 				<text class="size-30 gray-9">{{ item.userAddress }}</text>
 			</view>
-		</view>
-		<view class="px-26 py-46 mt-14 bg-white border-radius-12">
-			<view class="size-30 gray-2 flex">
+		</view> -->
+		<view class="main-contain">
+			<view class="main-header">订单详情</view>
+<!-- 			<view class="size-30 gray-2 flex">
 				<text class="size-30 gray-9">订单号：</text>
 				<text class="size-30 gray-3">{{ item.id }}</text>
+			</view> -->
+			<view class="main-item">
+				<view>回收种类</view>
+				<view>{{item.recycleCategory}}</view>
 			</view>
-			<view class="size-30 gray-2 mt-40 flex">
-				<text class="size-30 gray-9">下单时间：</text>
-				<text class="size-30 gray-3">{{ createTimeDate }}</text>
+			<view class="main-item">
+				<view>预约时间</view>
+				<view>{{dateInit(item.reserveTime)}}</view>
 			</view>
-			<view class="size-30 gray-2 mt-40 flex" v-if="item.del_time">
-				<text class="size-30 gray-9">取消时间：</text>
-				<text class="size-30 gray-3">{{ item.del_time | dateFormat }}</text>
+			<view class="main-item">
+				<view>预约地址</view>
+				<view>{{item.userCommunity + item.userAddress}}</view>
 			</view>
+			<view class="main-item">
+				<view>订单编号</view>
+				<view>{{item.id}}</view>
+			</view>
+			<view class="main-item">
+				<view>创建时间</view>
+				<view>{{dateInit(item.createTime)}}</view>
+			</view>
+			<view class="main-item">
+				<view>回收员</view>
+				<view>{{item.riderName}}</view>
+			</view>
+			<!-- <view class="main-footer" >
+				<span>我的评价:</span>
+				<view class="footer-input">
+					<view class="footer-bg"></view>
+					<view class="footer-evaluate">
+						<img src="../../static/new-user2.png" alt="评价">
+						<span>我的评价</span>
+					</view>
+				</view>
+			</view> -->
 		</view>
+<!-- 		<view class="order-cancle" @click="handleCancel(id)" v-if="item.orderStatus == 1">
+			取消订单
+		</view> -->
 		<view class="flex-between fixed-btn">
 			<!-- <view class="flex-end" v-if="item.orderStatus == 1"><view class="btn cancel-btn mt-28" @click="cancelPopupShow = true">取消订单</view></view> -->
 			<view class="flex-end" v-if="item.orderStatus == 1"><view @click="makePhone(item.riderPhone)" class="btn chat-btn mt-28">联系骑手</view></view>
 		</view>
+
 		<!-- 取消订单 弹窗 -->
 		<u-popup :show="cancelPopupShow" mode="bottom" @close="cancelPopupShow = false">
 			<view class="popup">
@@ -105,7 +152,8 @@ export default {
 			cancelContent: '',
 			successShow: false,
 			value: '',
-			createTimeDate:''
+			createTimeDate:'',
+			avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c'
 		};
 	},
 	onLoad(e) {
@@ -135,7 +183,7 @@ export default {
 					openid: uni.getStorageSync('openid')
 				})
 				.then(res => {
-					console.log();
+					console.log(res);
 					if (res.code == 200) {
 						this.$tools.toast('取消订单成功');
 						setTimeout(() => {
@@ -150,7 +198,7 @@ export default {
 		},
 		makePhone(phone) {
 			uni.makePhoneCall({
-				phoneNumber: phone
+				phoneNumber: phone,
 			});
 		},
 		feedback(id) {
@@ -189,14 +237,148 @@ export default {
 					}
 				}
 			});
+		},
+		// 转换日期格式
+		dateInit(date) {
+			// 有兼容性问题
+			// return new Date(date).toLocaleString('zh-CN', {hour12: false})
+			const originalDate = new Date(date);
+			const formattedDate = `${originalDate.getFullYear()}/${originalDate.getMonth() + 1}/${originalDate.getDate()} ${this.addLeadingZero(originalDate.getHours())}:${this.addLeadingZero(originalDate.getMinutes())}`;
+			return formattedDate;
+		},
+		// 检查时间是否小于10
+		addLeadingZero(value) {
+		  return value < 10 ? `0${value}` : value;
 		}
 	}
 };
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: 'iconfont';  /* Project id 4143017 */
+  src: url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff2?t=1690008329887') format('woff2'),
+	   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff?t=1690008329887') format('woff'),
+	   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.ttf?t=1690008329887') format('truetype');
+}
+.header-bg-1, .header-bg-2 {
+	background: linear-gradient(to right, #4eb777, #04e0b3)
+}
+.header-bg-3 {
+	background: linear-gradient(to right, #8a8a8a, #b4b4b5)
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 26upx;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .container {
 	padding: 22upx 14upx 100upx;
+	.header {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: 50px;
+		padding: 20px;
+		border-radius: 10px;
+	}
+	.userinfo {
+		display: flex;
+		align-items: center;
+		padding: 20px;
+		margin: 20px 0;
+		border-radius: 10px;
+		background-color: #fff;
+		.left {
+			img {
+				border-radius: 20px;
+				width: 40px;
+				height: 40px;
+			}
+		}
+		.right {
+			display: flex;
+			flex-direction: column;
+			margin-left: 20px;
+			.right-top {
+				display: flex;
+				.right-top-name {
+					margin-right: 5px;
+					vertical-align: middle; 
+					font-size: 16px; 
+					line-height: 21px;
+				}
+				.right-top-phone {
+					font-size: 14px;
+					vertical-align: middle; 
+					line-height: 23px;
+				}  
+			}
+			.right-footer {
+				display: flex;
+				align-items: center;
+				font-size: 12px;
+			}
+		}
+	}
+	.main-contain {
+		padding: 20px;
+		border-radius: 10px;
+		background-color: #fff;
+		.main-header {
+			padding-bottom: 15px;
+			border-bottom: 1px #ccc dashed;
+		}
+		.main-item {
+			display: flex;
+			justify-content: space-between;
+			margin: 10px 0;
+			font-size: 14px;
+			view {
+				color: #bbb;
+			}
+		}
+		.main-footer {
+			margin-top: 20px;
+			span {
+				font-size: 14px;
+			}
+			.footer-input {
+				display: flex;
+				.footer-bg {
+					flex: 1;
+					border-radius: 5px;
+					margin-right: 15px;
+					height: 30px;
+					background-color: #d1f4e8;
+					margin-top: 5px;
+					padding: 5px;
+				}
+				.footer-evaluate {
+					display: flex;
+					flex-direction: column;
+					img {
+						margin: 0 auto;
+						width: 30px; 
+						height: 30px;
+					}
+					span {
+						height: 10px;
+						font-size: 10px;
+					}
+				}
+			}
+		}
+	}
+	.order-cancle {
+		display: inline-block;
+		margin-top: 10px;
+		padding: 10px;
+		background-color: #ccc;
+		border-radius: 5px;
+	}
 
 	.icon {
 		width: 100upx;

@@ -1,11 +1,13 @@
 <template>
 	<view class="container">
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 100%; position: absolute;" :markers="covers" @click="clickMap"></map>
+			
 		<view class="contain">
-<!-- 			<view class="search">
-				<span class="iconfont" @click="searchAddress(searchKeyword)">&#xeafe;</span>
+			<view class="search">
+				<span class="iconfont span-icon" >&#xeafe;</span>
 				<input type="text" v-model="searchKeyword" placeholder="浙江省湖州市">
-			</view> -->
+				<view @click="searchAddress(searchKeyword)"><span>搜索</span></view>
+			</view>
 			<view class="info">
 				<view class="info-contain">
 					<view class="info-header">
@@ -15,7 +17,7 @@
 					<view class="info-community">
 						<span class="iconfont">&#xe652;</span>
 						<!-- <span style="margin-left: 1upx;">浙江省湖州市</span> -->
-						<input type="text" style="margin-left: 1upx; flex-grow: 1;" placeholder="浙江省湖州市" v-model="userCommunity" @blur="searchAddress(userCommunity)">
+						<input type="text" style="margin-left: 1upx; flex-grow: 1;" placeholder="浙江省湖州市" v-model="userCommunity" >
 					</view>
 					<view class="info-address">
 						<span class="iconfont">&#xe624;</span>
@@ -42,10 +44,10 @@
 						<span class="iconfont">&#xe74c;</span>
 						<span style="margin-left: 1upx;">地址簿</span>
 					</view>
-					<view class="info-footer-middle">
+<!-- 					<view class="info-footer-middle">
 						<span class="iconfont">&#xe625;</span>
 						<span style="margin-left: 1upx;" @click="goBooking">预约</span>
-					</view>
+					</view> -->
 					<view class="info-footer-right" @click="submit(2)">
 						<span class="iconfont">&#xec36;</span>
 						<span style="margin-left: 1upx;">确认</span>
@@ -343,6 +345,7 @@ export default {
 				}
 			})
 		},
+		// 比较范围
 		getSite() {
 			var ok = 0;
 			this.$api.getAllArea().then(res => {
@@ -369,8 +372,7 @@ export default {
 				  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 				  const distance = R * c;
 				  // console.log(distance)
-			
-				  if (distance <= 5 && distance >= -5) {
+				  if (distance <= location.distance) {
 					this.userArea = location.id;
 					ok=1;
 					break;
@@ -439,6 +441,10 @@ export default {
 		},
 		submit(type) {
 			if(this.userName && this.recycleCategory && this.currentTime){
+				if(!this.checkTelephone(this.userPhone)) {
+					this.$tools.toast('请输入正确的手机格式');
+					return
+				}
 				this.$api
 				.placeOrder({
 					userId: uni.getStorageSync('openid'),
@@ -482,7 +488,8 @@ export default {
 			})
 		},
 		searchAddress(keyword) {
-			console.log(this.latitude)
+			// console.log(this.latitude)
+			this.searchKeyword = ''
 		    this.qqMap.geocoder({
 		        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 				sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
@@ -490,6 +497,7 @@ export default {
 		                // console.log(res);
 		                this.latitude = res.result.location.lat;
 		                this.longitude = res.result.location.lng;
+						this.userCommunity =  res.result.title;
 						// this.community = res.result.title;
 						this.covers = [{
 							latitude: res.result.location.lat,
@@ -508,6 +516,14 @@ export default {
 		                });
 		              },
 		      })
+		},
+		checkTelephone(telephone) {
+		    var reg=/^[1][3,4,5,7,8][0-9]{9}$/;
+		    if (!reg.test(telephone)) {
+		        return false;
+		    } else {
+		        return true;
+		    }
 		}
 	}
 };
@@ -576,36 +592,53 @@ export default {
 		overflow: hidden;
 		.contain {
 			// 相对定位让子元素有间隔但是地图组件没法拖动
-			position: relative;
-			top: 50%;
-			height: 50%;
-			margin: 0 20upx;
+			position: absolute;
+			// position: relative;
+			// bottom: 10px;
+			width: 95%;
+			// top: 150px;
+			bottom: 10px;
+			height: 309px;
+			margin: 0 2.5%;
 			.search {
 				display: flex;
 				align-items: center;
 				position: absolute;
+				top: -35px;
 				// bottom: 450upx;
-				bottom: 70%;
-				width: 60%;
+				width: 213px;
 				// height: 40upx;
-				height: 7%;
-				border-radius: 20upx;
+				height: 28px;
+				border-radius: 10px;
 				background-color: #fff;
-				span {
-					margin-left: 10upx;
+				overflow: hidden;
+				.span-icon {
+					margin-left: 10px;
 				}
 				input {
-					padding: 10upx 0 10upx 10upx;
+					padding: 5px 0 5px 5px;
 					height: 100%;
 					box-sizing: border-box;
-					font-size: 26upx;
+					font-size: 12px;
+				}
+				view {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex: 1; 
+					height: 100%; 
+					background-color: #34cd99; 
+					border-radius: 10px;
+					span {
+						font-size: 12px;
+					}
 				}
 			}
 			
 			.info {
 				position: absolute;
 				// bottom: 100upx;
-				bottom: 10%;
+				// bottom: 10%;
 				// height: 300upx;
 				height: 288px;
 				width: 100%;

@@ -50,14 +50,22 @@
 		</view> -->
 		<view class="order">
 			<view class="flex-between">
-				<view class="title">我的回收</view>
+				<view class="title">我的订单</view>
 				<!-- <navigator url="../order/order" hover-class="none" class="flex" @click="goOrder(0)">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator> -->
 			</view>
 			<view class="list">
 				<!-- <view class="item" v-for="item in orders" :key="item.id" @click="goOrder(item.id)"> -->
-				<view class="item" v-for="item in orders" :key="item.id" @click="goDetail(item.url)">
+		<!-- 		<view class="item" v-for="item in orders" :key="item.id" @click="goOrder()">
 					<image :src="this.openid === '' ? item.icon1 : item.icon2" mode="aspectFill"></image>
 					<view>{{item.title}}</view>
+					</view> -->
+				<view class="item" @click="goOrder()">
+					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
+					<view>{{orders[0].title}}</view>
+				</view>
+				<view class="item" @click="makePhone('123455')">
+					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
+					<view>{{orders[1].title}}</view>
 				</view>
 			</view>
 		</view>
@@ -92,31 +100,28 @@ export default {
 			orders:[
 				{
 					id: 1,
-					url: "/pages/balance/balance",
 					icon1: require('../../static/new-user7.png'),
 					icon2: require('../../static/new-user8.png'),
-					title: '我的钱包',
+					title: '我的订单',
 				},
-				{
-					id: 2,
-					url: "#",
-					icon1: require('../../static/new-user9.png'),
-					icon2: require('../../static/new-user10.png'),
-					title: '回收记录',
-				},
-				{
-					id: 3,
-					url: "#",
-					icon1: require('../../static/new-user11.png'),
-					icon2: require('../../static/new-user12.png'),
-					title: '我的评价',
-				},
+				// {
+				// 	id: 2,
+				// 	icon1: require('../../static/new-user9.png'),
+				// 	icon2: require('../../static/new-user10.png'),
+				// 	title: '待回收',
+				// },
+				// {
+				// 	id: 3,
+				// 	icon1: require('../../static/new-user11.png'),
+				// 	icon2: require('../../static/new-user12.png'),
+				// 	title: '已取消',
+				// },
 				{
 					id: 4,
 					url: "#",
 					icon1: require('../../static/new-user15.png'),
 					icon2: require('../../static/new-user16.png'),
-					title: '我的售后',
+					title: '找回物品',
 				}
 			],
 			tools: [
@@ -127,22 +132,22 @@ export default {
 					title: '我的地址',
 					show: true
 				},
+				// {
+				// 	url: '../feedback/feedback',
+				// 	icon1: require('../../static/new-user1.png'),
+				// 	icon2: require('../../static/new-user2.png'),
+				// 	title: '意见反馈',
+				// 	show: true
+				// },
+				// {
+				// 	url: '../balance/balance',
+				// 	icon1: require('../../static/new-user3.png'),
+				// 	icon2: require('../../static/new-user4.png'),
+				// 	title: '常见问题',
+				// 	show: true
+				// },
 				{
-					url: '../feedback/feedback',
-					icon1: require('../../static/new-user1.png'),
-					icon2: require('../../static/new-user2.png'),
-					title: '意见反馈',
-					show: true
-				},
-				{
-					url: '../balance/balance',
-					icon1: require('../../static/new-user3.png'),
-					icon2: require('../../static/new-user4.png'),
-					title: '常见问题',
-					show: true
-				},
-				{
-					url: '#',
+					url: '../about/about',
 					icon1: require('../../static/new-user13.png'),
 					icon2: require('../../static/new-user14.png'),
 					title: '关于我们',
@@ -173,13 +178,14 @@ export default {
 		closePopup() {
 			this.show = false;
 		},
-		goOrder(id){
+		// uni.switchTab无法传递参数
+		goOrder(){
 			if (!uni.getStorageSync('openid')) {
 				this.$tools.toast('请先登录');
 				return;
 			}
 			uni.switchTab({
-				url:'../order/order?status=' + id
+				url:'../order/order'
 			});
 		},
 		goBanner(e) {
@@ -294,7 +300,18 @@ export default {
 					  console.log(res)
 				  }
 			});
-		}
+		},
+		makePhone(phone) {
+			uni.makePhoneCall({
+				phoneNumber: phone,
+				success(res) {
+					console.log('success:',res)
+				},
+				fail(res) {
+					console.log('fail:',res)
+				}
+			});
+		},
 	}
 };
 </script>
@@ -483,10 +500,11 @@ body {
 	.list{
 		@include menu-list(5);
 		display: flex;
-		justify-content: space-between;
-		padding: 0 40upx;
+		// justify-content: space-between;
+		// padding: 0 40upx;
 		padding-bottom: 30upx;
 		.item{
+			width: 25%;
 			image{
 				width: 52upx;
 				height: 52upx;

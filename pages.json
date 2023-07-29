@@ -218,7 +218,13 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },{
+			"path": "pages/about/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
+		}
     ],
 	"tabBar": {
 		"color": "#606060",

@@ -2,8 +2,9 @@
 	<view class="content pb-30">
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
 		 <view class="search-container">
+			 <view class="search-button"><span @click="searchAddress(searchKeyword)" class="iconfont">&#xeafe;</span></view>
 		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" />
-		      <button class="search-button" @click="searchAddress(searchKeyword)">搜索地址</button>
+		      <!-- <button class="search-button" @click="searchAddress(searchKeyword)">搜索地址</button> -->
 		</view>
 		<view class="input">
 			<text>联系人</text>
@@ -11,9 +12,11 @@
 		</view>
 		<view class="input">
 			<text>性别</text>
-			<view class="sex" v-for="item in sexList" :key="item.id">
-				<view class="item" :class="{cur:gender==item.id}"
-				@click="gender=item.id">{{item.name}}</view>
+			<view class="sex-check">
+				<view class="sex" v-for="item in sexList" :key="item.id">
+					<view class="item" :class="{cur:gender==item.id}"
+					@click="gender=item.id">{{item.name}}</view>
+				</view>
 			</view>
 		</view>
 		<view class="input">
@@ -22,7 +25,7 @@
 		</view>
 		<view class="input">
 		  <text>社区信息</text>
-		  <input v-model="community" @blur="searchAddress(community)"/>
+		  <input v-model="community" />
 		</view>
 
 		<view class="input">
@@ -259,6 +262,10 @@
 			},
 			submit() {
 				if (this.userName && this.userPhone && this.address&&this.areaId) {
+						if(!this.checkTelephone(this.userPhone)) {
+							this.$tools.toast('请输入正确的手机格式');
+							return
+						}
 						this.$api.addAddress({
 							userId: uni.getStorageSync('openid'),
 							id : this.id,
@@ -293,6 +300,10 @@
 			// 修改地址
 			edit() {
 				if (this.userName && this.userPhone && this.address &&this.areaId) {
+					if(!this.checkTelephone(this.userPhone)) {
+						this.$tools.toast('请输入正确的手机格式');
+						return
+					}
 					this.$api.siteAddres({
 						userId: uni.getStorageSync('openid'),
 						userName: this.userName,
@@ -334,7 +345,7 @@
 				}]
 			},
 			searchAddress(keyword) {
-				console.log(this.latitude)
+				// console.log(this.latitude)
 			    this.qqMap.geocoder({
 			        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
@@ -360,22 +371,44 @@
 			                });
 			              },
 			      })
+			},
+			checkTelephone(telephone) {
+			    var reg=/^[1][3,4,5,7,8][0-9]{9}$/;
+			    if (!reg.test(telephone)) {
+			        return false;
+			    } else {
+			        return true;
+			    }
 			}
-			
 		}
 	};
 </script>
 
 <style lang="scss">
+	@font-face {
+	  font-family: 'iconfont';  /* Project id 4143017 */
+	  src: url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff2?t=1690008329887') format('woff2'),
+		   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff?t=1690008329887') format('woff'),
+		   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.ttf?t=1690008329887') format('truetype');
+	}
+	.iconfont {
+	  font-family: "iconfont" !important;
+	  font-size: 26upx;
+	  font-style: normal;
+	  -webkit-font-smoothing: antialiased;
+	  -moz-osx-font-smoothing: grayscale;
+	}
 	.search-container {
 	  display: flex;
 	  align-items: center;
 	  margin-bottom: 10px;
+	  // background-color: #34cd99;
 	}
 	
 	.search-input {
 	  flex: 1;
 	  height: 36px;
+	  margin-right: 20px;
 	  padding: 0 20px;
 	  border: 1px solid #ccc;
 	  border-radius: 4px;
@@ -386,12 +419,15 @@
 	  align-items: center;
 	  justify-content: center;
 	  height: 36px;
-	  padding: 0 20px;
-	  background-color: #007AFF;
-	  color: #fff;
+	  padding: 20px 5px 20px 20px;
+	  // background-color: #007AFF;
 	  border: none;
-	  border-radius: 4px;
+	  // border-radius: 4px;
 	  cursor: pointer;
+	  color: #ccc;
+	  span {
+		  font-size: 26px;
+	  }
 	}
 
 	page {
@@ -444,29 +480,33 @@
 			padding: 0 20upx;
 			line-height: 100upx;
 			display: flex;
+			justify-content: space-between;
 			align-items: center;
 			font-size: 30upx;
 			color: #999999;
 			border-bottom: 2upx solid #ededed;
 			background: #fff;
 			position: relative;
-			.sex{
+			.sex-check {
 				display: flex;
-				margin: 20upx 0;
-				.item{
-					font-size: 32upx;
-					color: #C4C4C4;
-					width: 128upx;
-					line-height: 72upx;
-					text-align: center;
-					background: #FFFFFF;
-					border-radius: 12upx;
-					border: 1upx solid #C4C4C4;
-					margin-right: 32upx;
-				}
-				.cur{
-					color: #3BB061;
-					border: 1upx solid #3BB061;
+				.sex{
+					display: flex;
+					margin: 20upx 0;
+					.item{
+						font-size: 25upx;
+						color: #C4C4C4;
+						width: 128upx;
+						line-height: 50upx;
+						text-align: center;
+						background: #FFFFFF;
+						border-radius: 20upx;
+						border: 1upx solid #C4C4C4;
+						margin-right: 32upx;
+					}
+					.cur{
+						color: #3BB061;
+						border: 1upx solid #3BB061;
+					}
 				}
 			}
 			text {
@@ -515,6 +555,8 @@
 		justify-content: center;
 	}
 	.btn{
-		margin: 0 auto; 
+		margin: 10rpx auto;
+		background: linear-gradient(to right, #48b97e, #0be0b2);
+		line-height: 68rpx;
 	}
 </style>

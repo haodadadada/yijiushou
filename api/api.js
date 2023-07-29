@@ -70,12 +70,18 @@ const guidanceList = (data) => {
 	})
 }
 // 今日指导价详情
-const guidancePrice = (data) => {
-	return http.post({
-		url: 'api/Index/guidancePrice',
-		data: {
-			...data
-		}
+// const guidancePrice = (data) => {
+// 	return http.post({
+// 		url: 'api/Index/guidancePrice',
+// 		data: {
+// 			...data
+// 		}
+// 	})
+// }
+// 获取价格列表
+const guidancePrice = () => {
+	return http.get({
+		url: '/price/getAll',
 	})
 }
 // 回收站列表

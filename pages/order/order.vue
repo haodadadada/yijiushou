@@ -12,7 +12,7 @@
 			<view class="card" v-for="item in list" :key="item.id" v-show="item.orderStatus !== 3 || orderStatus !== 0 ">
 				<view class="header flex-between size-28 white" >
 				<!-- :class="'status-bg-' + item.orderStatus" -->
-					<view>纸张</view>
+					<view>{{item.recycleCategory}}</view>
 					<!-- <view class="white" v-if="item.orderStatus==1">骑手待上门</view> -->
 					<view v-if="item.orderStatus==3" class="item-font">已取消</view>
 					<view v-if="item.orderStatus==1" class="item-font">待回收</view>
@@ -47,8 +47,8 @@
 							<span class="item-font">取消订单</span>
 						</view>
 						<view class="item-icon">
-							<img src="../../static/new-order1.png" alt="">
-							<span class="item-font">修改时间</span>
+							<img src="../../static/new-order1.png" alt="" @click="goDetail(item.id)">
+							<span class="item-font">详情</span>
 						</view>
 					</view>
 				</view>
@@ -119,13 +119,12 @@
 					}
 				}
 			})
-			
 			if(e.status){
 				this.tabCur = e.status
 			}else{
 				this.tabCur = 1
 			}
-			
+	
 			this.list = []
 			this.getList()
 		},
@@ -285,6 +284,7 @@
 						flex-direction: column;
 						justify-content: center;
 						margin-top: 20upx;
+						text-align: center;
 						img {
 							margin: 0 auto;
 							width: 52upx;

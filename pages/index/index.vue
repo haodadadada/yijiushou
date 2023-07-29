@@ -40,15 +40,15 @@
 				<view class="menu" >
 					<view class="item">
 						<img src="../../static/new4.png" alt="指南">
-						<span class="title">回收指南</span>
+						<span class="title">二手交易</span>
 					</view>
-					<view class="item">
+					<view class="item" @click="openPrice">
 						<img src="../../static/new5.png" alt="分类">
-						<span class="title">回收分类</span>
+						<span class="title">价格类目</span>
 					</view>
 					<view class="item">
 						<img src="../../static/new6.png" alt="客服">
-						<span class="title">客服中心</span>
+						<span class="title">旧物找回</span>
 					</view>
 				</view>
 				
@@ -111,6 +111,12 @@
 
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 		</view>
+		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
+			<view v-for="item of totalData" :key="item.id" class="priceItem">
+				<span>{{item.name}}</span>
+				<span style="color: orangered;">￥{{item.price}}</span>
+			</view>
+		</u-popup>
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
 </template>
@@ -159,7 +165,9 @@ export default {
 			userInfo: '',
 			longitude: 0,
 			latitude: 0,
-			community: ''
+			community: '',
+			isShowPrice: false,
+			totalData: []
 		};
 	},
 	onShareAppMessage() {},
@@ -262,6 +270,10 @@ export default {
 			    fail: res => {
 			        }
 			      });
+		},
+		openPrice() {
+			this.isShowPrice = true
+			this.$api.guidancePrice().then(res => this.totalData = res.data)
 		}
 	}
 };
@@ -583,5 +595,11 @@ export default {
 			color: #999999;
 		}
 	}
+}
+.priceItem {
+	margin: 20px 50px;
+	display: flex;
+	justify-content: center;
+	font-size: 15px;
 }
 </style>
