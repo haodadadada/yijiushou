@@ -336,10 +336,11 @@ export default {
 			}
 		}
 		.location {
-			padding-left: 30upx;
+			padding-left: 10upx;
 			image {
 				width: 29upx;
 				height: 33upx;
+				margin-right: 10upx;
 			}
 		}
 			
@@ -355,8 +356,7 @@ export default {
 				margin-top: 30upx;
 				width: 100%;
 				border-radius: 30upx;
-				height: 300upx;
-				max-height: 100%;
+				height: 400upx;
 			}
 			.left {
 				padding-top: 30upx;

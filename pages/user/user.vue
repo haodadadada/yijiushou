@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<u-navbar title="个人中心" leftIconSize="0" :bgColor="bgColor"></u-navbar>
-		<view :class="showInalipay? 'bgcali1': 'bgc1'">
+		<!-- <u-navbar title="个人中心" leftIconSize="0" :bgColor="bgColor"></u-navbar> -->
+		<view class="bgc1" :class="showInalipay? 'bgcali1': ''">
 		</view>
-		<view :class="showInalipay? 'bgcali2': 'bgc2'">
+		<view class="bgc2" :class="showInalipay? 'bgcali2': ''">
 		</view>
 		<view class="info-container">
 			<view class="header">
@@ -342,35 +342,28 @@ body {
 	top: 0;
 	left: 0;
 	right: 0;
-	height: 415upx;
+	height: 400upx;
 	background: linear-gradient(45deg, #70c9ae, #77c9b0);
-	z-index: -1;
 }
 .bgcali1{
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 415upx;
+	background: none;
 	background-image: url('../../static/bg-user-alipay-1.jpg');
+
 }
 
 .bgc2 {
 	position: absolute;
+	top: 500upx;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	height: 850upx;
+	// height: 850upx;
 	background: linear-gradient(to top, #9fe6ce, #fff);
-	z-index: -2;
 }
 .bgcali2 {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	height: 850upx;
+	background: none;
 	background-image: url('../../static/bg-user-alipay-2.jpg');
+	background-size: 100% 100%;
 }
 
 .header{
