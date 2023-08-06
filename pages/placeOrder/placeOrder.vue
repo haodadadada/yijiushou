@@ -138,7 +138,9 @@ export default {
 				}
 			],
 			gender:0,
-			searchKeyword: ''
+			searchKeyword: '',
+			systemInfo: '',
+			showInalipay: false
 		};
 	},
 	watch: {
@@ -166,6 +168,7 @@ export default {
 		else{}
 
 		this.baseUrl = this.$tools.baseUrl;
+		this.getSystemInfo();
 	},
 	onShareTimeline() {},
 	onShareAppMessage() {},
@@ -192,7 +195,14 @@ export default {
 		this.resetData();
 		this.initMap();
 		// 在onload中uni.getStorageSync('userInfo').name可能还未设置完毕
-		this.userName = uni.getStorageSync('userInfo').name || '微信用户'
+		if(uni.getStorageSync('userInfo').name) {
+			this.userName = uni.getStorageSync('userInfo').name;
+		} else if(this.showInalipay === true) {
+			this.userName = '支付宝用户';
+		} else {
+			this.userName = '微信用户'
+		}
+		// this.userName = uni.getStorageSync('userInfo').name || this.showInalipay ? '支付宝用户' : '微信用户';
 	},
 	methods: {
 		
@@ -524,6 +534,13 @@ export default {
 		    } else {
 		        return true;
 		    }
+		},
+		/** 获取设备 */
+		getSystemInfo() {
+			this.systemInfo = uni.getSystemInfoSync()
+			if(this.systemInfo.uniPlatform === 'mp-alipay') {
+				this.showInalipay = true
+			}
 		}
 	}
 };

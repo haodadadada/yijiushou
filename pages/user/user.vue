@@ -11,6 +11,7 @@
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
 				<img :src="avatarUrl" alt="头像" class="user-img">
 				<view class="name" v-if="userInfo.name!=null">{{ userInfo.name }}</view>
+				<view v-else-if="showInalipay">支付宝用户</view>
 				<view v-else>微信用户</view>
 			</view>
 			<view class="userInfo" v-else>
@@ -179,6 +180,7 @@ export default {
 		if (uni.getStorageSync('invition_id')) {
 			this.user_id = uni.getStorageSync('invition_id');
 		}
+		
 	},
 	methods: {
 		closePopup() {
