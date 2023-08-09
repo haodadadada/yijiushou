@@ -3,7 +3,7 @@
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
 		 <view class="search-container">
 			 <view class="search-button"><span @click="searchAddress(searchKeyword)" class="iconfont">&#xeafe;</span></view>
-		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" />
+		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" @confirm="searchAddress(searchKeyword)"/>
 		      <!-- <button class="search-button" @click="searchAddress(searchKeyword)">搜索地址</button> -->
 		</view>
 		<view class="input">
@@ -346,6 +346,7 @@
 			},
 			searchAddress(keyword) {
 				// console.log(this.latitude)
+				this.searchKeyword = ''
 			    this.qqMap.geocoder({
 			        address: '浙江省湖州市'+keyword, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
 					sig:'4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
@@ -423,7 +424,7 @@
 	  // background-color: #007AFF;
 	  border: none;
 	  // border-radius: 4px;
-	  cursor: pointer;
+	  // cursor: pointer;
 	  color: #ccc;
 	  span {
 		  font-size: 26px;

@@ -1,15 +1,17 @@
 <template>
 	<view class="container">
-		<u-navbar title="个人中心" leftIconSize="0" :bgColor="bgColor"></u-navbar>
-		<view class="bgc1">
+		<!-- <u-navbar title="个人中心" leftIconSize="0" :bgColor="bgColor"></u-navbar> -->
+		<view class="bgc1" :class="showInalipay? 'bgcali1': ''">
 		</view>
-		<view class="bgc2">
+		<view class="bgc2" :class="showInalipay? 'bgcali2': ''">
 		</view>
-		<view class="header">
+		<view class="info-container">
+			<view class="header">
 			<view class="userInfo" @click="editUser" v-if="openid">
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
 				<img :src="avatarUrl" alt="头像" class="user-img">
 				<view class="name" v-if="userInfo.name!=null">{{ userInfo.name }}</view>
+				<view v-else-if="showInalipay">支付宝用户</view>
 				<view v-else>微信用户</view>
 			</view>
 			<view class="userInfo" v-else>
@@ -81,6 +83,8 @@
 				</view>
 			</view>
 		</view>
+		</view>
+			
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
 </template>
@@ -156,7 +160,9 @@ export default {
 			],
 			bannerList: [],
 			user_id: '',
-			avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c'
+			avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c',
+			systemInfo: '',
+			showInalipay: false
 		};
 	},
 	onShareAppMessage() {},
@@ -167,12 +173,14 @@ export default {
 			this.user_id = e.scene;
 			uni.setStorageSync('invition_id', this.user_id);
 		}
+		this.getSystemInfo()
 	},
 	onShow() {
 		this.getUserInfo();
 		if (uni.getStorageSync('invition_id')) {
 			this.user_id = uni.getStorageSync('invition_id');
 		}
+		
 	},
 	methods: {
 		closePopup() {
@@ -312,6 +320,13 @@ export default {
 				}
 			});
 		},
+		/** 获取设备 */ 
+		getSystemInfo() {
+			this.systemInfo = uni.getSystemInfoSync()
+			if(this.systemInfo.uniPlatform === 'mp-alipay') {
+				this.showInalipay = true
+			}
+		}
 	}
 };
 </script>
@@ -329,19 +344,28 @@ body {
 	top: 0;
 	left: 0;
 	right: 0;
-	height: 415upx;
+	height: 400upx;
 	background: linear-gradient(45deg, #70c9ae, #77c9b0);
-	z-index: -1;
+}
+.bgcali1{
+	background: none;
+	background-image: url('../../static/bg-user-alipay-1.jpg');
+
 }
 
 .bgc2 {
 	position: absolute;
+	top: 500upx;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	height: 850upx;
+	// height: 850upx;
 	background: linear-gradient(to top, #9fe6ce, #fff);
-	z-index: -2;
+}
+.bgcali2 {
+	background: none;
+	background-image: url('../../static/bg-user-alipay-2.jpg');
+	background-size: 100% 100%;
 }
 
 .header{
@@ -562,5 +586,8 @@ body {
 			margin-bottom: 10upx;
 		}
 	}
+}
+.info-container{
+	position: relative;
 }
 </style>

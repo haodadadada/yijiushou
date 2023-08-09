@@ -5,8 +5,8 @@
 		<view class="contain">
 			<view class="search">
 				<span class="iconfont span-icon" >&#xeafe;</span>
-				<input type="text" v-model="searchKeyword" placeholder="浙江省湖州市">
-				<view @click="searchAddress(searchKeyword)"><span>搜索</span></view>
+				<input type="text" v-model="searchKeyword" placeholder="浙江省湖州市" @confirm="searchAddress(searchKeyword)">
+				<view @click="searchAddress(searchKeyword)">搜索</view>
 			</view>
 			<view class="info">
 				<view class="info-contain">
@@ -25,7 +25,7 @@
 					</view>
 					<view class="info-phone">
 						<span class="iconfont">&#xe88b;</span>
-						<input type="text" style="margin-left: 1upx; flex-grow: 1;" placeholder="请输入手机号" v-model="userPhone">
+						<input type="tel" style="margin-left: 1upx; flex-grow: 1;" placeholder="请输入手机号" v-model="userPhone">
 					</view>
 					<view class="info-date" @click="this.isShow=true">
 						<span class="iconfont">&#xe64d;</span>
@@ -138,7 +138,9 @@ export default {
 				}
 			],
 			gender:0,
-			searchKeyword: ''
+			searchKeyword: '',
+			systemInfo: '',
+			showInalipay: false
 		};
 	},
 	watch: {
@@ -166,6 +168,7 @@ export default {
 		else{}
 
 		this.baseUrl = this.$tools.baseUrl;
+		this.getSystemInfo();
 	},
 	onShareTimeline() {},
 	onShareAppMessage() {},
@@ -192,7 +195,14 @@ export default {
 		this.resetData();
 		this.initMap();
 		// 在onload中uni.getStorageSync('userInfo').name可能还未设置完毕
-		this.userName = uni.getStorageSync('userInfo').name || '微信用户'
+		if(uni.getStorageSync('userInfo').name) {
+			this.userName = uni.getStorageSync('userInfo').name;
+		} else if(this.showInalipay === true) {
+			this.userName = '支付宝用户';
+		} else {
+			this.userName = '微信用户'
+		}
+		// this.userName = uni.getStorageSync('userInfo').name || this.showInalipay ? '支付宝用户' : '微信用户';
 	},
 	methods: {
 		
@@ -524,6 +534,13 @@ export default {
 		    } else {
 		        return true;
 		    }
+		},
+		/** 获取设备 */
+		getSystemInfo() {
+			this.systemInfo = uni.getSystemInfoSync()
+			if(this.systemInfo.uniPlatform === 'mp-alipay') {
+				this.showInalipay = true
+			}
 		}
 	}
 };
@@ -602,6 +619,7 @@ export default {
 			margin: 0 2.5%;
 			.search {
 				display: flex;
+				justify-content: space-between;
 				align-items: center;
 				position: absolute;
 				top: -35px;
@@ -625,13 +643,14 @@ export default {
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					flex: 1; 
-					height: 100%; 
+					// flex: 1; 
+					// height: 100%; 
 					background-color: #34cd99; 
 					border-radius: 10px;
-					span {
-						font-size: 12px;
-					}
+					width: 100upx;
+					height: 100%;
+						font-size: 24upx;
+						color: #fff;
 				}
 			}
 			
@@ -648,42 +667,47 @@ export default {
 				overflow: hidden;
 				font-size: 24upx;
 				.info-contain {
-					padding: 20upx;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					padding:20upx 20upx 100upx;
+					height: 100%;
+					box-sizing: border-box;
+					view {
+						input{
+							font-size: 28upx;
+							color: #898989;
+						}
+					}
 					.info-header {
 						display: flex;
 						justify-content: space-between;
-						margin-bottom: 17px;
 						font-size: 35upx;
 					}
 					.info-community {
 						display: flex;
 						align-items: center;
-						margin-bottom: 17px;
-						color: #898989
+						color: #898989;
 					}
 					.info-phone {
 						display: flex;
 						align-items: center;
-						margin-bottom: 17px;
-						color: #898989
+						color: #898989;
 					}
 					.info-date {
 						display: flex;
 						align-items: center;
-						margin-bottom: 17px;
-						color: #898989
+						color: #898989;
 					}
 					.info-category {
 						display: flex;
 						align-items: center;
-						margin-bottom: 17px;
-						color: #898989
+						color: #898989;
 					}
 					.info-address {
 						display: flex;
 						align-items: center;
-						margin-bottom: 17px;
-						color: #898989
+						color: #898989;
 					}
 				}
 
@@ -695,6 +719,7 @@ export default {
 					padding: 3% 0;
 					bottom: 0;
 					width: 100%;
+					height: 40upx;
 					background: linear-gradient(to right, #4eb777, #00e1b4);
 					text-align: center;
 					.info-footer-left {

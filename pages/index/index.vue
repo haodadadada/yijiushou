@@ -1,14 +1,13 @@
 <template>
 	<view class="container">
-		<view class="bgc">
-		</view>
+		<view :class="showInalipay? 'bgcali': 'bgc'"></view>
 		<view class="navbar"></view>
 		<view class="location flex">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
 			<span> {{community}} </span>
 			<text class="size-30 ml-8">{{ area }}</text>
 		</view>
-		<view>
+		<view class="main-banner-wrap">
 			<view class="main-banner">
 				<img src="../../static/new15.png" alt="" class="img-banner">
 <!-- 				<view class="left pl-10">
@@ -167,7 +166,10 @@ export default {
 			latitude: 0,
 			community: '',
 			isShowPrice: false,
-			totalData: []
+			totalData: [],
+			// 设备信息
+			systemInfo: '',
+			showInalipay: false
 		};
 	},
 	onShareAppMessage() {},
@@ -190,7 +192,9 @@ export default {
 		this.baseUrl = this.$tools.baseUrl;
 		this.getNoticeList();
 		this.initMap();
+		this.getSystemInfo();
 	},
+
 	methods: {
 		getNoticeList() {
 			this.$api.newOrder().then(res => {
@@ -274,6 +278,13 @@ export default {
 		openPrice() {
 			this.isShowPrice = true
 			this.$api.guidancePrice().then(res => this.totalData = res.data)
+		},
+		/** 获取设备 */ 
+		getSystemInfo() {
+			this.systemInfo = uni.getSystemInfoSync()
+			if(this.systemInfo.uniPlatform === 'mp-alipay') {
+				this.showInalipay = true
+			}
 		}
 	}
 };
@@ -287,6 +298,16 @@ export default {
 	  content: "";
 	  display: table;
 	  clear: both;
+	}
+	.bgcali{
+		position: absolute;
+		background-image: url('../../static//bk_for_airpay.jpg');
+		background-clip: content-box;
+		top: 560upx;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 0;
 	}
 	.bgc {
 		position: absolute;
@@ -315,10 +336,11 @@ export default {
 			}
 		}
 		.location {
-			padding-left: 30upx;
+			padding-left: 10upx;
 			image {
 				width: 29upx;
 				height: 33upx;
+				margin-right: 10upx;
 			}
 		}
 			
@@ -334,8 +356,7 @@ export default {
 				margin-top: 30upx;
 				width: 100%;
 				border-radius: 30upx;
-				height: 300upx;
-				max-height: 100%;
+				height: 400upx;
 			}
 			.left {
 				padding-top: 30upx;
@@ -601,5 +622,8 @@ export default {
 	display: flex;
 	justify-content: center;
 	font-size: 15px;
+}
+.main-banner-wrap{
+	position: relative;
 }
 </style>
