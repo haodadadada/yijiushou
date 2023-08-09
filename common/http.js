@@ -1,8 +1,8 @@
 import Vue from "vue"
 let startTestModel = true //开启测试模式
 let BASE_URL=''
-const DEV_BASE_URL = 'http://110.42.228.141:9090'
-const PROD_BASE_URL = 'http://110.42.228.141:9090'// 接口域名
+const DEV_BASE_URL = 'https://www.19so.net/user'
+const PROD_BASE_URL = 'https://www.19so.net/user'// 接口域名
 // const DEV_BASE_URL = 'https://user.19so.net'
 // const PROD_BASE_URL = 'https://user.19so.net'// 接口域名
 const IMG_URL = ''  // 图片域名
