@@ -288,7 +288,7 @@ export default {
 				})
 				.then(res => {
 					// console.log(res.data.user)
-					this.userInfo = res.data.user;
+					this.userInfo = res.data;
 					if (res.data.rstatus == 1) {
 						this.tools[5].show = true;
 						this.tools[6].show = true;

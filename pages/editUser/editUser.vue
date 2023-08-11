@@ -100,7 +100,7 @@
 				this.$api.getUserInfo({
 					openid: uni.getStorageSync('openid')
 				}).then(res => {
-					let userInfo = res.data.user
+					let userInfo = res.data;
 					this.name = userInfo.name
 					this.gender = userInfo.gender
 					this.phone = userInfo.phone
