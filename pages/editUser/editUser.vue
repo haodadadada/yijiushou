@@ -9,12 +9,12 @@
 				<view class="label">手机号</view>
 				<u-input type="number" maxlength="11" v-model="phone" border="none" placeholder="请输入您的手机号"></u-input>
 			</view>
-			<view class="item">
+<!-- 			<view class="item">
 				<view class="label">性别</view>
 				<view @click="show = true">{{gender==0?'女':'男'}}</view>
 				<u-picker :show="show" :columns="columns" @cancel="show=false" @close="show=false" @confirm="selectSex">
 				</u-picker>
-			</view>
+			</view> -->
 		</view>
 
 		<view class="menu">
@@ -81,7 +81,7 @@
 				console.log(uni.getStorageSync('openid'))
 				this.$api.editInfo({
 					name: this.name,
-					gender: this.gender,
+					// gender: this.gender,
 					phone: this.phone,
 					openid: uni.getStorageSync('openid')
 				}).then(res => {

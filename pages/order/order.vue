@@ -124,7 +124,8 @@
 			}else{
 				this.tabCur = 1
 			}
-	
+		},
+		onShow() {
 			this.list = []
 			this.getList()
 		},
