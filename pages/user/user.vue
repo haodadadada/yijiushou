@@ -65,9 +65,13 @@
 					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
 					<view>{{orders[0].title}}</view>
 				</view>
-				<view class="item" @click="makePhone('123455')">
+				<view class="item" @click="goBind()">
 					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
 					<view>{{orders[1].title}}</view>
+				</view>
+				<view class="item" @click="makePhone('123455')">
+					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
+					<view>{{orders[2].title}}</view>
 				</view>
 			</view>
 		</view>
@@ -104,9 +108,15 @@ export default {
 			orders:[
 				{
 					id: 1,
+					icon1: require('../../static/new-user9.png'),
+					icon2: require('../../static/new-user10.png'),
+					title: '我的订单',
+				},
+				{
+					id: 3,
 					icon1: require('../../static/new-user7.png'),
 					icon2: require('../../static/new-user8.png'),
-					title: '我的订单',
+					title: '我的钱包',
 				},
 				// {
 				// 	id: 2,
@@ -195,6 +205,15 @@ export default {
 			uni.switchTab({
 				url:'../order/order'
 			});
+		},
+		goBind() {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				return;
+			}
+			uni.navigateTo({
+				url: '../bind/bind'
+			})
 		},
 		goBanner(e) {
 			let url = this.bannerList[e].url;

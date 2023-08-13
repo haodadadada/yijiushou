@@ -635,6 +635,15 @@ const configCard= (data) => {
 	})
 }
 
+// 绑定支付宝
+const bindAlipay = (data) => {
+	return http.post({
+		url: '/user/updateAccount',
+		header:'application/json',
+		data
+	})
+}
+
 
 export default {
 	angelApply,
@@ -700,5 +709,6 @@ export default {
 	statistics,
 	configCard,
 	getCommunity,
-	getAllArea
+	getAllArea,
+	bindAlipay
 }

@@ -232,7 +232,21 @@
 				"navigationBarTitleText": "关于我们",
 				"enablePullDownRefresh": false
 			}
+		},{
+			"path": "pages/bind/bind",
+			"style": {
+				"navigationBarTitleText": "账户绑定",
+				"enablePullDownRefresh": false
+			}
 		}
+        ,{
+            "path" : "pages/bind-detail/bind-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "绑定成功",
+                "enablePullDownRefresh": false
+            }
+        }
     ],
 	"tabBar": {
 		"color": "#606060",
