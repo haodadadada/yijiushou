@@ -9,7 +9,7 @@
 		</view>
 		<view class="card-list">
 			<!-- <view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)"> -->
-			<view class="card" v-for="item in list" :key="item.id" v-show="item.orderStatus !== 3 || orderStatus !== 0 ">
+			<view class="card" v-for="item in list" :key="item.id">
 				<view class="header flex-between size-28 white" >
 				<!-- :class="'status-bg-' + item.orderStatus" -->
 					<view>{{item.recycleCategory}}</view>
@@ -152,7 +152,7 @@
 				}).then(res=>{
 					// this.list.push(...res.data)
 					// 翻转数组按创建时间从上到下排列
-					this.list = [...res.data].reverse()
+					this.list = [...res.data].reverse();
 				})
 			},
 			goDetail(id){
@@ -184,7 +184,7 @@
 			},
 			// 清除订单
 			delOrder(id) {
-				console.log(id)
+				// console.log(id)
 				// this.$api.delOrder({orderId: id}).then(res => this.list = this.list.filter(item => item.id !== res.data))
 				this.$api.delOrder({orderId: id}).then(
 				res => {

@@ -181,17 +181,17 @@ export default {
 			return;
 		}
 		this.getList();
-		this.$api
-			.orderov({
-				openid: uni.getStorageSync('openid')
-			})
-			.then(res => {
-				if (res.code == 200) {
-					if (res.data.status == 1) {
-						this.show = true;
-					}
-				}
-			});
+		// this.$api
+		// 	.orderov({
+		// 		openid: uni.getStorageSync('openid')
+		// 	})
+		// 	.then(res => {
+		// 		if (res.code == 200) {
+		// 			if (res.data.status == 1) {
+		// 				this.show = true;
+		// 			}
+		// 		}
+		// 	});
 		this.resetData();
 		this.initMap();
 		// 在onload中uni.getStorageSync('userInfo').name可能还未设置完毕
@@ -312,49 +312,6 @@ export default {
 		    },
 		  });
 		},
-		getAuthorize() {
-			uni.authorize({
-				  scope: 'scope.userLocation',
-				  success: () => {
-					this.initMap()
-				  },
-				  fail: (err) => {
-					err = err['errMsg']
-					uni
-					  .showModal({
-						content: '需要授权位置信息',
-						confirmText: '确认授权'
-					  })
-					  .then((res) => {
-						if (res[1]['confirm']) {
-							uni.openSetting({
-								success: (res) => {
-									if (res.authSetting['scope.userLocation']) {
-										// 授权成功
-										uni.showToast({
-											title: '授权成功',
-											icon: 'none'
-										})
-									} else {
-										// 未授权
-										uni.showToast({
-											title: '授权失败',
-											icon: 'none'
-										})
-									}
-									this.initMap()
-								}
-							})
-						}
-						if (res[1]['cancel']) {
-							// 取消授权
-							console.log('取消')
-							this.initMap()
-						}
-					})
-				}
-			})
-		},
 		// 比较范围
 		getSite() {
 			var ok = 0;
@@ -402,11 +359,6 @@ export default {
 				return value * Math.PI / 180;
 			  }
 		},
-		showMask() {
-		    this.isShow = true;
-		    // console.log(this.isShow);
-		},
-		
 		handelClose(data) {
 		    this.isShow = false;
 			this.currentTime = data.dateRange;
@@ -451,8 +403,7 @@ export default {
 		},
 		submit(type) {
 			if(this.userName && this.recycleCategory && this.currentTime){
-				if(!this.checkTelephone(this.userPhone)) {
-					this.$tools.toast('请输入正确的手机格式');
+				if(!this.$tools.verifyTelPhone(this.userPhone)) {
 					return
 				}
 				this.$api
@@ -526,14 +477,6 @@ export default {
 		                });
 		              },
 		      })
-		},
-		checkTelephone(telephone) {
-		    var reg=/^[1][3,4,5,7,8][0-9]{9}$/;
-		    if (!reg.test(telephone)) {
-		        return false;
-		    } else {
-		        return true;
-		    }
 		},
 		/** 获取设备 */
 		getSystemInfo() {

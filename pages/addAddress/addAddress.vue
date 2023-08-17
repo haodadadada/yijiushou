@@ -262,8 +262,7 @@
 			},
 			submit() {
 				if (this.userName && this.userPhone && this.address&&this.areaId) {
-						if(!this.checkTelephone(this.userPhone)) {
-							this.$tools.toast('请输入正确的手机格式');
+						if(!this.$tools.verifyTelPhone(this.userPhone)) {
 							return
 						}
 						this.$api.addAddress({

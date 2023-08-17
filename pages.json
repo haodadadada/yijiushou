@@ -29,13 +29,6 @@
 			}
 
 		}, {
-			"path": "pages/recycler/recycler",
-			"style": {
-				"navigationBarTitleText": "回收员",
-				"enablePullDownRefresh": true
-			}
-
-		}, {
 			"path": "pages/user/user",
 			"style": {
 				"navigationStyle": "custom",
@@ -52,14 +45,6 @@
 				"enablePullDownRefresh": false
 			}
 
-		},
-		{
-			"path": "pages/statistics/statistics",
-			"style": {
-				"navigationBarTitleText": "账户统计",
-				"enablePullDownRefresh": false
-			}
-
 		}, {
 			"path": "pages/address/address",
 			"style": {
@@ -68,78 +53,9 @@
 			}
 
 		}, {
-			"path": "pages/feedback/feedback",
-			"style": {
-				"navigationBarTitleText": "意见反馈",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/notice/notice",
-			"style": {
-				"navigationBarTitleText": "消息通知",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/calc/calc",
-			"style": {
-				"navigationBarTitleText": "计算",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/vip/vip",
-			"style": {
-				"navigationBarTitleText": "开通会员",
-				"enablePullDownRefresh": false
-			}
-		}, {
 			"path": "pages/guidePrice/guidePrice",
 			"style": {
 				"navigationBarTitleText": "今日上门价",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/takeOrders/takeOrders",
-			"style": {
-				"navigationBarTitleText": "抢单大厅",
-				"enablePullDownRefresh": true
-			}
-
-		}, {
-			"path": "pages/recycleBin/recycleBin",
-			"style": {
-				"navigationBarTitleText": "回收站",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/donate/donate",
-			"style": {
-				"navigationBarTitleText": "爱心积攒",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/benefitDetail/benefitDetail",
-			"style": {
-				"navigationBarTitleText": "爱心公益",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/recruit/recruit",
-			"style": {
-				"navigationBarTitleText": "招募入驻",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/applySuccess/applySuccess",
-			"style": {
-				"navigationBarTitleText": "申请成功",
 				"enablePullDownRefresh": false
 			}
 
@@ -151,74 +67,13 @@
 			}
 
 		}, {
-			"path": "pages/recycleOrderDetail/recycleOrderDetail",
-			"style": {
-				"navigationBarTitleText": "订单详情",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/editUser/editUser",
 			"style": {
 				"navigationBarTitleText": "个人信息",
 				"enablePullDownRefresh": false
 			}
 
-		}, {
-			"path": "pages/regaggrement/regaggrement",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/activeList/activeList",
-			"style": {
-				"navigationBarTitleText": "活动列表",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/angel/angel",
-			"style": {
-				"navigationBarTitleText": "天使人申请",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/myInvition/myInvition",
-			"style": {
-				"navigationBarTitleText": "推广中心",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/completeInfo/completeInfo",
-			"style": {
-				"navigationBarTitleText": "完善资料",
-				"enablePullDownRefresh": false
-			}
-
-		}
-	    ,{
-            "path" : "pages/balance/balance",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/withdraw/withdraw",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
+		},{
             "path" : "pages/booking/booking",
             "style" :                                                                                    
             {

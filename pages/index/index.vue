@@ -175,32 +175,32 @@ export default {
 	onShareAppMessage() {},
 	onShareTimeline() {},
 	onShow() {
-		this.$api
-			.orderov({
-				openid: uni.getStorageSync('openid')
-			})
-			.then(res => {
-				if (res.code == 1) {
-					if (res.data.status == 1) {
-						this.show = true;
-					}
-				}
-			});
+		// this.$api
+		// 	.orderov({
+		// 		openid: uni.getStorageSync('openid')
+		// 	})
+		// 	.then(res => {
+		// 		if (res.code == 1) {
+		// 			if (res.data.status == 1) {
+		// 				this.show = true;
+		// 			}
+		// 		}
+		// 	});
 		this.userInfo = uni.getStorageSync('userInfo');
 	},
 	onLoad() {
 		this.baseUrl = this.$tools.baseUrl;
-		this.getNoticeList();
+		// this.getNoticeList();
 		this.initMap();
 		this.getSystemInfo();
 	},
 
 	methods: {
-		getNoticeList() {
-			this.$api.newOrder().then(res => {
-				this.noticeList = res.data;
-			});
-		},
+		// getNoticeList() {
+		// 	this.$api.newOrder().then(res => {
+		// 		this.noticeList = res.data;
+		// 	});
+		// },
 		makePhone() {
 			uni.makePhoneCall({
 				phoneNumber: this.kefuphone
