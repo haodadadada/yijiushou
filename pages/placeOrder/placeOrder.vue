@@ -168,7 +168,7 @@ export default {
 			systemInfo: '',
 			showInalipay: false,
 			categoryShow: false,
-			isChooseList: [false],
+			isChooseList: [],
 			categoryList: [],
 			chooseList: [],
 			isShowMap: false,
@@ -313,8 +313,8 @@ export default {
 		    latitude: p.detail.latitude,
 		    longitude: p.detail.longitude,
 		    id: 1,
-		    width: 20,
-		    height: 20,
+		    width: 30,
+		    height: 30,
 		    iconPath: '../../static/location-map.png',	
 		  }];
 		  
@@ -371,7 +371,6 @@ export default {
 					}
 				    const community = res.result.formatted_addresses.recommend;
 					this.userCommunity = community;
-					console.log('no getsite')
 					this.getSite();
 				    // 其他逻辑处理
 				    // ...
@@ -394,8 +393,8 @@ export default {
 		        latitude: res.latitude,
 		        longitude: res.longitude,
 		        id: 1,
-		        width: 20,
-		        height: 20,
+		        width: 30,
+		        height: 30,
 		        iconPath: '../../static/location-map.png',
 		      }];
 		
@@ -420,8 +419,8 @@ export default {
 			      latitude: res.latitude,
 			      longitude: res.longitude,
 			      id: 1,
-			      width: 20,
-			      height: 20,
+			      width: 30,
+			      height: 30,
 			      iconPath: '../../static/location-map.png',
 			    }];
 					
@@ -574,8 +573,8 @@ export default {
 				latitude: this.latitude,
 				longitude: this.longitude,
 				id: 1,
-				width: 20,
-				height: 20,
+				width: 30,
+				height: 30,
 				iconPath: '../../static/location-map.png',	
 			}]
 			this.getSite();
@@ -648,8 +647,8 @@ export default {
 							latitude: res.result.location.lat,
 							longitude: res.result.location.lng,
 							id: 0,
-							width: 20,
-							height: 20,
+							width: 30,
+							height: 30,
 							iconPath: '../../static/location-map.png',	
 						}];
 						this.getSite();
@@ -668,6 +667,9 @@ export default {
 			this.$api.guidancePrice().then(res => {
 				if(res.code === 200) {
 					this.categoryList = res.data;
+					for(let i = 0; i < this.categoryList.length; i++) {
+						this.isChooseList[i] = false;
+					}
 				}
 				else {
 					this.$tools.toast('网络异常请稍后再试');
@@ -678,6 +680,7 @@ export default {
 		// 修改分类
 		changeChoose(index) {
 			this.isChooseList.splice(index, 1, !this.isChooseList[index]);
+			console.log(index, this.isChooseList)
 		},
 		// 确定分类
 		decideCategory() {
@@ -739,7 +742,7 @@ export default {
 	}
 	.iconfont {
 	  font-family: "iconfont" !important;
-	  font-size: 26upx;
+	  font-size: 30upx;
 	  font-style: normal;
 	  -webkit-font-smoothing: antialiased;
 	  -moz-osx-font-smoothing: grayscale;
@@ -913,6 +916,7 @@ export default {
 						display: flex;
 						align-items: center;
 						color: #898989;
+						padding: 0 0 10px;
 					}
 					.info-address {
 						display: flex;
@@ -933,15 +937,24 @@ export default {
 					background: linear-gradient(to right, #4eb777, #00e1b4);
 					text-align: center;
 					.info-footer-left {
+						display: flex;
+						align-items: center;
+						justify-content: center;
 						flex: 1;
 						border-right: 1upx #fff dashed;
 						color: #fff;
 					}
 					.info-footer-right {
+						display: flex;
+						align-items: center;
+						justify-content: center;
 						flex: 1;
 						color: #fff;
 					}
 					.info-footer-middle {
+						display: flex;
+						align-items: center;
+						justify-content: center;
 						flex: 1;
 						border-right: 1upx #fff dashed;
 						color: #fff;
