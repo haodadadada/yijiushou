@@ -406,7 +406,7 @@
 				// console.log(p.detail)
 				this.longitude = p.detail.longitude
 				this.latitude =  p.detail.latitude
-				this.getSite()
+				// this.getSite()
 				this.getLocation()
 				this.covers = [{
 					latitude: p.detail.latitude,
@@ -484,7 +484,7 @@
 		border-radius: 15px;
 		right: 10px;
 		top: 44vh;
-		background-color: #34cd99;
+		// background-color: #34cd99;
 		opacity: 0.5;
 		span {
 			display: inline-block;

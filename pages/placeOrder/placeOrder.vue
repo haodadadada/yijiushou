@@ -308,7 +308,7 @@ export default {
 		clickMap(p) {
 		  this.longitude = p.detail.longitude;
 		  this.latitude = p.detail.latitude;
-		  this.getSite();
+		  // this.getSite();
 		  this.covers = [{
 		    latitude: p.detail.latitude,
 		    longitude: p.detail.longitude,
