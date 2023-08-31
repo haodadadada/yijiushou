@@ -798,7 +798,7 @@ export default {
 			border-radius: 15px;
 			right: 10px;
 			bottom: 47vh;
-			background-color: #34cd99;
+			// background-color: #34cd99;
 			opacity: 0.5;
 			span {
 				display: inline-block;
