@@ -1,15 +1,17 @@
 <template>
 	<view>
+		<u-modal :show="showModal" :title="title"  showCancelButton=true @confirm="orderCancel" @cancel="orderKeep" confirmColor='#34cd99'>
+			<span>确定要取消订单吗?</span>
+		</u-modal>
 		<view class="tab">
-			<view class="item" :class="{cur:tabCur==item.id}" 
-			v-for="item in tabs" :key="item.id"
+			<view class="item" :class="{cur:index==orderStatus}" 
+			v-for="(item,index) in tabs" :key="item.id"
 			@click="selectTab(item.id)">
 				{{item.name}}
 			</view>
 		</view>
 		<view class="card-list">
-			<!-- <view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)"> -->
-			<view class="card" v-for="item in list" :key="item.id">
+			<view class="card" v-for="item in list" :key="item.id" @click="goDetail(item.id)">
 				<view class="header flex-between size-28 white" >
 				<!-- :class="'status-bg-' + item.orderStatus" -->
 					<view>{{item.recycleCategory}}</view>
@@ -28,9 +30,9 @@
 						<view class="py-16 item-font">
 							预约地址: {{item.userCommunity}}
 						</view>
-						<view class="py-16 item-font" >
+<!-- 						<view class="py-16 item-font">
 							物品称重: {{item.estimateWeight || ''}}
-						</view>
+						</view> -->
 						<view class="py-16 item-font">
 							创建时间: {{dateInit(item.createTime)}}
 						</view>
@@ -41,14 +43,14 @@
 							<view class="ml-18 size-32 gray-2">{{item.userName}}</view>
 						</view> -->
 					</view>
-					<view class="main-icon">
-						<view class="item-icon" @click="delOrder(item.id)">
+					<view class="main-icon" v-if="item.orderStatus == 1">
+						<view class="item-icon" @click.stop="delOrder(item.id)">
 							<img src="../../static/new-order2.png" alt="">
 							<span class="item-font">取消订单</span>
 						</view>
-						<view class="item-icon">
-							<img src="../../static/new-order1.png" alt="" @click="goDetail(item.id)">
-							<span class="item-font">详情</span>
+						<view class="item-icon" @click.stop="handldeChat(item.riderPhone)">
+							<img src="../../static/new-order1.png" alt="" >
+							<span class="item-font">联系骑手</span>
 						</view>
 					</view>
 				</view>
@@ -58,7 +60,7 @@
 					<view class="btn" @click.stop="handldeChat(item.riderPhone)">联系骑手</view>
 				</view> -->
 			</view>
-			<view class="empty" v-if="list.length==0">
+			<view class="empty" v-if="list.length==0 && !isLoading">
 				<image src="../../static/empty.png" mode="aspectFill"></image>
 				<view>暂无相关订单～～</view>
 			</view>
@@ -97,8 +99,11 @@
 						
 					}
 				],
-				orderStatus: 0,
-				list: []
+				orderStatus: 1,
+				list: [],
+				isLoading: true,
+				showModal:false,
+				cancelId: ''
 			};
 		},
 		onShareAppMessage() {},
@@ -110,20 +115,20 @@
 				})
 				return
 			}
-			this.$api.orderov({
-				openid: uni.getStorageSync('openid')
-			}).then(res => {
-				if (res.code == 1) {
-					if (res.data.status == 1) {
-						this.show = true
-					}
-				}
-			})
-			if(e.status){
-				this.tabCur = e.status
-			}else{
-				this.tabCur = 1
-			}
+			// this.$api.orderov({
+			// 	openid: uni.getStorageSync('openid')
+			// }).then(res => {
+			// 	if (res.code == 1) {
+			// 		if (res.data.status == 1) {
+			// 			this.show = true
+			// 		}
+			// 	}
+			// })
+			// if(e.status){
+			// 	this.tabCur = e.status
+			// }else{
+			// 	this.tabCur = 1
+			// }
 		},
 		onShow() {
 			this.list = []
@@ -146,6 +151,7 @@
 				this.getList()
 			},
 			getList(){
+				this.isLoading = true;
 				this.$api.userOrder({
 					userId:uni.getStorageSync('openid'),
 					orderStatus:this.orderStatus
@@ -153,6 +159,7 @@
 					// this.list.push(...res.data)
 					// 翻转数组按创建时间从上到下排列
 					this.list = [...res.data].reverse();
+					this.isLoading = false;
 				})
 			},
 			goDetail(id){
@@ -164,7 +171,7 @@
 			handldeReminder(id){
 				console.log('催单',id)
 			},
-			// 联系天使员
+			// 联系骑手
 			handldeChat(phone){
 				uni.makePhoneCall({
 					phoneNumber:phone
@@ -184,13 +191,20 @@
 			},
 			// 清除订单
 			delOrder(id) {
-				// console.log(id)
 				// this.$api.delOrder({orderId: id}).then(res => this.list = this.list.filter(item => item.id !== res.data))
-				this.$api.delOrder({orderId: id}).then(
+				this.showModal = true;
+				this.cancelId = id;
+			},
+			orderCancel() {
+				this.$api.delOrder({orderId: this.cancelId}).then(
 				res => {
-					this.list = [] 
-					this.getList()
+					this.list = [];
+					this.getList();
 				})
+				this.showModal = false;
+			},
+			orderKeep() {
+				this.showModal = false;
 			}
 		}
 	}
@@ -216,11 +230,12 @@
 			text-align: center;
 			font-size: 30upx;
 			color: #979797;
+			border: 1px solid #fff;
 		}
 
 		.cur {
 			color: #fff;
-			background: $color-primary;
+			background: #34cd99;
 		}
 	}
 

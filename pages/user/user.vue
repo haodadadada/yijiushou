@@ -9,14 +9,14 @@
 			<view class="header">
 			<view class="userInfo" @click="editUser" v-if="openid">
 				<!-- <img src="../../static/new-user2.png" alt="指南" class="user-img"> -->
-				<img :src="avatarUrl" alt="头像" class="user-img">
-				<view class="name" v-if="userInfo.name!=null">{{ userInfo.name }}</view>
+				<img :src="userInfo.avatarUrl? userInfo.avatarUrl : oldAvatarUrl" alt="头像" class="user-img">
+				<view class="name" v-if="userInfo.name">{{ userInfo.name }}</view>
 				<view v-else-if="showInalipay">支付宝用户</view>
 				<view v-else>微信用户</view>
 			</view>
 			<view class="userInfo" v-else>
 				<view @click="getCode" class="login-btn">
-					<img :src="avatarUrl" alt="头像" class="user-img">
+					<img :src="oldAvatarUrl" alt="头像" class="user-img">
 					<span>立即登录</span>
 					<span class="header-right">></span>
 				</view>
@@ -69,7 +69,7 @@
 					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
 					<view>{{orders[1].title}}</view>
 				</view>
-				<view class="item" @click="makePhone('123455')">
+				<view class="item" @click="makePhone('4001100019')">
 					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
 					<view>{{orders[2].title}}</view>
 				</view>
@@ -95,6 +95,7 @@
 
 <script>
 import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
+import userVue from './user.vue';
 export default {
 	components: {
 		orderStatus
@@ -170,7 +171,7 @@ export default {
 			],
 			bannerList: [],
 			user_id: '',
-			avatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c',
+			oldAvatarUrl: 'https://pic4.zhimg.com/50/v2-6afa72220d29f045c15217aa6b275808_hd.jpg?source=1940ef5c',
 			systemInfo: '',
 			showInalipay: false
 		};
@@ -187,10 +188,11 @@ export default {
 	},
 	onShow() {
 		this.getUserInfo();
+		this.handleTabBarShow(2)
+
 		if (uni.getStorageSync('invition_id')) {
 			this.user_id = uni.getStorageSync('invition_id');
 		}
-		
 	},
 	methods: {
 		closePopup() {
@@ -202,7 +204,7 @@ export default {
 				this.$tools.toast('请先登录');
 				return;
 			}
-			uni.switchTab({
+			uni.navigateTo({
 				url:'../order/order'
 			});
 		},
@@ -251,15 +253,20 @@ export default {
 							onlyAuthorize: true,
 							success: res => {
 								this.$api.getVxOpenid({
-										code: res.code,
-										name: '微信用户',
-										avatarUrl: this.avatarUrl
+										code: res.code
 									})
 								.then(res1 => {
 									if (res1.code == 200) {
 										this.openid = res1.data;
 										uni.setStorageSync('openid', this.openid);
-										this.getUserInfo()
+										if(res1.msg == '未注册'){
+											uni.navigateTo({
+												url: '../editUser/editUser'
+											});
+										}else{
+											this.getUserInfo();
+										}
+										// this.editUser();
 										} else {
 											this.$tools.toast('登录失败，请稍后重试');
 										}
@@ -267,37 +274,37 @@ export default {
 							}
 						});
 					}  else {
-						/* uni.login({
+						uni.login({
 						  provider: 'alipay',
 						  success: loginRes => {
 							var authCode = loginRes.code;
 							console.log('支付宝用户的 code:', authCode);
 							this.$api.getAliOpenid({
 							  code: authCode,
-							  name: '支付宝用户'
-							})
-							.then((res) => {
+							  name: '支付宝用户',
+							  avatarUrl: this.oldAvatarUrl
+							}).then((res) => {
 							  if (res.code == 200) {
-								console.log(res);
 								this.openid = res.data;
 								uni.setStorageSync('openid', this.openid);
 							  } else {
 								this.$tools.toast('登录失败，请稍后重试');
 							  }
+							}).catch(error => {
+								console.log(222, error);
 							});
 						  },
 						  fail: function (error) {
 							console.log('获取支付宝用户的 code 失败:', error);
 						  }
-						}); */
-						uni.setStorageSync('openid', 'oOw3S5P0_8c9kTQz58gwiqj1YqvE');
+						});
+						// uni.setStorageSync('openid', 'oOw3S5P0_8c9kTQz58gwiqj1YqvE');
 					}
 				  },
 			  fail: function (error) {
 			    console.log('获取系统信息失败', error);
 			  },
 			});
-			this.getUserProfile()
 			return;
 		},
 		getUserInfo() {
@@ -306,27 +313,10 @@ export default {
 					openid: this.openid
 				})
 				.then(res => {
-					// console.log(res.data.user)
 					this.userInfo = res.data;
-					if (res.data.rstatus == 1) {
-						this.tools[5].show = true;
-						this.tools[6].show = true;
-					}
+					console.log(11,this.userInfo)
 					uni.setStorageSync('userInfo', this.userInfo);
 				});
-		},
-		getUserProfile() {
-			uni.getUserProfile({
-			      provider: 'weixin',
-				  desc: '用于展示',
-			      success: (infoRes) => {
-					  console.log(infoRes.userInfo.avatarUrl)
-					  // this.avatarUrl = infoRes.userInfo.avatarUrl
-			      },
-				  fail(res) {
-					  console.log(res)
-				  }
-			});
 		},
 		makePhone(phone) {
 			uni.makePhoneCall({
@@ -345,7 +335,16 @@ export default {
 			if(this.systemInfo.uniPlatform === 'mp-alipay') {
 				this.showInalipay = true
 			}
-		}
+		},
+		/** 自定义tabbar时切换高亮显示 */
+		handleTabBarShow (index) {
+				const page = this.$mp.page  
+				if (typeof page.getTabBar === 'function' && page.getTabBar()) {
+						page.getTabBar().setData({  
+								selected: index
+						})  
+				}
+			}
 	}
 };
 </script>

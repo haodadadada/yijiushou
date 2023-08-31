@@ -104,10 +104,10 @@
 <!-- 		<view class="order-cancle" @click="handleCancel(id)" v-if="item.orderStatus == 1">
 			取消订单
 		</view> -->
-		<view class="flex-between fixed-btn">
+		<!-- <view class="flex-between fixed-btn"> -->
 			<!-- <view class="flex-end" v-if="item.orderStatus == 1"><view class="btn cancel-btn mt-28" @click="cancelPopupShow = true">取消订单</view></view> -->
-			<view class="flex-end" v-if="item.orderStatus == 1"><view @click="makePhone(item.riderPhone)" class="btn chat-btn mt-28">联系骑手</view></view>
-		</view>
+<!-- 			<view class="flex-end" v-if="item.orderStatus == 1"><view @click="makePhone(item.riderPhone)" class="btn chat-btn mt-28">联系骑手</view></view>
+		</view> -->
 
 		<!-- 取消订单 弹窗 -->
 		<u-popup :show="cancelPopupShow" mode="bottom" @close="cancelPopupShow = false">

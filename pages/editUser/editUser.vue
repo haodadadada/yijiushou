@@ -1,41 +1,36 @@
-<template>
+<<template>
 	<view>
+		<!-- #ifdef MP-WEIXIN -->
 		<view class="input-group input-group-1">
-			<view class="item">
-				<view class="label">昵称</view>
-				<u-input type="text" v-model="name" border="none" placeholder="请输入您的昵称"></u-input>
-			</view>
-			<view class="item">
-				<view class="label">手机号</view>
-				<u-input type="number" maxlength="11" v-model="phone" border="none" placeholder="请输入您的手机号"></u-input>
-			</view>
-<!-- 			<view class="item">
-				<view class="label">性别</view>
-				<view @click="show = true">{{gender==0?'女':'男'}}</view>
-				<u-picker :show="show" :columns="columns" @cancel="show=false" @close="show=false" @confirm="selectSex">
-				</u-picker>
-			</view> -->
-		</view>
-
-		<view class="menu">
-			<view class="card card-1" :class="'card-' + item.id" v-for="item in menuList" :key="item.id"
-				@click="routerPush(item.url,item.id)">
-				<view class="left">
-					<view class="text-1">{{item.title}}</view>
-					<view class="text-2">{{item.desc}}</view>
-					<!-- <swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
-						<swiper-item v-for="item in noticeList" :key="item.id">
-							<view class="swiper-item">
-								<image :src="item.avatar" mode="aspectFill"></image>
-								<view class="size-18">{{item.nickname}}</view>
-							</view>
-						</swiper-item>
-					</swiper> -->
-				</view>
-				<image class="pic" :src="item.icon" mode=""></image>
-				<image class="bg" :src="item.icon1" mode=""></image>
+			<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar($event)">
+			  <image class="avatar" :src="avatarUrl"></image>
+			</button>
+			<view class="name">
+				<span>昵称</span>
+				<input type="nickname"  class="weui-input" placeholder="请输入昵称" v-model="name"/>
 			</view>
 		</view>
+		<!-- #endif -->
+		<!-- #ifdef MP-ALIPAY -->
+		<view class="input-group input-group-1" style="display: flex; flex-direction: column; justify-content: center; margin-top: 30px;">
+			<image style="width: 86px; height: 86px; margin: 0 auto;" :src="avatarUrl"></image>
+			<view class="name" >
+				<span>昵称</span>
+				<input type="nickname" placeholder="请输入昵称" v-model="name" />
+			</view>
+		</view>
+		<button
+			class="AlipayButton"
+		    type="primary"
+		    size="default"
+		    open-type="getAuthorize"
+		    scope="userInfo"
+		    @getAuthorize="onGetAuthorize"
+		    @error="onAuthError"
+		>
+			点击获取授权信息
+		</button>
+		<!-- #endif -->
 
 
 		<view class="m-30">
@@ -51,76 +46,122 @@
 				show: false,
 				openid:'',
 				name: '',
-				gender: 0,
-				columns: [
-					['女', '男']
-				],
-				baseUrl: '',
-				// menuList: [{
-				// 	id: 2,
-				// 	title: '接单大厅',
-				// 	desc: '快速接单 高效执行',
-				// 	icon: require('../../static/img2@2x(1).png'),
-				// 	icon1: require('../../static/home_img_gx@2x.png'),
-				// 	url: '../takeOrders/takeOrders'
-				// }, ],
-				noticeList: [],
-				phone:''
-			};
+				status:'',
+				userInfo: {},
+				avatarUrl: '',
+				// canIUseAuthButton: my.canIUse('button.open-type.getAuthorize')
+			}
 		},
 		onLoad() {
-			this.getUserInfo()
-			this.baseUrl = this.$tools.baseUrl
-			this.openid=uni.getStorageSync('openid')
+			// #ifdef MP-ALIPAY
+			this.status = 2;
+			// #endif
+			// #ifdef MP-WEIXIN
+			this.status = 1;
+			// #endif
+			this.openid=uni.getStorageSync('openid');
+		},
+		onShow() {
+			this.userInfo = uni.getStorageSync('userInfo');
+			if(this.userInfo.avatarUrl) {
+				this.avatarUrl = this.userInfo.avatarUrl;
+				this.name = this.userInfo.name;
+			}
 		},
 		methods: {
 			submit() {
-				if(!this.$tools.verifyTelPhone(this.phone)){
-					return
-				}
-				console.log(uni.getStorageSync('openid'))
 				this.$api.editInfo({
 					name: this.name,
-					// gender: this.gender,
-					phone: this.phone,
-					openid: uni.getStorageSync('openid')
+					openid: uni.getStorageSync('openid'),
+					avatarUrl: this.avatarUrl
 				}).then(res => {
-					console.log(res)
 					this.$tools.toast(res.msg)
 					if (res.code == 200) {
 						setTimeout(() => {
 							uni.navigateBack({
 								delta: 1
 							})
-						}, 1000)
+						}, 500)
 					}
 				})
 			},
-			getUserInfo() {
-				this.$api.getUserInfo({
-					openid: uni.getStorageSync('openid')
-				}).then(res => {
-					let userInfo = res.data;
-					this.name = userInfo.name
-					this.gender = userInfo.gender
-					this.phone = userInfo.phone
-					// console.log(res.data.user)
+			onGetAuthorize() {
+			    my.getOpenUserInfo({
+			        fail: (res) => {
+			          console.log(res)
+			        },
+			        success: (res) => {
+						console.log(res)
+			          let userInfo = JSON.parse(res.response).response // 以下方的报文格式解析两层 response
+					  if (userInfo.code == "10000") {
+			            this.avatarUrl = userInfo.avatar
+			            this.name = userInfo.nickName
+			          }
+			        }
+			      })
+			    },
+			    // 授权失败回调
+			    onAuthError() {
+			      uni.showToast({
+			        title: "授权失败回调"
+			      })
+			    },
+			onChooseAvatar(e) {
+				const { avatarUrl } = e.detail 
+				uni.uploadFile({
+					url: 'https://www.19so.net/user/user/uploadAvatar',
+					filePath: avatarUrl,
+					name: 'file',
+					success: res => {
+						let data = JSON.parse(res.data);
+						this.avatarUrl = data.data;
+					},
+					fail: error => {
+						console.log('uploadfile', error)
+					}
 				})
 			},
-			selectSex(e) {
-				this.show = false
-				this.gender = e.indexs[0]
-				// console.log(e)
-			}
+			hideKeyboard() {
+				uni.hideKeyboard();
+			},
+			getUserInfo() {
+				this.$api.getUserInfo({
+					openid: this.openid
+				}).then(res => {
+					this.userInfo = res.data;
+					uni.setStorageSync('userInfo', this.userInfo);
+				});
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
+	.AlipayButton {
+		width: 50%;
+		margin: 0 auto;
+	}
 	.input-group {
-		background: #fff;
 		margin-bottom: 20upx;
-
+		.avatar-wrapper {
+			margin-top: 100px;
+			.avatar {
+				width: 86px;
+				height: 86px;
+			}
+		}
+		.name {
+			display: flex;
+			margin: 20px 20px 30vh;
+			span {
+				flex: 1;
+			}
+			input {
+				flex: 3;
+			}
+		}
+		
+		
 		.insuranceimage {
 			width: 300upx;
 			height: 200upx;

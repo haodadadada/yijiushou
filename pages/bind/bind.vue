@@ -18,12 +18,12 @@
 		<view class="footer" @click="bind">
 			<view class="bind"><span>一键绑定</span></view>
 		</view>
-		<view class="reading">
+		<!-- <view class="reading">
 			<view class="right">
 				<view :class="isChecked? 'agree' : 'refuse'" @click="isChecked=!isChecked"></view>
 				<text>已阅读并同意 《用户协议》</text>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -72,6 +72,12 @@
 		},
 		onShow() {
 			this.id = uni.getStorageSync('openid');
+			this.$api.getAlipay({
+				openid: this.id
+			}).then(res => {
+				this.alipayName = res.data.alipayName;
+				this.alipayAccount = res.data.alipayAccount;
+			})
 		}
 	}
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="!isLoading">
 		<view class="empty" v-if="list.length==0">
 			<image src="../../static/no-address.png" mode="widthFix"></image>
 			<view>添加地址，预约你的回收天使～</view>
@@ -12,7 +12,7 @@
 				</view>
 				<view class="address mt-30 pb-38 border-b">
 					<image class="icon mr-8" src="../../static/map-pin@2x.png" mode="aspectFill"></image>
-					<view class="size-30 gray-9">{{item.community}}{{item.address}}</view>
+					<view class="size-30 gray-9">{{item.community}} {{item.address}}</view>
 				</view>
 				<view class="flex-between mt-32">
 					<view class="error size-30" @click.stop="delAddress(item.id)">删除</view>
@@ -31,7 +31,8 @@
 		data() {
 			return {
 				list: [],
-				page: 1
+				page: 1,
+				isLoading: true,
 			};
 		},
 		onLoad() {
@@ -49,11 +50,13 @@
 		methods: {
 			// 获取地址列表
 			getList() {
+				this.isLoading = true;
 				this.$api.userAddress({
 					userId: uni.getStorageSync('openid'),
 					// page:this.page
 				}).then(res => {
-					this.list = [...res.data].reverse()
+					this.list = [...res.data].reverse();
+					this.isLoading = false;
 				})
 			},
 			// 删除地址
@@ -61,6 +64,7 @@
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除地址吗？',
+					confirmColor: '#34cd99',
 					success: (res) => {
 						if (res.confirm) {
 							this.$api.delAddress({

@@ -39,6 +39,11 @@ const get = async (options) => {
 							title: '请先登录',
 							icon: 'none'
 						})
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/user/user',
+							})
+						}, 50)
 					}
 					if (res.statusCode == 500) {
 						uni.showToast({
@@ -115,6 +120,11 @@ const post = async (options) => {
 							title: '系统错误，请稍后重试',
 							icon: 'none'
 						})
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/user/user',
+							})
+						}, 50)
 					}
 				},
 				fail: err => {

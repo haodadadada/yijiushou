@@ -37,7 +37,7 @@
 			</view> -->
 			<view class="clearfix" style="">
 				<view class="menu" >
-					<view class="item">
+					<view class="item" @click="soonComing">
 						<img src="../../static/new4.png" alt="指南">
 						<span class="title">二手交易</span>
 					</view>
@@ -45,7 +45,7 @@
 						<img src="../../static/new5.png" alt="分类">
 						<span class="title">价格类目</span>
 					</view>
-					<view class="item">
+					<view class="item" @click="makePhone('4001100019')">
 						<img src="../../static/new6.png" alt="客服">
 						<span class="title">旧物找回</span>
 					</view>
@@ -113,9 +113,12 @@
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
 			<view v-for="item of totalData" :key="item.id" class="priceItem">
 				<span>{{item.name}}</span>
-				<span style="color: orangered;">￥{{item.price}}</span>
+				<span style="color: #34cd99;">￥{{item.price}}</span>
 			</view>
 		</u-popup>
+		<u-modal :show="showModal" closeOnClickOverlay=true @confirm="showModal = false" confirmColor='#34cd99'>
+			<span>敬请期待</span>
+		</u-modal>
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
 </template>
@@ -169,12 +172,14 @@ export default {
 			totalData: [],
 			// 设备信息
 			systemInfo: '',
-			showInalipay: false
+			showInalipay: false,
+			showModal: false
 		};
 	},
 	onShareAppMessage() {},
 	onShareTimeline() {},
 	onShow() {
+		this.handleTabBarShow(0)
 		// this.$api
 		// 	.orderov({
 		// 		openid: uni.getStorageSync('openid')
@@ -187,11 +192,11 @@ export default {
 		// 		}
 		// 	});
 		this.userInfo = uni.getStorageSync('userInfo');
+		this.initMap();
 	},
 	onLoad() {
 		this.baseUrl = this.$tools.baseUrl;
 		// this.getNoticeList();
-		this.initMap();
 		this.getSystemInfo();
 	},
 
@@ -201,9 +206,15 @@ export default {
 		// 		this.noticeList = res.data;
 		// 	});
 		// },
-		makePhone() {
+		makePhone(phone) {
 			uni.makePhoneCall({
-				phoneNumber: this.kefuphone
+				phoneNumber: phone,
+				success() {
+					console.log('success to call');
+				},
+				fail(error) {
+					console.log('fail:', error);
+				}
 			});
 		},
 		closePopup() {
@@ -269,11 +280,11 @@ export default {
 			        this.latitude = res.latitude;
 					// 等待异步回调结果返回后再调用
 					this.getLocation()
-					
 			    },
 			    fail: res => {
-			        }
-			      });
+					this.$tools.toast('请打开定位功能并授权定位');
+				}
+			});
 		},
 		openPrice() {
 			this.isShowPrice = true
@@ -284,6 +295,18 @@ export default {
 			this.systemInfo = uni.getSystemInfoSync()
 			if(this.systemInfo.uniPlatform === 'mp-alipay') {
 				this.showInalipay = true
+			}
+		},
+		soonComing() {
+			this.showModal = true;
+		},
+		/** 自定义tabbar时切换高亮显示 */
+		handleTabBarShow (index) {
+			const page = this.$mp.page 
+			if (typeof page.getTabBar === 'function' && page.getTabBar()) {  
+					page.getTabBar().setData({  
+							selected: index
+					})  
 			}
 		}
 	}

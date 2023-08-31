@@ -101,7 +101,13 @@
                 "navigationBarTitleText": "绑定成功",
                 "enablePullDownRefresh": false
             }
-        }
+        },
+		{
+			"path": "pages/map-suggest/map-suggest",
+			"style": {
+				"navigationBarTitleText": "地址查询"
+			}
+		}
     ],
 	"tabBar": {
 		"color": "#606060",
@@ -119,12 +125,6 @@
 				"selectedIconPath": "static/new10.png",
 				"text": "预约"
 			}, 
-			{
-				"pagePath": "pages/order/order",
-				"iconPath": "static/new11.png",
-				"selectedIconPath": "static/new12.png",
-				"text": "订单"
-			},
 			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/new13.png",

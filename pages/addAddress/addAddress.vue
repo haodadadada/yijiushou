@@ -1,43 +1,53 @@
 <template>
 	<view class="content pb-30">
-		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 300px;" :markers="covers" @click="clickMap"></map>
-		 <view class="search-container">
+		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 50vh;" :markers="covers" @click="clickMap" v-if="isShowMap"></map>
+		<view class="mylocation" @click.stop="initMap" v-if="isShowMap">
+			<span class="iconfont">&#xec32;</span>
+		</view>
+		<view class="tolocation" v-if="!isShowMap && !isLoading">
+			<view>无法定位到您</view>
+			<view>请在手机中查看是否开启定位功能并且授权定位</view>
+			<button @click="getAuthorize">刷新定位</button>
+		</view>
+<!-- 		 <view class="search-container">
 			 <view class="search-button"><span @click="searchAddress(searchKeyword)" class="iconfont">&#xeafe;</span></view>
 		      <input class="search-input" type="text" placeholder="例:湖州万达广场" v-model="searchKeyword" @confirm="searchAddress(searchKeyword)"/>
-		      <!-- <button class="search-button" @click="searchAddress(searchKeyword)">搜索地址</button> -->
-		</view>
-		<view class="input">
-			<text>联系人</text>
-			<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
-		</view>
-		<view class="input">
-			<text>性别</text>
-			<view class="sex-check">
-				<view class="sex" v-for="item in sexList" :key="item.id">
-					<view class="item" :class="{cur:gender==item.id}"
-					@click="gender=item.id">{{item.name}}</view>
+		</view> -->
+		<view class="contain" style="width: 100%;">
+			<view class="input">
+					<text>联系人</text>
+					<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
 				</view>
-			</view>
+			<!-- 	<view class="input">
+					<text>性别</text>
+					<view class="sex-check">
+						<view class="sex" v-for="item in sexList" :key="item.id">
+							<view class="item" :class="{cur:gender==item.id}"
+							@click="gender=item.id">{{item.name}}</view>
+						</view>
+					</view>
+				</view> -->
+				<view class="input">
+					<text>手机号码</text>
+					<input type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
+				</view>
+				<view class="input" @click="goSuggest">
+				  <text>地址信息</text>
+				  <input type="text" v-model="userCommunity" placeholder="请输入地址信息" disabled="true" />
+				</view>
+			
+				<view class="input">
+					<text>门牌号</text>
+					<input type="text" value="" placeholder="例:xx号xx楼xx门牌" v-model="address" />
+				</view>
+				<view v-if="id" class="btn" @click="edit">确认修改</view>
+				<view v-else class="btn" @click="submit">保存地址</view>
 		</view>
-		<view class="input">
-			<text>手机号码</text>
-			<input type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
-		</view>
-		<view class="input">
-		  <text>社区信息</text>
-		  <input v-model="community" />
-		</view>
-
-		<view class="input">
-			<text>详细地址</text>
-			<input type="text" value="" placeholder="例:xx号xx楼xx门牌" v-model="address" />
-		</view>
-		<view v-if="id" class="btn" @click="edit">确认修改</view>
-		<view v-else class="btn" @click="submit">保存地址</view>
 	</view>
 </template>
 
 <script>
+	import {mapState} from 'vuex';
 	export default {
 		data() {
 			return {
@@ -47,7 +57,7 @@
 				region: '',
 				txt: '选择社区',
 				customItem: '',
-				community: '', // 存储选中的社区
+				userCommunity: '', // 存储选中的社区
 				areaId:'',
 				userId:'',
 				sexList:[
@@ -73,26 +83,65 @@
 					id: 1,
 					width: 0,
 					height: 0,
-					iconPath: '../../static/location-1.png',
+					iconPath: '../../static/location-map.png',
 				}],
+				isShowMap: false,
+				isLoading: true,
+				flag: 0
 			};
+		},
+		computed: {
+			...mapState({
+				community: state => state.community.community
+			})
 		},
 		onLoad(e) {
 			this.baseUrl = this.$tools.baseUrl			
 			if(e.source){
 				this.source = e.source
 			}
-			if(e.id){
-				this.getAddress(e.id)
-			}else{
-				this.getAuthorize();
-				this.initMap()
-			}
+			// if(e.id){
+			// 	this.getAddress(e.id)
+			// }else{
+			// 	this.getAuthorize();
+			// }
 			// this.getSite();
-			
+		},
+		onShow() {
+			uni.getSystemInfo({
+				success: (res) => {
+					if (!res.locationEnabled || !res.locationAuthorized) {
+						if(this.flag == 0) {
+							uni.showModal({
+								title: '提示',
+								content: '请打开手机定位服务功能',
+							})
+						}
+						this.flag++;
+						this.isLoading = false;
+						this.getLocation();
+						return;
+					}
+					else {
+						uni.authorize({
+						  scope: 'scope.userLocation',
+						  success: () => {
+							  this.initMap();
+						  },
+						  fail: () => {
+							  this.isLoading = false;
+						  }
+						})
+					}
+				}
+			})
+			this.$store.commit('CLEARKEEPADDRESS');
+			// this.getSite();
 		},
 		methods: {
 			initMap(){
+				this.isShowMap = true;
+				this.isLoading = true;
 				uni.getLocation({
 				    type: 'gcj02',
 				    success: res => {
@@ -104,56 +153,67 @@
 							id: 1,
 							width: 20,
 							height: 20,
-							iconPath: '../../static/location-1.png',	
+							iconPath: '../../static/location-map.png',	
 						}]
 						// 等待异步回调结果返回后再调用
 						this.getLocation()
-						
+						this.isLoading = false;
 				    },
 				    fail: res => {
 				        }
 				      });
 			},
 			getAuthorize() {
-			            uni.authorize({
-			              scope: 'scope.userLocation',
-			              success: () => {
-			                this.initMap()
-			              },
-			              fail: (err) => {
-			                err = err['errMsg']
-			                uni
-			                  .showModal({
-			                    content: '需要授权位置信息',
-			                    confirmText: '确认授权'
-			                  })
-							  .then((res) => {
-							        if (res[1]['confirm']) {
-										uni.openSetting({
-							            success: (res) => {
-							            if (res.authSetting['scope.userLocation']) {
-							                // 授权成功
-											uni.showToast({
-							                    title: '授权成功',
-							                    icon: 'none'
-							                })
-							            } else {
-							                // 未授权
-											uni.showToast({
-							                    title: '授权失败',
-							                    icon: 'none'
-							                })
-							            }
-							            this.initMap()
-							        }
-							    })
-							}
-							if (res[1]['cancel']) {
-							// 取消授权
-							console.log('取消')
-							this.initMap()
-							}
-						})
+				uni.getSystemInfo({
+					success: (res) => {
+						if (!res.locationEnabled || !res.locationAuthorized) {
+							uni.showModal({
+								title: '提示',
+								content: '请打开手机定位服务功能',
+							})
+							return;
+						}
+						else {
+							uni.authorize({
+								scope: 'scope.userLocation',
+								success: () => {
+									this.initMap()
+								},
+								fail: (err) => {
+									err = err['errMsg']
+									uni.showModal({
+										content: '需要授权位置信息',
+										confirmText: '确认授权'
+									}).then(res => {
+										if (res[1]['confirm']) {
+											uni.openSetting({
+												success: (res) => {
+													if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
+														// 授权成功
+														uni.showToast({
+															title: '授权成功',
+															icon: 'none'
+														})
+														this.initMap();
+													} else {
+														// 未授权
+														uni.showToast({
+															title: '授权失败',
+															icon: 'none'
+														})
+													}
+												}	
+											})
+										}
+										if (res[1]['cancel']) {
+											// 取消授权
+											console.log('取消');
+											this.$tools.toast('请开启定位功能并授权获取地图服务');
+										}
+									})
+								}
+							})
+						}
 					}
 				})
 			},
@@ -168,13 +228,27 @@
 					...params,
 				  success: (res) => {
 				    // 获取定位成功的结果
+					if(this.community) {
+						this.userCommunity = this.community;
+						this.searchAddress(this.userCommunity);
+						this.$store.dispatch('clearAddress');
+						return;
+					}
 				    const community = res.result.formatted_addresses.recommend;
-					this.community = community;
+					this.userCommunity = community;
+					this.getSite();
 				    // 其他逻辑处理
 				    // ...
 				  },
 				  fail: (error) => {
 				    // 定位失败的处理
+					if(this.community) {
+						this.userCommunity = this.community;
+						this.searchAddress(this.userCommunity);
+						this.getSite();
+						this.$store.dispatch('clearAddress');
+						return;
+					}
 				    console.log('定位失败', error)
 				  }
 				})
@@ -237,7 +311,7 @@
 					this.userPhone = res.data.userPhone
 					this.gender = res.data.gender
 					this.areaId = res.data.areaId
-					this.community = res.data.community
+					this.userCommunity = res.data.community
 					this.address = res.data.address
 					this.userId = res.data.userId
 					var location = res.data.location
@@ -250,7 +324,7 @@
 						id: 1,
 						width: 20,
 						height: 20,
-						iconPath: '../../static/location-1.png',	
+						iconPath: '../../static/location-map.png',	
 					}];
 					this.getSite();
 				})
@@ -272,7 +346,7 @@
 							userPhone : this.userPhone,
 							gender : this.gender,
 							areaId : this.areaId,
-							community : this.community,
+							community : this.userCommunity,
 							address : this.address,
 							location : this.latitude+','+this.longitude
 						}).then(res=>{
@@ -309,7 +383,7 @@
 						userPhone: this.userPhone,
 						gender: this.gender,
 						areaId:this.areaId,
-						community: this.community,
+						community: this.userCommunity,
 						address: this.address,  
 						id:this.id,
 						location: this.latitude+','+this.longitude
@@ -340,7 +414,7 @@
 					id: 1,
 					width: 20,
 					height: 20,
-					iconPath: '../../static/location-1.png',	
+					iconPath: '../../static/location-map.png',	
 				}]
 			},
 			searchAddress(keyword) {
@@ -352,14 +426,14 @@
 			              success: (res) => {//成功后的回调
 			                this.latitude = res.result.location.lat;
 			                this.longitude = res.result.location.lng;
-							this.community = res.result.title;
+							this.userCommunity = res.result.title;
 							this.covers = [{
 								latitude: res.result.location.lat,
 								longitude: res.result.location.lng,
 								id: 0,
 								width: 20,
 								height: 20,
-								iconPath: '../../static/location-1.png',	
+								iconPath: '../../static/location-map.png',	
 							}];
 							console.log(this.latitude)
 							this.getSite()
@@ -379,17 +453,22 @@
 			    } else {
 			        return true;
 			    }
-			}
+			},
+			goSuggest() {
+				uni.navigateTo({
+					url: '/pages/map-suggest/map-suggest'
+				})
+			},
 		}
 	};
 </script>
 
 <style lang="scss">
 	@font-face {
-	  font-family: 'iconfont';  /* Project id 4143017 */
-	  src: url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff2?t=1690008329887') format('woff2'),
-		   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.woff?t=1690008329887') format('woff'),
-		   url('//at.alicdn.com/t/c/font_4143017_ulbzv7r9ka.ttf?t=1690008329887') format('truetype');
+	  font-family: 'iconfont';  /* Project id 4207593 */
+	  src: url('//at.alicdn.com/t/c/font_4207593_wya1fcygdz.woff2?t=1693219668648') format('woff2'),
+		   url('//at.alicdn.com/t/c/font_4207593_wya1fcygdz.woff?t=1693219668648') format('woff'),
+		   url('//at.alicdn.com/t/c/font_4207593_wya1fcygdz.ttf?t=1693219668648') format('truetype');
 	}
 	.iconfont {
 	  font-family: "iconfont" !important;
@@ -397,6 +476,34 @@
 	  font-style: normal;
 	  -webkit-font-smoothing: antialiased;
 	  -moz-osx-font-smoothing: grayscale;
+	}
+	.mylocation {
+		position: absolute;
+		width: 30px;
+		height: 30px;
+		border-radius: 15px;
+		right: 10px;
+		top: 44vh;
+		background-color: #34cd99;
+		opacity: 0.5;
+		span {
+			display: inline-block;
+			font-size: 30px;
+		}
+	}
+	.tolocation {
+		display: flex;
+		flex-flow: column;
+		justify-content: center;
+		align-items: center;
+		margin: 10vh 0;
+		width: 100%;
+		border: none;
+		button {
+			margin-top: 10px;
+			background-color: #34cd99;
+			color: #fff;
+		}
 	}
 	.search-container {
 	  display: flex;
@@ -452,8 +559,6 @@
 
 	.content {
 		width: 100%;
-		margin-top: 20upx;
-
 		.addAddress {
 			width: 80%;
 			margin-left: 10%;
@@ -555,7 +660,7 @@
 		justify-content: center;
 	}
 	.btn{
-		margin: 10rpx auto;
+		margin: 20px auto;
 		background: linear-gradient(to right, #48b97e, #0be0b2);
 		line-height: 68rpx;
 	}
