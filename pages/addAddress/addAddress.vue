@@ -122,15 +122,29 @@
 						this.getLocation();
 						return;
 					}
-					else {
+					else if(res.hostName == 'WeChat'){
+						this.systemInfo = 'WeChat';
 						uni.authorize({
 						  scope: 'scope.userLocation',
 						  success: () => {
 							  this.initMap();
 						  },
-						  fail: () => {
+						  fail: (error) => {
 							  this.isLoading = false;
 						  }
+						})
+					}
+					else if(res.hostName == 'alipay'){
+						this.systemInfo = 'alipay'
+						my.getSetting({
+							success: (res) => {
+								if(res.authSetting.location) {
+									this.initMap()
+								}
+								else {
+									this.isLoading = false;
+								}
+							}
 						})
 					}
 				}
@@ -163,24 +177,65 @@
 				        }
 				      });
 			},
-			getAuthorize() {
-				uni.getSystemInfo({
-					success: (res) => {
-						if (!res.locationEnabled || !res.locationAuthorized) {
-							uni.showModal({
-								title: '提示',
-								content: '请打开手机定位服务功能',
-							})
-							return;
-						}
-						else {
-							uni.authorize({
-								scope: 'scope.userLocation',
-								success: () => {
+		getAuthorize() {
+			uni.getSystemInfo({
+				success: (res) => {
+					if (!res.locationEnabled || !res.locationAuthorized) {
+						uni.showModal({
+							title: '提示',
+							content: '请打开手机定位服务功能',
+						})
+						return;
+					}
+					else if(res.hostName == 'WeChat'){
+						uni.authorize({
+							scope: 'scope.userLocation',
+							success: () => {
+								this.initMap()
+							},
+							fail: (err) => {
+								err = err['errMsg']
+								uni.showModal({
+									content: '需要授权位置信息',
+									confirmText: '确认授权'
+								}).then(res => {
+									if (res[1]['confirm']) {
+										uni.openSetting({
+											success: (res) => {
+												if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
+													// 授权成功
+													uni.showToast({
+														title: '授权成功',
+														icon: 'none'
+													})
+													this.initMap();
+												} else {
+													// 未授权
+													uni.showToast({
+														title: '授权失败',
+														icon: 'none'
+													})
+												}
+											}	
+										})
+									}
+									if (res[1]['cancel']) {
+										// 取消授权
+										console.log('取消');
+										this.$tools.toast('请开启定位功能并授权获取地图服务');
+									}
+								})
+							}
+						})
+					}
+					else if(res.hostName == 'alipay') {
+						my.getSetting({
+							success: (res) => {
+								console.log('success:',res)
+								if(res.authSetting.location) {
 									this.initMap()
-								},
-								fail: (err) => {
-									err = err['errMsg']
+								}
+								else {
 									uni.showModal({
 										content: '需要授权位置信息',
 										confirmText: '确认授权'
@@ -212,11 +267,15 @@
 										}
 									})
 								}
-							})
-						}
+							},
+							fail: (err) => {
+								console.log('err:', err)
+							}
+						})
 					}
-				})
-			},
+				}
+			})
+		},
 
 			getLocation(){
 				const params = {
@@ -403,14 +462,19 @@
 				}
 			},
 			clickMap(p) {
-				// console.log(p.detail)
-				this.longitude = p.detail.longitude
-				this.latitude =  p.detail.latitude
+				if(this.systemInfo == 'WeChat') {
+					this.longitude = p.detail.longitude;
+					this.latitude = p.detail.latitude;
+				}
+				else if(this.systemInfo == 'alipay') {
+					this.longitude = p.longitude;
+					this.latitude = p.latitude;
+				}
 				// this.getSite()
 				this.getLocation()
 				this.covers = [{
-					latitude: p.detail.latitude,
-					longitude: p.detail.longitude,
+					latitude: this.latitude,
+					longitude: this.longitude,
 					id: 1,
 					width: 20,
 					height: 20,
@@ -496,7 +560,7 @@
 		flex-flow: column;
 		justify-content: center;
 		align-items: center;
-		margin: 10vh 0;
+		padding: 10vh 0;
 		width: 100%;
 		border: none;
 		button {

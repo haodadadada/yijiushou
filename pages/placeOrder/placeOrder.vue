@@ -40,9 +40,9 @@
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" disabled="true" :placeholder="isShow ? '' : '请选择时间'" v-model="currentTime">
 						<hTimeAlert title="预约时间" subhead='请选择需要上门服务的时间' rangeDay="5" intervalTime="60" :isShow="isShow" @closeAlert="handelClose" class="hTimeAlert"></hTimeAlert>
 					</view>
-					<view class="info-category">
+					<view class="info-category" @click="showCategory">
 						<span class="iconfont">&#xe62a;</span>
-						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入旧物种类" v-model="recycleCategory" disabled="true" @click="showCategory">
+						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入旧物种类" v-model="recycleCategory" disabled="true" >
 					</view>
 				</view>
 
@@ -229,17 +229,36 @@ export default {
 					this.getLocation();
 					return;
 				}
-				else {
+				else if(res.hostName == 'WeChat'){
+					this.systemInfo = 'WeChat';
 					uni.authorize({
 					  scope: 'scope.userLocation',
 					  success: () => {
 						  this.keepMap();
 					  },
-					  fail: () => {
+					  fail: (error) => {
 						  this.isLoading = false;
 					  }
 					})
 				}
+				else if(res.hostName == 'alipay'){
+					this.systemInfo = 'alipay'
+					my.getSetting({
+						success: (res) => {
+							console.log(res)
+							if(res.authSetting.location) {
+								this.keepMap()
+							}
+							else {
+								this.isLoading = false;
+							}
+						}
+					})
+				}
+				console.log('systeminfo', this.systemInfo);
+			},
+			fail: (error) => {
+				console.log('systemfail:', error)
 			}
 		})
 
@@ -306,12 +325,18 @@ export default {
 		  this.recycleCategory = '';
 		},
 		clickMap(p) {
-		  this.longitude = p.detail.longitude;
-		  this.latitude = p.detail.latitude;
+		  if(this.systemInfo == 'WeChat') {
+			  this.longitude = p.detail.longitude;
+			  this.latitude = p.detail.latitude;
+		  }
+		  else if(this.systemInfo == 'alipay') {
+			  this.longitude = p.longitude;
+			  this.latitude = p.latitude;
+		  }
 		  // this.getSite();
 		  this.covers = [{
-		    latitude: p.detail.latitude,
-		    longitude: p.detail.longitude,
+		    latitude: this.latitude,
+		    longitude: this.longitude,
 		    id: 1,
 		    width: 30,
 		    height: 30,
@@ -327,6 +352,7 @@ export default {
 			  location: this.latitude+','+this.longitude,
 			  sig: '4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
 			};
+			console.log('params',params);
 			// 调用定位方法
 			this.qqMap.reverseGeocoder({
 				...params,
@@ -445,7 +471,7 @@ export default {
 						})
 						return;
 					}
-					else {
+					else if(res.hostName == 'WeChat'){
 						uni.authorize({
 							scope: 'scope.userLocation',
 							success: () => {
@@ -460,7 +486,6 @@ export default {
 									if (res[1]['confirm']) {
 										uni.openSetting({
 											success: (res) => {
-												console.log('授权', res);
 												if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
 													// 授权成功
 													uni.showToast({
@@ -484,6 +509,51 @@ export default {
 										this.$tools.toast('请开启定位功能并授权获取地图服务');
 									}
 								})
+							}
+						})
+					}
+					else if(res.hostName == 'alipay') {
+						my.getSetting({
+							success: (res) => {
+								console.log('success:',res)
+								if(res.authSetting.location) {
+									this.initMap()
+								}
+								else {
+									uni.showModal({
+										content: '需要授权位置信息',
+										confirmText: '确认授权'
+									}).then(res => {
+										if (res[1]['confirm']) {
+											uni.openSetting({
+												success: (res) => {
+													if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
+														// 授权成功
+														uni.showToast({
+															title: '授权成功',
+															icon: 'none'
+														})
+														this.initMap();
+													} else {
+														// 未授权
+														uni.showToast({
+															title: '授权失败',
+															icon: 'none'
+														})
+													}
+												}	
+											})
+										}
+										if (res[1]['cancel']) {
+											// 取消授权
+											console.log('取消');
+											this.$tools.toast('请开启定位功能并授权获取地图服务');
+										}
+									})
+								}
+							},
+							fail: (err) => {
+								console.log('err:', err)
 							}
 						})
 					}
@@ -663,6 +733,7 @@ export default {
 		},
 		// 点击分类
 		showCategory() {
+			console.log(1123)
 			this.categoryShow = true;
 			this.$api.guidancePrice().then(res => {
 				if(res.code === 200) {
@@ -680,7 +751,7 @@ export default {
 		// 修改分类
 		changeChoose(index) {
 			this.isChooseList.splice(index, 1, !this.isChooseList[index]);
-			console.log(index, this.isChooseList)
+			// console.log(index, this.isChooseList)
 		},
 		// 确定分类
 		decideCategory() {
@@ -700,7 +771,7 @@ export default {
 					this.recycleCategory += item.name;
 				}
 			})
-			console.log(this.chooseList)
+			// console.log(this.chooseList)
 		},
 		goSuggest() {
 			uni.navigateTo({
@@ -723,8 +794,7 @@ export default {
 		},
 		/** 获取设备 */
 		getSystemInfo() {
-			this.systemInfo = uni.getSystemInfoSync()
-			if(this.systemInfo.uniPlatform === 'mp-alipay') {
+			if(uni.getSystemInfoSync() === 'mp-alipay') {
 				this.showInalipay = true
 			}
 		},

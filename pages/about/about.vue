@@ -45,9 +45,10 @@
 		background-color: #34cd99;
 	}
 	.container {
+		padding-top: 20px;
 		.logo {
 			border-radius: 20px;
-			margin: 20px;
+			margin: 0 20px 20px;
 			// height: 300px;
 			background-color: #fff;
 			.top-logo {
