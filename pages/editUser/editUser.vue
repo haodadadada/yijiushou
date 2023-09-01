@@ -16,7 +16,7 @@
 			<image style="width: 86px; height: 86px; margin: 0 auto;" :src="avatarUrl"></image>
 			<view class="name" >
 				<span>昵称</span>
-				<input type="nickname" placeholder="请输入昵称" v-model="name" />
+				<input type="nickname" placeholder="请输入昵称" v-model="name" class="ali-input" />
 			</view>
 		</view>
 		<button
@@ -27,6 +27,7 @@
 		    scope="userInfo"
 		    @getAuthorize="onGetAuthorize"
 		    @error="onAuthError"
+			style="border-radius: 15px;"
 		>
 			点击获取授权信息
 		</button>
@@ -152,12 +153,16 @@
 		}
 		.name {
 			display: flex;
+			align-items: center;
 			margin: 20px 20px 30vh;
 			span {
 				flex: 1;
 			}
 			input {
-				flex: 3;
+				flex: 4;
+				background-color: #eee;
+				border-radius: 10px;
+				padding: 5px 10px;
 			}
 		}
 		

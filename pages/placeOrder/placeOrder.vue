@@ -870,7 +870,7 @@ export default {
 			height: 30px;
 			border-radius: 15px;
 			right: 10px;
-			bottom: 47vh;
+			bottom: 48vh;
 			// background-color: #34cd99;
 			opacity: 0.5;
 			span {
