@@ -733,7 +733,6 @@ export default {
 		},
 		// 点击分类
 		showCategory() {
-			console.log(1123)
 			this.categoryShow = true;
 			this.$api.guidancePrice().then(res => {
 				if(res.code === 200) {

@@ -6,11 +6,20 @@
 		</view>
 		<view class="contain">
 			<ul>
-				<!-- <li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @touchstart="flag.splice(index, 1, true)" @touchend="flag.splice(index, 1, false)" @click="chooseAddress(item.title)"> -->
-				<li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @touchstart="tell(1)" @touchend="tell(2)" @click="chooseAddress(item.title)">
+				<!-- #ifdef MP-WEIXIN -->
+				<li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @touchstart="flag.splice(index, 1, true)" @touchend="flag.splice(index, 1, false)" @click="chooseAddress(item.title)">
+				<!-- <li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @touchstart="tell(1)" @touchend="tell(2)" @click="chooseAddress(item.title)"> -->
 					<view class="title">{{item.title}}</view>
 					<view class="address">{{item.address}}</view>
 				</li>
+				<!-- #endif -->
+				<!-- #ifdef MP-ALIPAY -->
+				<li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @click="chooseAddress(item.title)">
+				<!-- <li v-for="(item, index) in suggestList" :key="index" :class="flag[index]? 'bgc' : ''" @touchstart="tell(1)" @touchend="tell(2)" @click="chooseAddress(item.title)"> -->
+					<view class="title">{{item.title}}</view>
+					<view class="address">{{item.address}}</view>
+				</li>
+				<!-- #endif -->
 			</ul>
 		</view>
 	</view>
