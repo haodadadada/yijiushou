@@ -3,7 +3,8 @@
 		<!-- #ifdef MP-WEIXIN -->
 		<view class="input-group input-group-1">
 			<button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar($event)">
-			  <image class="avatar" :src="avatarUrl"></image>
+				<span style="position: absolute; left: 20px; margin-top: 52px; transform: translateY(-50%); font-size: 16px;">头像</span>
+				<image class="avatar" :src="avatarUrl"></image>
 			</button>
 			<view class="name">
 				<span>昵称</span>
@@ -15,7 +16,7 @@
 		<view class="input-group input-group-1" style="display: flex; flex-direction: column; justify-content: center; margin-top: 30px;">
 			<image style="width: 86px; height: 86px; margin: 0 auto;" :src="avatarUrl"></image>
 			<view class="name" >
-				<span>昵称</span>
+				<span style="font-size: 16px;">昵称</span>
 				<input type="nickname" placeholder="请输入昵称" v-model="name" class="ali-input" />
 			</view>
 		</view>
@@ -145,6 +146,7 @@
 	.input-group {
 		margin-bottom: 20upx;
 		.avatar-wrapper {
+			position: relative;
 			margin-top: 100px;
 			.avatar {
 				width: 86px;
