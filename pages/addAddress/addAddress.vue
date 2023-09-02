@@ -2,7 +2,8 @@
 	<view class="content pb-30">
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 50vh;" :markers="covers" @click="clickMap" v-if="isShowMap"></map>
 		<view class="mylocation" @click.stop="initMap" v-if="isShowMap">
-			<span class="iconfont">&#xec32;</span>
+			<!-- <span class="iconfont">&#xec32;</span> -->
+			<img src="../../static/icon/dingwei.png" alt="" style="width: 30px; height: 30px;">
 		</view>
 		<view class="tolocation" v-if="!isShowMap && !isLoading">
 			<view>无法定位到您</view>

@@ -8,11 +8,11 @@
 			</view>
 			<view class="alertChangetab"></view>
 			<view class="alertTimebox">
-				<view class="left_box">
+	<!-- 			<view class="left_box">
 					<view v-if="item.timeArr.length > 0" @click="_changeDay(index)" :class="{ active: item.checked }" v-for="(item, index) in timeList" :key="item.dateStr">
 						{{ item.name }}
 					</view>
-				</view>
+				</view> -->
 				<view class="right_box">
 					<view @click="_changeTime(index)" :class="{ active: item.checked }" v-for="(item, index) in activeTimeArr" :key="item.time">
 						{{ item.time }}{{ rangeType ? '-' + item.endtime : '' }}

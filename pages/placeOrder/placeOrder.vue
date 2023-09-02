@@ -2,7 +2,8 @@
 	<view class="container">
 		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 60%; position: absolute; z-index: 0;" :markers="covers" @click="clickMap" v-if="isShowMap"></map>
 		<view class="mylocation" @click.stop="initMap" v-if="isShowMap">
-			<span class="iconfont">&#xec32;</span>
+			<!-- <span class="iconfont">&#xec32;</span> -->
+			<img src="../../static/icon/dingwei.png" alt="" style="width: 30px; height: 30px;">
 		</view>
 		<view class="tolocation" v-if="!isShowMap && !isLoading">
 			<view>无法定位到您</view>
@@ -22,33 +23,39 @@
 						<!-- <span class="iconfont" style="color: green;">&#xe628;1.2km</span> -->
 					</view>
 					<view class="info-community" @click="goSuggest">
-						<span class="iconfont">&#xe652;</span>
+						<!-- <span class="iconfont">&#xe652;</span> -->
+						<img src="../../static/icon/dizhi.png" alt="" style="width: 17px; height: 17px;">
 						<!-- <span style="margin-left: 1upx;">浙江省湖州市</span> -->
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="浙江省湖州市" v-model="userCommunity" @confirm="searchAddress(userCommunity)"  disabled="true">
 					</view>
 					<view class="info-address">
-						<span class="iconfont">&#xe624;</span>
+						<!-- <span class="iconfont">&#xe624;</span>-->
+						<img src="../../static/icon/jia.png" alt="" style="width: 17px; height: 17px;">
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入门牌号" v-model="userAddress">
 					</view>
 					<view class="info-phone">
-						<span class="iconfont">&#xe88b;</span>
+						<!-- <span class="iconfont">&#xe88b;</span> -->
+						<img src="../../static/icon/dianhua.png" alt="" style="width: 17px; height: 17px;">
 						<input type="tel" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入手机号" v-model="userPhone">
 					</view>
 					<view class="info-date" @click="this.isShow=true">
-						<span class="iconfont">&#xe64d;</span>
+						<!-- <span class="iconfont">&#xe64d;</span> -->
+						<img src="../../static/icon/yuyue.png" alt="" style="width: 17px; height: 17px;">
 						<!-- <u-input v-model="currentTime" placeholder="请选择" disabled disabledColor="#ffffff" style="margin-left: 1upx; padding: 0;"></u-input>				 -->
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" disabled="true" :placeholder="isShow ? '' : '请选择时间'" v-model="currentTime">
 						<hTimeAlert title="预约时间" subhead='请选择需要上门服务的时间' rangeDay="5" intervalTime="60" :isShow="isShow" @closeAlert="handelClose" class="hTimeAlert"></hTimeAlert>
 					</view>
 					<view class="info-category" @click="showCategory">
-						<span class="iconfont">&#xe62a;</span>
+						<!-- <span class="iconfont">&#xe62a;</span> -->
+						<img src="../../static/icon/fenzu.png" alt="" style="width: 17px; height: 17px;">
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入旧物种类" v-model="recycleCategory" disabled="true" >
 					</view>
 				</view>
 
 				<view class="info-footer">
 					<view class="info-footer-left" @click="addressPopupShow = true">
-						<span class="iconfont">&#xe74c;</span>
+						<!-- <span class="iconfont">&#xe74c;</span> -->
+						<img src="../../static/icon/dizhibu.png" alt="" style="width: 17px; height: 17px;">
 						<span style="margin-left: 1upx;">地址簿</span>
 					</view>
 <!-- 					<view class="info-footer-middle">
@@ -64,7 +71,12 @@
 		</view>
 		<!-- 选择种类 -->
 		<u-popup :show="categoryShow" @close="categoryShow = false">
-			<view style="line-height: 10vh; font-weight: 500; margin-left: 5vw;">物品分类</view>
+			<view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #ccc;">
+				<view style="line-height: 10vh; font-weight: 500; margin-left: 5vw;">物品分类</view>
+				<view class="decision" @click="decideCategory">
+					<span>确定</span>
+				</view>
+			</view>
 <!-- 			<view class="popup-header">
 				<span class="item" v-for="(item, index) in categoryList" :key="index" v-if="isChooseList[index]">
 					<u-tag :text="item.name" :show="true" borderColor="#34cd99" closeColor="#34cd99" color="#34cd99" plain=true closable=true @close="changeChoose(index)"></u-tag>
@@ -75,9 +87,7 @@
 					<u-tag :text="item.name" :bgColor="isChooseList[index] ?  '#34cd99' : '#C6C7CB'" :show="true" :borderColor="isChooseList[index] ?  '#34cd99' : '#C6C7CB'" @click="changeChoose(index)"></u-tag>
 				</span>
 			</view>
-			<view class="decision" @click="decideCategory">
-				<span>确定</span>
-			</view>
+
 		</u-popup>
 		
 		<!-- 选择地址 -->
@@ -1040,7 +1050,7 @@ export default {
 		}
 		.popup-contain {
 			margin: 0 5vw;
-			margin-bottom: 40px;
+			margin-bottom: 20px;
 			.item {
 				display: inline-block;
 				margin-right: 10px;
@@ -1050,11 +1060,11 @@ export default {
 		}
 		.decision {
 			text-align: center;
-			margin-bottom: 20px;
+			margin-right: 5vw;
+			background-color: #34cd99;
+			border-radius: 10px;
+			padding: 10px 30px;
 			span {
-				border-radius: 10px;
-				padding: 10px 30px;
-				background-color: #34cd99;
 				color: #fff;
 			}
 		}
