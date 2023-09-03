@@ -659,11 +659,21 @@ export default {
 			}]
 			this.getSite();
 		},
-		submit(type) {
+		async submit(type) {
 			if(this.userName && this.recycleCategory && this.currentTime){
 				if(!this.$tools.verifyTelPhone(this.userPhone)) {
 					return
 				}
+				
+				let result = await this.$api.getAlipay({
+					openid: this.id
+				})
+				
+				if(result.code !== 200) {
+					this.$tools.toast('请绑定支付宝账户之后再预约');
+					return;
+				}
+					
 				this.$api
 				.placeOrder({
 					userId: uni.getStorageSync('openid'),

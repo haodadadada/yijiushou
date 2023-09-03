@@ -644,6 +644,12 @@ const bindAlipay = (data) => {
 	})
 }
 
+const getAlipay = (data) => {
+	return http.get({
+		url: '/user/getAccount',
+		data
+	})
+}
 
 export default {
 	angelApply,
@@ -710,5 +716,6 @@ export default {
 	configCard,
 	getCommunity,
 	getAllArea,
-	bindAlipay
+	bindAlipay,
+	getAlipay
 }

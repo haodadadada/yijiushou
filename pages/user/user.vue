@@ -65,10 +65,10 @@
 					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
 					<view>{{orders[0].title}}</view>
 				</view>
-				<view class="item" @click="goBind()">
+<!-- 				<view class="item" @click="goBind()">
 					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
 					<view>{{orders[1].title}}</view>
-				</view>
+				</view> -->
 				<view class="item" @click="makePhone('4001100019')">
 					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
 					<view>{{orders[2].title}}</view>
