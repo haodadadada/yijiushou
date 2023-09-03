@@ -669,8 +669,9 @@ export default {
 					openid: this.id
 				})
 				
-				if(result.code !== 200) {
-					this.$tools.toast('请绑定支付宝账户之后再预约');
+				console.log(result)
+				if(result.data === null) {
+					this.$tools.toast('请在我的钱包中绑定支付宝账户再预约');
 					return;
 				}
 					
