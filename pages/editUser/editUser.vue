@@ -77,7 +77,6 @@
 					openid: uni.getStorageSync('openid'),
 					avatarUrl: this.avatarUrl
 				}).then(res => {
-					this.$tools.toast(res.msg)
 					if (res.code == 200) {
 						setTimeout(() => {
 							uni.navigateBack({

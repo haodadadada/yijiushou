@@ -215,6 +215,7 @@ export default {
 	onShareTimeline() {},
 	onShareAppMessage() {},
 	onShow() {
+		console.log(this.oldCommunity)
 		if (!uni.getStorageSync('openid')) {
 			this.$tools.toast('请先登录');
 			setTimeout(() => {
@@ -273,7 +274,7 @@ export default {
 		})
 
 		this.getList();
-		this.resetData();
+		// this.resetData();
 		// this.getLocation();
 		// 在onload中uni.getStorageSync('userInfo').name可能还未设置完毕
 		if(uni.getStorageSync('userInfo').name) {
@@ -657,6 +658,7 @@ export default {
 				height: 30,
 				iconPath: '../../static/location-map.png',	
 			}]
+			this.$store.dispatch('keepAddress', item.community);
 			this.getSite();
 		},
 		async submit(type) {
@@ -666,14 +668,16 @@ export default {
 				}
 				
 				let result = await this.$api.getAlipay({
-					openid: this.id
+					openid: uni.getStorageSync('openid'),
 				})
+				
+				console.log(result);
 				
 				if(result.data === null) {
 					this.$tools.toast('请在我的钱包中绑定支付宝账户再预约');
 					return;
 				}
-					
+				
 				this.$api
 				.placeOrder({
 					userId: uni.getStorageSync('openid'),
@@ -690,6 +694,7 @@ export default {
 					if (res.code == 200) {
 						this.$tools.toast('下单成功');
 							this.$store.commit('CLEARKEEPADDRESS');
+							this.resetData();
 							setTimeout(() => {
 								//跳转到订单页面
 								uni.navigateTo({
