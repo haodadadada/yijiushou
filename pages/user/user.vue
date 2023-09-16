@@ -65,10 +65,12 @@
 					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
 					<view>{{orders[0].title}}</view>
 				</view>
+				<!-- #ifdef MP-ALIPAY -->
 				<view class="item" @click="goBind()">
 					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
 					<view>{{orders[1].title}}</view>
 				</view>
+				<!-- #endif -->
 				<view class="item" @click="makePhone('4001100019')">
 					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
 					<view>{{orders[2].title}}</view>
@@ -167,6 +169,13 @@ export default {
 					icon2: require('../../static/new-user14.png'),
 					title: '关于我们',
 					show: true
+				},
+				{
+					url: '../shop/shop',
+					icon1: require('../../static/new-store1.png'),
+					icon2: require('../../static/new-store2.png'),
+					title: '积分商城',
+					show: true
 				}
 			],
 			bannerList: [],
@@ -259,6 +268,7 @@ export default {
 									if (res1.code == 200) {
 										this.openid = res1.data;
 										uni.setStorageSync('openid', this.openid);
+										console.log(res1)
 										if(res1.msg == '未注册'){
 											uni.navigateTo({
 												url: '../editUser/editUser'
@@ -314,7 +324,6 @@ export default {
 				})
 				.then(res => {
 					this.userInfo = res.data;
-					console.log(11,this.userInfo)
 					uni.setStorageSync('userInfo', this.userInfo);
 				});
 		},

@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="logo">
 			<view class="top-logo">
-				<img src="../../static/new logo.png" alt="">
+				<img src="/static/new-logo.png" alt="">
 			</view>
 			<view class="footer-introduce">
 				<span class="intruduce-top">介绍</span>

@@ -651,6 +651,46 @@ const getAlipay = (data) => {
 	})
 }
 
+// 获取积分商城商品
+const getPointProduct = () => {
+	return http.get({
+		url: '/points/getPointProduct'
+	})
+}
+
+// 获取积分订单
+const getUserPointsOrder = () => {
+	return http.get({
+		url: '/points/getUserPointsOrder'
+	})
+}
+
+// 获取用户积分
+const getUserPoint = (data) => {
+	return http.post({
+		url: '/points/getUserPoints',
+		data
+	})
+}
+
+// 购买积分商品
+const buyProduct = (data) => {
+	return http.post({
+		url: '/points/buyProduct',
+		data,
+		header:'application/json',
+	})
+}
+
+// 问卷
+const sendQuestionnaire = (data) => {
+	return http.post({
+		url: '/survey/create',
+		data,
+		header:'application/json'
+	})
+}
+
 export default {
 	angelApply,
 	cancelOrder,
@@ -717,5 +757,10 @@ export default {
 	getCommunity,
 	getAllArea,
 	bindAlipay,
-	getAlipay
+	getAlipay,
+	getPointProduct,
+	getUserPointsOrder,
+	getUserPoint,
+	buyProduct,
+	sendQuestionnaire
 }

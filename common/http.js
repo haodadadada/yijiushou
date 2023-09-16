@@ -51,6 +51,10 @@ const get = async (options) => {
 							icon: 'none'
 						})
 					}
+					// 不同情况输出不同内容
+					if(res.statusCode == 400) {
+						reject(res);
+					}
 				},
 				fail: err => {
 					uni.stopPullDownRefresh()

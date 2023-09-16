@@ -84,7 +84,7 @@
 					id: 1,
 					width: 0,
 					height: 0,
-					iconPath: '../../static/location-map.png',
+					iconPath: '/static/location-map.png',
 				}],
 				isShowMap: false,
 				isLoading: true,
@@ -168,7 +168,7 @@
 							id: 1,
 							width: 20,
 							height: 20,
-							iconPath: '../../static/location-map.png',	
+							iconPath: '/static/location-map.png',	
 						}]
 						// 等待异步回调结果返回后再调用
 						this.getLocation()
@@ -384,7 +384,7 @@
 						id: 1,
 						width: 20,
 						height: 20,
-						iconPath: '../../static/location-map.png',	
+						iconPath: '/static/location-map.png',	
 					}];
 					this.getSite();
 				})
@@ -479,7 +479,7 @@
 					id: 1,
 					width: 20,
 					height: 20,
-					iconPath: '../../static/location-map.png',	
+					iconPath: '/static/location-map.png',	
 				}]
 			},
 			searchAddress(keyword) {
@@ -498,7 +498,7 @@
 								id: 0,
 								width: 20,
 								height: 20,
-								iconPath: '../../static/location-map.png',	
+								iconPath: '/static/location-map.png',	
 							}];
 							console.log(this.latitude)
 							this.getSite()

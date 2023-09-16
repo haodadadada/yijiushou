@@ -18,11 +18,13 @@ Vue.prototype.$tools = Tools
 Vue.prototype.qqMap = qqMap
 // vuex 仓库
 Vue.prototype.$store = store
+
 Vue.config.productionTip = false
 // 全局过滤器
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
 })
+
 App.mpType = 'app'
 const app = new Vue({
 	...App

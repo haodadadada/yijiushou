@@ -83,6 +83,7 @@
 				</span>
 			</view> -->
 			<view class="popup-contain">
+				<!-- 如果要改变数据 不要把index作为key -->
 				<span class="item" v-for="(item, index) in categoryList" :key="index">
 					<u-tag :text="item.name" :bgColor="isChooseList[index] ?  '#34cd99' : '#C6C7CB'" :show="true" :borderColor="isChooseList[index] ?  '#34cd99' : '#C6C7CB'" @click="changeChoose(index)"></u-tag>
 				</span>
@@ -159,7 +160,7 @@ export default {
 				id: 1,
 				width: 0,
 				height: 0,
-				iconPath: '../../static/location-map.png',
+				iconPath: '/static/location-map.png',
 			}],
 			longitude: 0, // 经度
 			latitude: 0, // 纬度
@@ -215,7 +216,6 @@ export default {
 	onShareTimeline() {},
 	onShareAppMessage() {},
 	onShow() {
-		console.log(this.oldCommunity)
 		if (!uni.getStorageSync('openid')) {
 			this.$tools.toast('请先登录');
 			setTimeout(() => {
@@ -318,7 +318,7 @@ export default {
 		    id: 1,
 		    width: 0,
 		    height: 0,
-		    iconPath: '../../static/location-map.png',
+		    iconPath: '/static/location-map.png',
 		  }];
 		  this.longitude = 0;
 		  this.latitude = 0;
@@ -345,13 +345,14 @@ export default {
 			  this.latitude = p.latitude;
 		  }
 		  // this.getSite();
+		  console.log('click', this.latitude, this.longitude)
 		  this.covers = [{
 		    latitude: this.latitude,
 		    longitude: this.longitude,
 		    id: 1,
 		    width: 30,
 		    height: 30,
-		    iconPath: '../../static/location-map.png',	
+		    iconPath: '/static/location-map.png',	
 		  }];
 		  
 		  this.getLocation();
@@ -432,7 +433,7 @@ export default {
 		        id: 1,
 		        width: 30,
 		        height: 30,
-		        iconPath: '../../static/location-map.png',
+		        iconPath: '/static/location-map.png',
 		      }];
 		
 		      // 等待异步回调结果返回后再调用
@@ -450,6 +451,7 @@ export default {
 			uni.getLocation({
 			  type: 'gcj02',
 			  success: res => {
+				  console.log(res)
 			    this.longitude = res.longitude;
 			    this.latitude = res.latitude;
 			    this.covers = [{
@@ -458,7 +460,7 @@ export default {
 			      id: 1,
 			      width: 30,
 			      height: 30,
-			      iconPath: '../../static/location-map.png',
+			      iconPath: '/static/location-map.png',
 			    }];
 					
 			    // 等待异步回调结果返回后再调用
@@ -656,7 +658,7 @@ export default {
 				id: 1,
 				width: 30,
 				height: 30,
-				iconPath: '../../static/location-map.png',	
+				iconPath: '/static/location-map.png',	
 			}]
 			this.$store.dispatch('keepAddress', item.community);
 			this.getSite();
@@ -673,11 +675,12 @@ export default {
 				
 				console.log(result);
 				
+				//  #ifdef MP-ALIPAY
 				if(result.data === null) {
 					this.$tools.toast('请在我的钱包中绑定支付宝账户再预约');
 					return;
 				}
-				
+				//  #endif
 				this.$api
 				.placeOrder({
 					userId: uni.getStorageSync('openid'),
@@ -744,7 +747,7 @@ export default {
 							id: 0,
 							width: 30,
 							height: 30,
-							iconPath: '../../static/location-map.png',	
+							iconPath: '/static/location-map.png',	
 						}];
 						this.getSite();
 		              },
@@ -787,6 +790,7 @@ export default {
 					this.chooseList.unshift(this.categoryList[index]);
 				}
 			})
+
 			this.chooseList.forEach((item, index) => {
 				if(index != this.chooseList.length - 1) {
 					this.recycleCategory += item.name + '、';
@@ -818,7 +822,8 @@ export default {
 		},
 		/** 获取设备 */
 		getSystemInfo() {
-			if(uni.getSystemInfoSync() === 'mp-alipay') {
+			console.log('123',uni.getSystemInfoSync())
+			if(uni.getSystemInfoSync().uniPlatform === 'mp-alipay') {
 				this.showInalipay = true
 			}
 		},

@@ -1,15 +1,25 @@
 <template>
 	<view class="container">
 		<view :class="showInalipay? 'bgcali': 'bgc'"></view>
+		<!-- #ifdef MP-WEIXIN -->
 		<view class="navbar"></view>
 		<view class="location flex">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
 			<span> {{community}} </span>
 			<text class="size-30 ml-8">{{ area }}</text>
 		</view>
+		<!-- #endif -->
+		<!-- #ifdef MP-ALIPAY -->
+		<view class="navbar-ali"></view>
+		<view class="location flex" style="margin-left: 20px;">
+			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
+			<span> {{community}} </span>
+			<text class="size-30 ml-8">{{ area }}</text>
+		</view>
+		<!-- #endif -->
 		<view class="main-banner-wrap">
 			<view class="main-banner">
-				<img src="../../static/new15.png" alt="" class="img-banner">
+				<img src="/static/wenjuan.jpg" alt="" class="img-banner" @click="goQuestionnaire">
 <!-- 				<view class="left pl-10">
 					<view class="title">环保公益 你我同行</view>
 					<view class="btn-1 flex-center">
@@ -290,6 +300,12 @@ export default {
 			this.isShowPrice = true
 			this.$api.guidancePrice().then(res => this.totalData = res.data)
 		},
+		goQuestionnaire() {
+			uni.navigateTo({
+				url: '/pages/questionnaire/questionnaire?url=https://www.19so.net/wjx.html'
+			})
+		},
+		
 		/** 获取设备 */ 
 		getSystemInfo() {
 			this.systemInfo = uni.getSystemInfoSync()
@@ -351,8 +367,19 @@ export default {
 			font-size: 34upx;
 			font-weight: 500;
 			color: #ffffff;
-			padding: 20upx 30upx;
+			padding: 40upx 30upx;
 			padding-top: calc(var(--status-bar-height) + 50upx);
+			image {
+				width: 250upx;
+				height: 64upx;
+			}
+		}
+		.navbar-ali {
+			font-size: 34upx;
+			font-weight: 500;
+			color: #ffffff;
+			padding: 40upx 30upx;
+			padding-top: calc(var(--status-bar-height);
 			image {
 				width: 250upx;
 				height: 64upx;
@@ -368,13 +395,11 @@ export default {
 		}
 			
 		.main-banner {
-			// background: url(https://youjin.phpcaff.cn/uploads/20220503/2d46dd07ab6430295e32156d08fbe588.png) no-repeat;
 			background-size: 100% 100%;
 			color: #fff;
 			display: flex;
 			justify-content: center;
 			overflow: hidden;
-			// height: 480upx;
 			.img-banner {
 				margin-top: 30upx;
 				width: 100%;
