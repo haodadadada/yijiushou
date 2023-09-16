@@ -125,6 +125,13 @@
 				"navigationBarTitleText": "问卷调查",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/shop-detail/shop-detail",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"enablePullDownRefresh": false
+			}
 		}
     ],
 	"tabBar": {

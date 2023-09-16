@@ -7,7 +7,7 @@
 			<!-- <view class="bottom">积分明细 >></view> -->
 		</view>
 		<view class="contain">
-<!-- 			<view class="item" v-for="item in products" :key="item.id">
+			<view class="item" v-for="item in products" :key="item.id">
 				<view class="img">
 					<image :src="item.productImg" mode=""></image>
 				</view>
@@ -15,11 +15,11 @@
 					<view class="name">{{item.productName}}</view>
 					<view class="price">
 						<span>{{item.productPrice}}积分</span>
-						<span @click="buyProduct(item.id)">马上换</span>
+						<span @click="buyProduct(item.id, item.productImg, item.productName)">马上换</span>
 					</view>
 				</view>
-			</view> -->
-			<view style="text-align: center;">敬请期待</view>
+			</view>
+			<!-- <view style="text-align: center;">敬请期待</view> -->
 		</view>
 	</view>
 </template>
@@ -70,12 +70,10 @@
 				})
 			},
 			
-			buyProduct(productId) {
-				// this.$api.buyProduct({
-				// 	userId: uni.getStorageSync('openid'),
-				// 	productId,
-					
-				// })
+			buyProduct(productId, productImg, productName) {
+				uni.navigateTo({
+					url: `/pages/shop-detail/shop-detail?productId=${productId}&productImg=${productImg}&productName=${productName}`
+				})
 			}
 		},
 		onShow() {
@@ -161,13 +159,14 @@
 					// 元素不在同一水平线上的原因是这个有文字的div的vertical-align默认为baseline
 					.name {
 						// vertical-align: top;
-						font-size: 16px;
+						font-size: 14px;
 					}
 					.price {
 						display: flex; 
 						justify-content: space-between; width: 100%;
 						span:nth-child(1) {
-							font-size: 20px;
+							padding: 5px 0;
+							font-size: 18px;
 							color: coral;
 						}
 						span:nth-child(2) {
