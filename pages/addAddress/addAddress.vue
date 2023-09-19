@@ -412,7 +412,7 @@
 						}).then(res=>{
 							// this.$tools.toast(res.msg)
 							if(res.code==200){
-								if(this.source=='placeOrder'){
+								if(this.source=='placeOrder' || this.source=='shop-detail'){
 									uni.navigateBack({
 										delta:1
 									})

@@ -130,6 +130,10 @@ const post = async (options) => {
 							icon: 'none'
 						})
 					}
+					
+					if(res.statusCode == 400) {
+						reject(res);
+					}
 				},
 				fail: err => {
 					uni.stopPullDownRefresh()

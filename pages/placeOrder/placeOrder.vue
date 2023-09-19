@@ -673,7 +673,6 @@ export default {
 					openid: uni.getStorageSync('openid'),
 				})
 				
-				console.log(result);
 				
 				//  #ifdef MP-ALIPAY
 				if(result.data === null) {

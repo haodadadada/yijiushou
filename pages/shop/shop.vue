@@ -4,7 +4,7 @@
 		<view class="header">
 			<view class="top">当前积分</view>
 			<view class="middle">{{userPoint}}</view>
-			<!-- <view class="bottom">积分明细 >></view> -->
+			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
 		<view class="contain">
 			<view class="item" v-for="item in products" :key="item.id">
@@ -15,7 +15,8 @@
 					<view class="name">{{item.productName}}</view>
 					<view class="price">
 						<span>{{item.productPrice}}积分</span>
-						<span @click="buyProduct(item.id, item.productImg, item.productName)">马上换</span>
+						<!-- <span @click="buyProduct(item.id, item.productImg, item.productName, item.productPrice)">马上换</span> -->
+						<span @click="buyProduct(item)">马上换</span>
 					</view>
 				</view>
 			</view>
@@ -37,7 +38,6 @@
 		methods: {
 			async getPointProduct() {
 				let result = await this.$api.getPointProduct();
-				console.log(result)
 				if(result.code === 200)
 					this.products = result.data;
 			},
@@ -50,29 +50,17 @@
 					this.userPoint = result.data;
 			},
 			
-			// async getUserPointsOrder() {
-			// 	let result = await this.$api.getUserPointsOrder({
-			// 		id: uni.getStorageSync('openid')
-			// 	});
-			// 	if(result.code === 400)
-			// 		this.$tool.toast('暂无订单');
-			// 		return;
-			// 	if(result.code === 200) 
-			// 		console.log(result);
-			// }
-			getUserPointsOrder() {
-				this.$api.getUserPointsOrder({
-					id: uni.getStorageSync('openid')
-				}).then(res => {
-					console.log(111,res)
-				}).catch(error => {
-					console.log(222, error)
+			
+			buyProduct(item) {
+				const {id, productImg, productName, productPrice} = item;
+				uni.navigateTo({
+					url: `/pages/shop-detail/shop-detail?productId=${id}&productImg=${productImg}&productName=${productName}&productPrice=${productPrice}`
 				})
 			},
 			
-			buyProduct(productId, productImg, productName) {
+			goShopOrder() {
 				uni.navigateTo({
-					url: `/pages/shop-detail/shop-detail?productId=${productId}&productImg=${productImg}&productName=${productName}`
+					url: '/pages/shopOrder/shopOrder'
 				})
 			}
 		},
@@ -88,7 +76,6 @@
 			}
 			this.getPointProduct();
 			this.getUserPoint();
-			this.getUserPointsOrder();
 		}
 	}
 </script>

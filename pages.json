@@ -129,6 +129,20 @@
 		{
 			"path": "pages/shop-detail/shop-detail",
 			"style": {
+				"navigationBarTitleText": "积分兑换",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/shopOrder/shopOrder",
+			"style": {
+				"navigationBarTitleText": "兑换记录",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/shopOrder-detail/shopOrder-detail",
+			"style": {
 				"navigationBarTitleText": "商品详情",
 				"enablePullDownRefresh": false
 			}

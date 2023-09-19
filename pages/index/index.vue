@@ -301,8 +301,12 @@ export default {
 			this.$api.guidancePrice().then(res => this.totalData = res.data)
 		},
 		goQuestionnaire() {
-			uni.navigateTo({
-				url: '/pages/questionnaire/questionnaire?url=https://www.19so.net/wjx.html'
+			uni.openEmbeddedMiniProgram({
+				appId: 'wxd947200f82267e58',
+				path: 'pages/wjxqList/wjxqList?activityId=eWTDjXc',
+				success() {
+					console.log('opensuccess')
+				}
 			})
 		},
 		

@@ -6,6 +6,7 @@ import user from './modules/user.js'
 import config from './modules/config.js'
 import community from './modules/community.js'
 
+
 const store = new Vuex.Store({
 	modules:{
 		user,

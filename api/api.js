@@ -659,9 +659,10 @@ const getPointProduct = () => {
 }
 
 // 获取积分订单
-const getUserPointsOrder = () => {
+const getUserPointsOrder = (data) => {
 	return http.get({
-		url: '/points/getUserPointsOrder'
+		url: '/points/getUserPointsOrder',
+		data
 	})
 }
 
