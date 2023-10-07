@@ -6,6 +6,9 @@
 			<view class="middle">{{userPoint}}</view>
 			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
+		<view class="tip" style="margin-bottom: 10px; margin-left: 5vw; font-size: 12px;">
+			<span style="color: #3a9476;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
+		</view>
 		<view class="contain">
 			<view class="item" v-for="item in products" :key="item.id">
 				<view class="img">
@@ -21,6 +24,9 @@
 				</view>
 			</view>
 			<!-- <view style="text-align: center;">敬请期待</view> -->
+		</view>
+		<view style="display: flex; justify-content: center; margin-top: 10px;">
+			<span style="font-family: Microsoft Yahei; font-weight: 500; color: #107855;">更多商品敬请期待</span>
 		</view>
 	</view>
 </template>
@@ -110,9 +116,9 @@
 		}
 		.header {
 			position: relative;
-			margin: 20px 12vw;
+			margin: 20px 12vw 0px;
 			border-radius: 10px;
-			height: 20vh;
+			height: 18vh;
 			.top {
 				position: absolute;
 				top: 2vh;

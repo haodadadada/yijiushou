@@ -126,10 +126,10 @@
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
 			<view v-for="item of totalData" :key="item.id" class="priceItem">
-				<view style="flex: 1;">
+				<view style="flex: 1; text-align: center;">
 					<span>{{item.name}}</span>
 				</view>
-				<view style="flex: 1;">
+				<view style="flex: 1; text-align: center;">
 					<span style="color: #34cd99;">{{item.price}}积分</span>
 				</view>
 			</view>
