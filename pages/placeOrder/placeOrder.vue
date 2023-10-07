@@ -576,6 +576,7 @@ export default {
 		// 比较范围
 		getSite() {
 			var ok = 0;
+			this.userArea = '';
 			this.$api.getAllArea().then(res => {
 				const locationList = res.data;
 				// console.log("data:",locationList)
