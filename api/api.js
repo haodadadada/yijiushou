@@ -692,6 +692,14 @@ const sendQuestionnaire = (data) => {
 	})
 }
 
+// 赠送积分
+const givePoints = (data) => {
+	return http.post({
+		url: '/points/givePoints',
+		data
+	})
+}
+
 export default {
 	angelApply,
 	cancelOrder,
@@ -763,5 +771,6 @@ export default {
 	getUserPointsOrder,
 	getUserPoint,
 	buyProduct,
-	sendQuestionnaire
+	sendQuestionnaire,
+	givePoints
 }

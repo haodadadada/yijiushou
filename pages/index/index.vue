@@ -55,7 +55,11 @@
 						<img src="../../static/new5.png" alt="分类">
 						<span class="title">价格类目</span>
 					</view>
-					<view class="item" @click="makePhone('4001100019')">
+					<view class="item" @click="goShop()">
+						<img src="../../static/shop.png" alt="商城">
+						<span class="title">积分商城</span>
+					</view>
+					<view class="item" @click="makePhone('17682378225')">
 						<img src="../../static/new6.png" alt="客服">
 						<span class="title">旧物找回</span>
 					</view>
@@ -122,8 +126,12 @@
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
 			<view v-for="item of totalData" :key="item.id" class="priceItem">
-				<span>{{item.name}}</span>
-				<span style="color: #34cd99;">￥{{item.price}}</span>
+				<view style="flex: 1;">
+					<span>{{item.name}}</span>
+				</view>
+				<view style="flex: 1;">
+					<span style="color: #34cd99;">{{item.price}}积分</span>
+				</view>
 			</view>
 		</u-popup>
 		<u-modal :show="showModal" closeOnClickOverlay=true @confirm="showModal = false" confirmColor='#34cd99'>
@@ -301,6 +309,22 @@ export default {
 			this.$api.guidancePrice().then(res => this.totalData = res.data)
 		},
 		goQuestionnaire() {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				setTimeout(() => {
+					uni.switchTab({
+						url: '../user/user'
+					});
+				}, 500);
+				return;
+			}
+			
+			this.$api.givePoints({
+				id: uni.getStorageSync('openid')
+			}).then(res => {
+				console.log(res);
+			})
+			
 			uni.openEmbeddedMiniProgram({
 				appId: 'wxd947200f82267e58',
 				path: 'pages/wjxqList/wjxqList?activityId=eWTDjXc',
@@ -319,6 +343,20 @@ export default {
 		},
 		soonComing() {
 			this.showModal = true;
+		},
+		goShop() {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				setTimeout(() => {
+					uni.switchTab({
+						url: '../user/user'
+					});
+				}, 500);
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/shop/shop'
+			})
 		},
 		/** 自定义tabbar时切换高亮显示 */
 		handleTabBarShow (index) {
@@ -509,8 +547,8 @@ export default {
 				margin-top: 40upx;
 				image {
 					margin: 0 auto;
-					width: 64upx;
-					height: 64upx;
+					width: 52upx;
+					height: 52upx;
 				}
 				.title {
 					margin-top: 10upx;
@@ -672,7 +710,7 @@ export default {
 .priceItem {
 	margin: 20px 50px;
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	font-size: 15px;
 }
 .main-banner-wrap{

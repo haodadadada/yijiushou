@@ -2,7 +2,7 @@
 	<view class="container">
 		<image src="/static/new-store-bgc.png" mode="" class="bgc"></image>
 		<view class="header">
-			<view class="top">当前积分</view>
+			<view class="top">当前积分<span style="margin-left: 30px;" @click="navigateToMiniProgram(openid)">打印</span></view>
 			<view class="middle">{{userPoint}}</view>
 			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
@@ -32,7 +32,8 @@
 				products: [],
 				userPoint: '',
 				userPointOrder: [],
-				userInfo: {}
+				userInfo: {},
+				openid: ''
 			}
 		},
 		methods: {
@@ -52,6 +53,7 @@
 			
 			
 			buyProduct(item) {
+				console.log(item)
 				const {id, productImg, productName, productPrice} = item;
 				uni.navigateTo({
 					url: `/pages/shop-detail/shop-detail?productId=${id}&productImg=${productImg}&productName=${productName}&productPrice=${productPrice}`
@@ -61,6 +63,18 @@
 			goShopOrder() {
 				uni.navigateTo({
 					url: '/pages/shopOrder/shopOrder'
+				})
+			},
+			
+			navigateToMiniProgram(id) {
+				uni.navigateToMiniProgram({
+					appId: 'wx0051ea7ec7ed0ae8',
+					extraData: {
+						id
+					},
+					success: res => {
+						console.log(res);
+					}
 				})
 			}
 		},
@@ -76,6 +90,7 @@
 			}
 			this.getPointProduct();
 			this.getUserPoint();
+			this.openid = uni.getStorageSync('openid');
 		}
 	}
 </script>
@@ -120,8 +135,10 @@
 		}
 		
 		.contain {
+			overflow: hidden;
 			.item {
-				display: inline-block;
+				// display: inline-block;
+				float: left;
 				width: 42vw;
 				// height: 150px;
 				background-color: pink;
@@ -153,7 +170,6 @@
 						justify-content: space-between; width: 100%;
 						span:nth-child(1) {
 							padding: 5px 0;
-							font-size: 18px;
 							color: coral;
 						}
 						span:nth-child(2) {

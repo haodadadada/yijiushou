@@ -108,7 +108,8 @@
 			      })
 			    },
 			onChooseAvatar(e) {
-				const { avatarUrl } = e.detail 
+				const { avatarUrl } = e.detail
+				console.log(avatarUrl)
 				uni.uploadFile({
 					url: 'https://www.19so.net/user/user/uploadAvatar',
 					filePath: avatarUrl,

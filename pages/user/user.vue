@@ -71,7 +71,7 @@
 					<view>{{orders[1].title}}</view>
 				</view>
 				<!-- #endif -->
-				<view class="item" @click="makePhone('4001100019')">
+				<view class="item" @click="makePhone('17682378225')">
 					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
 					<view>{{orders[2].title}}</view>
 				</view>
@@ -251,6 +251,7 @@ export default {
 				url: '../editUser/editUser'
 			});
 		},
+		// 登录或注册获取openid
 		getCode() {
 			uni.getSystemInfo({
 				success: (res) => {

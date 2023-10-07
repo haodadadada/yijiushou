@@ -10,6 +10,7 @@
 				<view style="font-size: 12px; color: #888;">{{dateInit(item.createTime)}}</view>
 			</view>
 		</view>
+		<view v-if="order.length == 0 && !isLoading" style=" position: absolute; top: 30vh; text-align: center; width: 100%;">暂无记录</view>
 	</view>
 </template>
 
@@ -17,7 +18,8 @@
 	export default {
 		data() {
 			return {
-				order: []
+				order: [],
+				isLoading: true
 			}
 		},
 
@@ -33,12 +35,14 @@
 			// 		console.log(result);
 			// }
 			getUserPointsOrder() {
+				this.isLoading = true;
 				this.$api.getUserPointsOrder({
 					id: uni.getStorageSync('openid')
 				}).then(res => {
 					this.order = res.data.reverse();
+					this.isLoading = false;
 				}).catch(error => {
-					console.log(222, error)
+					console.log(222, error);
 				})
 			},
 			goShopOrderDetail(item) {

@@ -94,7 +94,7 @@ import community from '../../store/modules/community';
 					this.$tools.toast('请填写完整信息');
 					return;
 				}
-				if(!this.$tools.verifyTelPhone) {
+				if(!this.$tools.verifyTelPhone(this.userPhone)) {
 					this.$tools.toast('请填写正确的手机号码');
 					return;
 				}
@@ -118,12 +118,15 @@ import community from '../../store/modules/community';
 					userName
 				}))
 				.then(res => {
+					console.log(res)
 					if(res.code === 200) {
-						this.$tools.toast('兑换成功');
+						this.$tools.toast('兑换成功, 客服会稍后联系您');
+						const {address, community, payPoints, phone, productName, productImg, userName} = this;
+						const id = res.data;
 						// 跳转到shop页面
 						setTimeout(() => {
 							uni.navigateTo({
-								url: '/pages/shop/shop'
+								url: `/pages/shopOrder-detail/shopOrder-detail?address=${userAddress}&community=${userCommunity}&id=${id}&payPoints=${productPrice}&phone=${userPhone}&productName=${productName}&productImg=${productImg}&userName=${userName}`
 							})
 						}, 1000)
 					}

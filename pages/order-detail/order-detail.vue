@@ -90,6 +90,10 @@
 				<view>回收员</view>
 				<view>{{item.riderName}}</view>
 			</view>
+			<view class="main-item" v-if="item.orderStatus === 2">
+				<view>回收金额</view>
+				<view>{{item.price}}</view>
+			</view>
 			<!-- <view class="main-footer" >
 				<span>我的评价:</span>
 				<view class="footer-input">
