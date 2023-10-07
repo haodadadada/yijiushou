@@ -90,7 +90,7 @@ import community from '../../store/modules/community';
 		},
 		methods: {
 			async submit() {
-				if(!this.userName && !this.userPhone && !this.userAddress && !this.userCommunity) {
+				if(!this.userName || !this.userPhone || !this.userAddress || !this.userCommunity) {
 					this.$tools.toast('请填写完整信息');
 					return;
 				}
@@ -118,15 +118,15 @@ import community from '../../store/modules/community';
 					userName
 				}))
 				.then(res => {
-					console.log(res)
 					if(res.code === 200) {
 						this.$tools.toast('兑换成功, 客服会稍后联系您');
 						const {address, community, payPoints, phone, productName, productImg, userName} = this;
 						const id = res.data;
+						const createTime = this.dateInit(new Date());
 						// 跳转到shop页面
 						setTimeout(() => {
 							uni.navigateTo({
-								url: `/pages/shopOrder-detail/shopOrder-detail?address=${userAddress}&community=${userCommunity}&id=${id}&payPoints=${productPrice}&phone=${userPhone}&productName=${productName}&productImg=${productImg}&userName=${userName}`
+								url: `/pages/shopOrder-detail/shopOrder-detail?address=${userAddress}&community=${userCommunity}&id=${id}&payPoints=${productPrice}&phone=${userPhone}&productName=${productName}&productImg=${productImg}&userName=${userName}&createTime=${createTime}`
 							})
 						}, 1000)
 					}
@@ -227,6 +227,16 @@ import community from '../../store/modules/community';
 				  function toRad(value) {
 					return value * Math.PI / 180;
 				  }
+			},
+			
+			dateInit(date) {
+				const originalDate = new Date(date);
+				const formattedDate = `${originalDate.getFullYear()}-${originalDate.getMonth() + 1}-${originalDate.getDate()} ${this.addLeadingZero(originalDate.getHours())}:${this.addLeadingZero(originalDate.getMinutes())}`;
+				return formattedDate;
+			},
+			// 检查时间是否小于10
+			addLeadingZero(value) {
+			  return value < 10 ? `0${value}` : value;
 			},
 		},
 		onLoad(option) {

@@ -2,7 +2,7 @@
 	<view class="container">
 		<image src="/static/new-store-bgc.png" mode="" class="bgc"></image>
 		<view class="header">
-			<view class="top">当前积分<span style="margin-left: 30px;" @click="navigateToMiniProgram(openid)">打印</span></view>
+			<!-- <view class="top">当前积分<span style="margin-left: 30px;" @click="navigateToMiniProgram(openid)">打印</span></view> -->
 			<view class="middle">{{userPoint}}</view>
 			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
