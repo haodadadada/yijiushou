@@ -66,7 +66,7 @@ import community from '../../store/modules/community';
 			this.productPrice = option.payPoints;
 			this.userPhone = option.phone;
 			this.userName = option.userName;
-			this.userAddress = option.address + ',' + option.community;
+			this.userAddress = option.community + ',' + option.address;
 			this.createTime = option.createTime;
 			this.productImg = option.productImg;
 		}
