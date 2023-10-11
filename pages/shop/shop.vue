@@ -6,8 +6,8 @@
 			<view class="middle">{{userPoint}}</view>
 			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
-		<view class="tip" style="margin-bottom: 10px; margin-left: 5vw; font-size: 12px;">
-			<span style="color: #3a9476;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
+		<view class="tip" style="display: flex; align-items: center; width: 90vw; margin-bottom: 10px; margin-left: 5vw; font-size: 12px; background-color: #34cd99; border-radius: 99999px; padding: 5px 10px; box-sizing: border-box;">
+			<span style="color: #fff; display: flex; align-items: center;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
 		</view>
 		<view class="contain">
 			<view class="item" v-for="item in products" :key="item.id">
@@ -26,7 +26,7 @@
 			<!-- <view style="text-align: center;">敬请期待</view> -->
 		</view>
 		<view style="display: flex; justify-content: center; margin-top: 10px;">
-			<span style="font-family: Microsoft Yahei; font-weight: 500; color: #107855;">更多商品敬请期待</span>
+			<span style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">更多商品敬请期待</span>
 		</view>
 	</view>
 </template>
@@ -102,6 +102,22 @@
 </script>
 
 <style lang="scss">
+	@keyframes identifier {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
+	}
+	.tip {
+		background: linear-gradient(to left, #80f9bc, #34cd99);
+		background-size: 200% 200%;
+		animation: identifier 5s linear infinite;
+	}
 	.container {
 		.bgc {
 			position: absolute;
