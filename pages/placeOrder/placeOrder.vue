@@ -33,6 +33,17 @@
 						<img src="../../static/icon/jia.png" alt="" style="width: 17px; height: 17px;">
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" placeholder="请输入门牌号" v-model="userAddress">
 					</view>
+					<view class="info-sex">
+						<!-- <span class="iconfont">&#xe88b;</span> -->
+						<img src="../../static/icon/sex.png" alt="" style="width: 17px; height: 17px;">
+						<input type="tel" style="margin-left: 5px; flex-grow: 1;" placeholder="请选择性别" :disabled="true">
+						<view class="sex-check">
+							<view class="sex" v-for="item in sexList" :key="item.id">
+								<view class="item" :class="{cur:gender==item.id}"
+								@click="gender=item.id">{{item.name}}</view>
+							</view>
+						</view>
+					</view>
 					<view class="info-phone">
 						<!-- <span class="iconfont">&#xe88b;</span> -->
 						<img src="../../static/icon/dianhua.png" alt="" style="width: 17px; height: 17px;">
@@ -653,6 +664,7 @@ export default {
 			this.latitude = location1[0];
 			this.longitude = location1[1];
 			this.addressPopupShow = false;
+			this.gender = item.gender;
 			this.covers = [{
 				latitude: this.latitude,
 				longitude: this.longitude,
@@ -665,7 +677,7 @@ export default {
 			this.getSite();
 		},
 		async submit(type) {
-			if(this.userName && this.recycleCategory && this.currentTime){
+			if(this.userName && this.recycleCategory && this.currentTime && this.userCommunity && this.userAddress){
 				if(!this.$tools.verifyTelPhone(this.userPhone)) {
 					return
 				}
@@ -691,7 +703,8 @@ export default {
 					userCommunity: this.userCommunity,
 					userAddress: this.userAddress,
 					reserveTime: this.currentTimeDate,
-					recycleCategory:this.recycleCategory
+					recycleCategory:this.recycleCategory,
+					gender: this.gender
 				})
 				.then(res => {
 					console.log(res)
@@ -900,7 +913,7 @@ export default {
 			height: 30px;
 			border-radius: 15px;
 			right: 10px;
-			bottom: 48vh;
+			bottom: 53vh;
 			// background-color: #34cd99;
 			opacity: 0.5;
 			span {
@@ -971,7 +984,7 @@ export default {
 			.info {
 				position: absolute;
 				// height: 319px;
-				height: 45vh;
+				height: 50vh;
 				width: 100%;
 				bottom: 1vh;
 				border-radius: 20upx;
@@ -1023,6 +1036,34 @@ export default {
 						align-items: center;
 						color: #898989;
 					}
+					.info-sex {
+						display: flex;
+						justify-content: space-around;
+						align-items: center;
+						color: #898989;
+						.sex-check {
+							display: flex;
+							.sex{
+								display: flex;
+								.item{
+									font-size: 25upx;
+									color: #C4C4C4;
+									width: 128upx;
+									// line-height: 50upx;
+									text-align: center;
+									background: #FFFFFF;
+									border-radius: 20upx;
+									border: 1upx solid #C4C4C4;
+									margin-right: 32upx;
+								}
+								.cur{
+									color: #3BB061;
+									border: 1upx solid #3BB061;
+								}
+							}
+						}
+					}
+			
 				}
 
 				.info-footer {

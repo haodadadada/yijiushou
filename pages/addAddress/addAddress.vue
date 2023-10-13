@@ -1,6 +1,6 @@
 <template>
 	<view class="content pb-30">
-		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 50vh;" :markers="covers" @click="clickMap" v-if="isShowMap"></map>
+		<map :longitude="longitude" :latitude="latitude" :scale="16" style="width: 100%; height: 40vh;" :markers="covers" @click="clickMap" v-if="isShowMap"></map>
 		<view class="mylocation" @click.stop="initMap" v-if="isShowMap">
 			<!-- <span class="iconfont">&#xec32;</span> -->
 			<img src="../../static/icon/dingwei.png" alt="" style="width: 30px; height: 30px;">
@@ -16,33 +16,33 @@
 		</view> -->
 		<view class="contain" style="width: 100%;">
 			<view class="input">
-					<text>联系人</text>
-					<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
-				</view>
-			<!-- 	<view class="input">
-					<text>性别</text>
-					<view class="sex-check">
-						<view class="sex" v-for="item in sexList" :key="item.id">
-							<view class="item" :class="{cur:gender==item.id}"
-							@click="gender=item.id">{{item.name}}</view>
-						</view>
+				<text>联系人</text>
+				<input type="text" value="" placeholder="请输入联系人姓名" v-model="userName" />
+			</view>
+			<view class="input">
+				<text>性别</text>
+				<view class="sex-check">
+					<view class="sex" v-for="item in sexList" :key="item.id">
+						<view class="item" :class="{cur:gender==item.id}"
+						@click="gender=item.id">{{item.name}}</view>
 					</view>
-				</view> -->
-				<view class="input">
-					<text>手机号码</text>
-					<input type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
 				</view>
-				<view class="input" @click="goSuggest">
-				  <text>地址信息</text>
-				  <input type="text" v-model="userCommunity" placeholder="请输入地址信息" disabled="true" />
-				</view>
-			
-				<view class="input">
-					<text>门牌号</text>
-					<input type="text" value="" placeholder="例:xx号xx楼xx门牌" v-model="address" />
-				</view>
-				<view v-if="id" class="btn" @click="edit">确认修改</view>
-				<view v-else class="btn" @click="submit">保存地址</view>
+			</view>
+			<view class="input">
+				<text>手机号码</text>
+				<input type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
+			</view>
+			<view class="input" @click="goSuggest">
+			  <text>地址信息</text>
+			  <input type="text" v-model="userCommunity" placeholder="请输入地址信息" disabled="true" />
+			</view>
+		
+			<view class="input">
+				<text>门牌号</text>
+				<input type="text" value="" placeholder="例:xx号xx楼xx门牌" v-model="address" />
+			</view>
+			<view v-if="id" class="btn" @click="edit">确认修改</view>
+			<view v-else class="btn" @click="submit">保存地址</view>
 		</view>
 	</view>
 </template>
@@ -71,7 +71,7 @@
 						name:'女士'
 					}
 				],
-				gender:0,
+				gender: 0,
 				userName: '',
 				userPhone: '',
 				address: '',				
@@ -101,6 +101,7 @@
 			if(e.source){
 				this.source = e.source
 			}
+			this.id = e.id;
 			// if(e.id){
 			// 	this.getAddress(e.id)
 			// }else{
@@ -395,7 +396,7 @@
 				console.log(data.data.join(''));
 			},
 			submit() {
-				if (this.userName && this.userPhone && this.address&&this.areaId) {
+				if (this.userName && this.userPhone && this.address && this.areaId) {
 						if(!this.$tools.verifyTelPhone(this.userPhone)) {
 							return
 						}
