@@ -677,6 +677,7 @@ export default {
 			this.getSite();
 		},
 		async submit(type) {
+			console.log(this.gender);
 			if(this.userName && this.recycleCategory && this.currentTime && this.userCommunity && this.userAddress){
 				if(!this.$tools.verifyTelPhone(this.userPhone)) {
 					return
@@ -704,7 +705,7 @@ export default {
 					userAddress: this.userAddress,
 					reserveTime: this.currentTimeDate,
 					recycleCategory:this.recycleCategory,
-					gender: this.gender
+					userGender: this.gender
 				})
 				.then(res => {
 					console.log(res)

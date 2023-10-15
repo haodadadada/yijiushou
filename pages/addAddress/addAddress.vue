@@ -434,7 +434,7 @@
 			// 修改地址
 			edit() {
 				if (this.userName && this.userPhone && this.address &&this.areaId) {
-					if(!this.checkTelephone(this.userPhone)) {
+					if(!this.$tools.verifyTelPhone(this.userPhone)) {
 						this.$tools.toast('请输入正确的手机格式');
 						return
 					}
