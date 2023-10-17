@@ -130,7 +130,7 @@
 					<span>{{item.name}}</span>
 				</view>
 				<view style="flex: 1; text-align: center;">
-					<span style="color: #34cd99;">{{item.price}}积分</span>
+					<span style="color: #34cd99;">{{item.price}} 元</span>
 				</view>
 			</view>
 		</u-popup>

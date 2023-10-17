@@ -10,6 +10,10 @@
 				<span>昵称</span>
 				<input type="nickname"  class="weui-input" placeholder="请输入昵称" v-model="name"/>
 			</view>
+			<view class="phone">
+			  <span>手机号</span>
+			  <input type="text" class="weui-input" placeholder="请输入手机号" v-model="phone" />
+			</view>
 		</view>
 		<!-- #endif -->
 		<!-- #ifdef MP-ALIPAY -->
@@ -51,6 +55,9 @@
 				status:'',
 				userInfo: {},
 				avatarUrl: '',
+				phone:'',
+				isPhoneNumberValid:true,
+				phoneNumberPattern: /^1[3-9]\d{9}$/ // 手机号正则表达式
 				// canIUseAuthButton: my.canIUse('button.open-type.getAuthorize')
 			}
 		},
@@ -68,14 +75,20 @@
 			if(this.userInfo.avatarUrl) {
 				this.avatarUrl = this.userInfo.avatarUrl;
 				this.name = this.userInfo.name;
+				this.phone = this.userInfo.phone;
 			}
 		},
 		methods: {
 			submit() {
+				if(!this.$tools.verifyTelPhone(this.phone)) {
+					this.$tools.toast('请输入正确的手机号码');
+					return;
+				}
 				this.$api.editInfo({
 					name: this.name,
 					openid: uni.getStorageSync('openid'),
-					avatarUrl: this.avatarUrl
+					avatarUrl: this.avatarUrl,
+					phone: this.phone
 				}).then(res => {
 					if (res.code == 200) {
 						setTimeout(() => {
@@ -97,6 +110,7 @@
 					  if (userInfo.code == "10000") {
 			            this.avatarUrl = userInfo.avatar
 			            this.name = userInfo.nickName
+						this.phone = userInfo.phone
 			          }
 			        }
 			      })
@@ -156,7 +170,7 @@
 		.name {
 			display: flex;
 			align-items: center;
-			margin: 20px 20px 30vh;
+			margin: 20px 20px;
 			span {
 				flex: 1;
 			}
@@ -167,6 +181,21 @@
 				padding: 5px 10px;
 			}
 		}
+		.phone {
+		    display: flex;
+		    align-items: center;
+		    margin: 10px 20px 0; /* 修改上边距，左右边距不变 */
+		    span {
+		        flex: 1;
+		    }
+		    input {
+		        flex: 4;
+		        background-color: #eee;
+		        border-radius: 10px;
+		        padding: 5px 10px;
+		    }
+		}
+
 		
 		
 		.insuranceimage {

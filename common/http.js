@@ -1,7 +1,7 @@
 import Vue from "vue"
 let startTestModel = true //开启测试模式
 let BASE_URL=''
-const DEV_BASE_URL = 'http://192.168.1.225:9090'
+const DEV_BASE_URL = 'https://www.19so.net/user'
 const PROD_BASE_URL = 'https://www.19so.net/user'// 接口域名
 // const DEV_BASE_URL = 'https://user.19so.net'
 // const PROD_BASE_URL = 'https://user.19so.net'// 接口域名
@@ -15,7 +15,7 @@ console.log("%c".concat("开发模式开启", "%c"),
 // 封装get方法
 const get = async (options) => {
 	return new Promise((resolve, reject) => {
-		if (options.loading)
+		// if (options.loading)
 			uni.showLoading({
 				title: '加载中..'
 			})
