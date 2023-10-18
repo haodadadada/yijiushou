@@ -15,7 +15,7 @@ console.log("%c".concat("开发模式开启", "%c"),
 // 封装get方法
 const get = async (options) => {
 	return new Promise((resolve, reject) => {
-		// if (options.loading)
+		if (options.loading)
 			uni.showLoading({
 				title: '加载中..'
 			})

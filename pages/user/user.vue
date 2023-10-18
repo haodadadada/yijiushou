@@ -65,6 +65,10 @@
 					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
 					<view>{{orders[0].title}}</view>
 				</view>
+				<view class="item" @click="goAddress()">
+					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
+					<view>{{orders[1].title}}</view>
+				</view>
 				<!-- #ifdef MP-ALIPAY -->
 				<view class="item" @click="goBind()">
 					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
@@ -116,10 +120,11 @@ export default {
 					title: '我的订单',
 				},
 				{
-					id: 3,
-					icon1: require('../../static/new-user7.png'),
-					icon2: require('../../static/new-user8.png'),
-					title: '我的钱包',
+					id: 2,
+					icon1: require('../../static/new-user5.png'),
+					icon2: require('../../static/new-user6.png'),
+					title: '我的地址',
+					show: true
 				},
 				// {
 				// 	id: 2,
@@ -133,22 +138,16 @@ export default {
 				// 	icon2: require('../../static/new-user12.png'),
 				// 	title: '已取消',
 				// },
-				{
-					id: 4,
-					url: "#",
-					icon1: require('../../static/new-user15.png'),
-					icon2: require('../../static/new-user16.png'),
-					title: '找回物品',
-				}
+				// {
+				// 	id: 4,
+				// 	url: "#",
+				// 	icon1: require('../../static/new-user15.png'),
+				// 	icon2: require('../../static/new-user16.png'),
+				// 	title: '找回物品',
+				// }
 			],
 			tools: [
-				{
-					url: '../address/address',
-					icon1: require('../../static/new-user5.png'),
-					icon2: require('../../static/new-user6.png'),
-					title: '我的地址',
-					show: true
-				},
+
 				// {
 				// 	url: '../feedback/feedback',
 				// 	icon1: require('../../static/new-user1.png'),
@@ -224,6 +223,15 @@ export default {
 			}
 			uni.navigateTo({
 				url: '../bind/bind'
+			})
+		},
+		goAddress() {
+			if(!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				return;
+			}
+			uni.navigateTo({
+				url: '../address/address'
 			})
 		},
 		goBanner(e) {

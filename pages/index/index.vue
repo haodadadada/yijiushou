@@ -59,10 +59,11 @@
 						<img src="../../static/shop.png" alt="商城">
 						<span class="title">积分商城</span>
 					</view>
-					<view class="item" @click="makePhone('17682378225')">
+<!-- 					<view class="item" @click="makePhone('17682378225')">
 						<img src="../../static/new6.png" alt="客服">
-						<span class="title">旧物找回</span>
-					</view>
+						<span class="title">客服中心</span>
+					</view> -->
+		
 				</view>
 				
 				<!-- 这里是靠内部撑开的很难去量百分比 -->
@@ -123,6 +124,15 @@
 			</view> -->
 
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
+			<view class="kefu">
+				<view style="position: absolute; right: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+					<img src="/static/icon/kefu.png" alt="" style="width: 26px; height: 26px;">
+					<span style="font-size: 12px; color: #222;">客服中心</span>
+				</view>
+				<button open-type="contact" bindcontact="handleContact" style="position: absolute; right: 10px; opacity: 0;">
+					在线客服
+				</button>
+			</view>
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
 			<view v-for="item of totalData" :key="item.id" class="priceItem">
@@ -404,7 +414,7 @@ export default {
 		// background-color: #02c99a;
 		background-size: 100% auto;
 		overflow-x: hidden;
-		margin: 0 20upx 0 20upx;
+		padding: 0 20upx 0 20upx;
 		.navbar {
 			font-size: 34upx;
 			font-weight: 500;
@@ -715,5 +725,15 @@ export default {
 }
 .main-banner-wrap{
 	position: relative;
+	.kefu {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		margin-top: 20upx;
+		height: 46px;
+	}
 }
 </style>
