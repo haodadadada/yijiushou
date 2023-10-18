@@ -126,7 +126,7 @@
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 			<view class="kefu">
 				<view style="position: absolute; right: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-					<img src="/static/icon/kefu.png" alt="" style="width: 26px; height: 26px;">
+					<img src="/static/icon/kefu.png" alt="" style="width: 26px; height: 30px;">
 					<span style="font-size: 12px; color: #222;">客服中心</span>
 				</view>
 				<button open-type="contact" bindcontact="handleContact" style="position: absolute; right: 10px; opacity: 0;">
