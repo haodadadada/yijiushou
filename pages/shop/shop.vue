@@ -165,7 +165,7 @@
 			width: 90vw;
 			img {
 				width: 90vw;
-				height: 35vw;
+				height: 23vw;
 				border-radius: 20px;
 			}
 		}
