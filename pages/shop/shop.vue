@@ -7,7 +7,7 @@
 			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
 		</view>
 		<view class="exchange">
-			<img src="/static/exchange.jpg" alt="兑换打印">
+			<img src="/static/exchange.jpg" alt="兑换打印" @click="navigateToMiniProgram">
 		</view>
 		<view class="tip" style="display: flex; align-items: center; width: 90vw; margin-bottom: 10px; margin-left: 5vw; font-size: 12px; background-color: #34cd99; border-radius: 99999px; padding: 5px 10px; box-sizing: border-box;">
 			<span style="color: #fff; display: flex; align-items: center;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
@@ -75,12 +75,14 @@
 				})
 			},
 			
-			navigateToMiniProgram(id) {
+			navigateToMiniProgram() {
 				uni.navigateToMiniProgram({
 					appId: 'wx0051ea7ec7ed0ae8',
+					// 可在ws.getLaunchOptionsSync()获得
 					extraData: {
-						id
+						openid: this.openid
 					},
+					envVersion: 'develop',
 					success: res => {
 						console.log(res);
 					}
