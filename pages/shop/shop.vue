@@ -82,7 +82,7 @@
 					extraData: {
 						openid: this.openid
 					},
-					envVersion: 'develop',
+					envVersion: 'trial',
 					success: res => {
 						console.log(res);
 					}
