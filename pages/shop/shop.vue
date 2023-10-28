@@ -76,17 +76,17 @@
 			},
 			
 			navigateToMiniProgram() {
-				uni.navigateToMiniProgram({
-					appId: 'wx0051ea7ec7ed0ae8',
-					// 可在ws.getLaunchOptionsSync()获得
-					extraData: {
-						openid: this.openid
-					},
-					envVersion: 'trial',
-					success: res => {
-						console.log(res);
-					}
-				})
+				// uni.navigateToMiniProgram({
+				// 	appId: 'wx0051ea7ec7ed0ae8',
+				// 	// 可在ws.getLaunchOptionsSync()获得
+				// 	extraData: {
+				// 		openid: this.openid
+				// 	},
+				// 	envVersion: 'trial',
+				// 	success: res => {
+				// 		console.log(res);
+				// 	}
+				// })
 			}
 		},
 		onShow() {
