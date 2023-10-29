@@ -338,7 +338,7 @@ export default {
 			uni.openEmbeddedMiniProgram({
 				appId: 'wxd947200f82267e58',
 				// path: 'pages/wjxqList/wjxqList?activityId=eWTDjXc',
-				path: 'pages/wjxqList/wjxqList?activityId=h0QZb9H'
+				path: 'pages/wjxqList/wjxqList?activityId=h0QZb9H',
 				success() {
 					console.log('opensuccess')
 				}
