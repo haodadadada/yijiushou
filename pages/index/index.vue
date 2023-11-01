@@ -353,7 +353,10 @@ export default {
 			}
 		},
 		soonComing() {
-			this.showModal = true;
+			uni.navigateTo({
+				url: '/pages/activity/activity'
+			})
+			// this.showModal = true;
 		},
 		goShop() {
 			if (!uni.getStorageSync('openid')) {

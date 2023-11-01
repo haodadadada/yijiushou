@@ -700,6 +700,34 @@ const givePoints = (data) => {
 	})
 }
 
+// 双十一活动接口
+
+// 参与抽奖
+const lotteryDraw = (data) => {
+	return http.post({
+		url: '/lottery/join',
+		data
+	})
+}
+
+// 获取参与奖券
+const getLotterCoupon = (data) => {
+	return http.post({
+		url: '/lottery/getAllLottery',
+		data
+	})
+}
+
+// 获取参与人数
+
+const getLotterUserCount = (data) => {
+	return http.get({
+		url: '/lottery/getUserCount',
+		data
+	})
+}
+//
+
 export default {
 	angelApply,
 	cancelOrder,
@@ -772,5 +800,8 @@ export default {
 	getUserPoint,
 	buyProduct,
 	sendQuestionnaire,
-	givePoints
+	givePoints,
+	lotteryDraw,
+	getLotterCoupon,
+	getLotterUserCount
 }
