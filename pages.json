@@ -146,6 +146,13 @@
 				"navigationBarTitleText": "商品详情",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/activity/activity",
+			"style": {
+				"navigationBarTitleText": "活动",
+				"enablePullDownRefresh": false
+			}
 		}
     ],
 	"tabBar": {
