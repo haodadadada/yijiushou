@@ -54,7 +54,7 @@
 						<img src="../../static/icon/yuyue.png" alt="" style="width: 17px; height: 17px;">
 						<!-- <u-input v-model="currentTime" placeholder="请选择" disabled disabledColor="#ffffff" style="margin-left: 1upx; padding: 0;"></u-input>				 -->
 						<input type="text" style="margin-left: 5px; flex-grow: 1;" disabled="true" :placeholder="isShow ? '' : '请选择时间'" v-model="currentTime">
-						<hTimeAlert title="预约时间" subhead='请选择需要上门服务的时间' rangeDay="5" intervalTime="30" :isShow="isShow" @closeAlert="handelClose" class="hTimeAlert" rangeStartTime="19:00:00" rangeEndTime="21:00:00"></hTimeAlert>
+						<hTimeAlert title="预约时间" subhead='请选择需要上门服务的时间' rangeDay="5" intervalTime="30" :isShow="isShow" @closeAlert="handelClose" class="hTimeAlert" rangeStartTime="19:00:00" rangeEndTime="21:00:00" dayStartIntTime="60"></hTimeAlert>
 					</view>
 					<view class="info-category" @click="showCategory">
 						<!-- <span class="iconfont">&#xe62a;</span> -->
