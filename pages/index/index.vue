@@ -212,6 +212,7 @@ export default {
 			rootHeight: ''
 		};
 	},
+
 	onShareAppMessage() {},
 	onShareTimeline() {},
 	onShow() {
@@ -230,7 +231,7 @@ export default {
 		this.userInfo = uni.getStorageSync('userInfo');
 		this.initMap();
 	},
-	onLoad() {
+	onLoad(option) {
 		this.baseUrl = this.$tools.baseUrl;
 		// this.getNoticeList();
 		this.getSystemInfo();
@@ -244,6 +245,11 @@ export default {
 				this.windowHeight = res.windowHeight;
 			}
 		})
+		if (option.invitedId)
+			uni.setStorage({
+				key: 'invitedId',
+				data: option.invitedId,
+			});
 	},
 
 	methods: {
@@ -464,7 +470,7 @@ export default {
 			font-weight: 500;
 			color: #ffffff;
 			padding: 40upx 30upx;
-			padding-top: calc(var(--status-bar-height);
+			padding-top: calc(var(--status-bar-height));
 			image {
 				width: 250upx;
 				height: 64upx;

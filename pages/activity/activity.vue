@@ -1,25 +1,34 @@
 <template>
   <div class="activity-page">
     <div class="activity-container">
-      <img class="top" src="../../static/activity/top.png" alt="">
-      <div class="prize-pool">
-		<div class="prize-pool-title">
-			  <img src="../../static/activity/all-prize.png" alt="" />
-		</div>
+			<div class="top">
+				<img src="../../static/activity/top.png" alt="">
+				<!-- <div class="top-title">豪礼抽不停</div> -->
+			</div>
+    	<div class="prize-pool">
+				<div class="prize-pool-title">
+						<img src="../../static/activity/all-prize.png" alt="" />
+				</div>
         <div class="countdown">
           <div class="countdown-title">开奖倒计时： </div>
           <div class="countdown-time">
             {{ endTime }}
           </div>
         </div>
-        <div class="status">
-          <div class="status-item people-num">
+				<div class="status">
+					<div class="status-item people-num">
             <div class="title">当前人数： </div>
             <div class="num">{{ lotterUserNum }}人</div>
           </div>
-          <div class="status-item remaining-points">
+				</div>
+        <div class="status">
+          <div class="status-item people-num">
             <div class="title">剩余积分： </div>
-            <div class="num">{{ userPoint }}</div>
+            <div class="num">{{ userPoint }}人</div>
+          </div>
+          <div class="status-item remaining-points">
+            <div class="title">分享成功次数： </div>
+            <div class="num">{{ invitedNum }}</div>
           </div>
         </div>
         <!-- <div class="remaining-qualification">
@@ -93,24 +102,55 @@
         <div class="tip-title">如何获得抽奖次数</div>
         <div class="tip-list">
           <span class="list-tiem">1.下单回收可获得相应积分。</span>
-          <span class="list-tiem">2.分享抽奖活动至好友，没分享一次可得5积分。</span>
+          <span class="list-tiem">2.分享抽奖活动至好友，并成功拉取新用户注册（需注册完整信息），每次可得5积分。</span>
           <span class="list-tiem">3.每5积分可兑换一次抽奖次数，不限兑换次数。</span>
         </div>
         <div class="tip-option">
-          <div class="option to-buy">去下单</div>
-          <div class="option share">分享好友</div>
+          <div class="option to-buy" @click="goToOrder()">去下单</div>
+          <button class="option share" open-type="share">分享好友</button>
         </div>
       </div>
     </div>
-    <div class="my-prize">
+    <div class="my-prize" @click="checkMyCoupon = true;getCoupon()">
       <img src="../../static/activity/my-prize.svg" alt="">
     </div>
     <div class="rule" @click="checkRule = !checkRule">
       <img src="../../static/activity/rule.svg" alt="">
     </div>
+		<div v-if="checkMyCoupon" class="my-coupon" @click="checkMyCoupon = false">
+			<div class="coupon-list" @click.stop>
+				<div class="list-title">我的奖券</div>
+				<div class="coupons" v-if="couponList.length != 0">
+					<div v-for="(item, index) in couponList" class="coupon-item">
+						{{ item.id }}
+					</div>
+				</div>
+				<div v-else class="coupon-empty">
+						<img src="../../static/activity/empty.png" alt="">
+						<span class="empty-desc">暂无奖券，快去参与抽奖吧！</span>
+					</div>
+				<img class="close-button" @click="checkMyCoupon = false" src="../../static/activity/close.svg" alt="">
+			</div>
+		</div>
 		<Transition name="fade">
-			<div v-if="checkRule" class="activity-rule">
-				<img src="../../static/activity/rule.png" alt="" @click="checkRule = !checkRule">
+			<div v-if="checkRule" class="activity-rule" @click="checkRule = false">
+				<div class="rules" @click.stop>
+					<div class="rules-title">
+						<img src="../../static/activity/rule-title.png" alt="">
+					</div>
+					<div class="rules-content">
+						<p><span>1.</span>此活动为抽奖团活动，共抽取1名幸运用户免费赠送礼品。</p>
+						<p><span>2.</span>奖池分为一级奖池、二级奖池、三级奖池，奖品价值逐级递增。参与人数满1000人但不足2000人，抽取一级奖池礼品；满2000人但不足3000人，抽取二级奖池礼品；满3000人及以上，抽取三级奖池礼品。</p>
+						<p><span>3.</span>用户可使用账户积分兑换抽奖次数，每5积分即可兑换一次，不限兑换次数。</p>
+						<p><span>4.</span>用户n次参与抽奖意味着占有n个人 数名额，即抽奖次数越多，中奖率越高。</p>
+						<p><span>5.</span>分享抽奖活动至好友，并成功拉取新用户注册（需注册完整信息），每次可得5积分。</p>
+						<p><span>6.</span>此抽奖活动为定时开奖，请实时关注开奖时间。</p>
+					</div>
+					<div class="rule-back">
+						<img src="../../static/activity/rule-back.png" alt="">
+					</div>
+					<img class="close-button" @click="checkRule = false" src="../../static/activity/close.svg" alt="">
+				</div>
 			</div>
 		</Transition>
   </div>
@@ -126,9 +166,11 @@ export default {
 			prizeProcess: 0,
 			userPoint: 0,
 			lotterUserNum: 0,
-			lotterCount: 0,
+			invitedNum: 0,
+			couponList: [],
 			endTime: '0天 0:0:0',
 			checkRule: false,
+			checkMyCoupon: false,
 		};
 	},
 	mounted() {
@@ -137,22 +179,10 @@ export default {
 			this.lotterTimer()
 		}, 1000);
 
-		this.$api.getUserPoint({
-			id: uni.getStorageSync('openid')
-		}).then(res => {
-			if(res.code === 200)
-				this.userPoint = res.data;
-		});
-
-		this.$api.getLotterUserCount().then(res => {
-			if(res.code === 200) {
-				this.lotterUserNum = res.data.userNum
-				if(this.lotterUserNum > 3000) this.prizeProcess = 100
-				else this.prizeProcess = this.lotterUserNum / 3000 * 100
-			}
-		});
-
+		this.getPoint()
+		this.getUserCount()
 		this.getCoupon()
+		this.getUserCountInvited()
 	},
 	watch: {
 		
@@ -193,17 +223,54 @@ export default {
 				} else {
 					this.toast(res.msg)
 				}
-				this.getCoupon()
+				this.getPoint()
+				this.getUserCount()
 			});
+		},
+		goToOrder() {
+			uni.switchTab({
+				url: '../placeOrder/placeOrder'
+			});
+		},
+
+		onShareAppMessage(res) {
+			return {
+				title: '回收分享赚取积分，最高可抽iPhone 15 Pro Max 1T！',
+				path: '/pages/index/index?invitedId=' + uni.getStorageSync('openid')
+			}
 		},
 
 		getCoupon() {
 			this.$api.getLotterCoupon({
 				id: uni.getStorageSync('openid')
 			}).then(res => {
-				console.log(res)
 				if(res.code === 200)
-					this.lotterCount = res.data.length
+					this.couponList = res.data
+			});
+		},
+		getPoint() {
+			console.log(uni.getStorageSync('openid'))
+			this.$api.getUserPoint({
+				id: uni.getStorageSync('openid')
+			}).then(res => {
+				if(res.code === 200)
+					this.userPoint = res.data;
+			});
+		},
+		getUserCount() {
+			this.$api.getLotterUserCount().then(res => {
+				if(res.code === 200) {
+					this.lotterUserNum = res.data.userNum
+					if(this.lotterUserNum > 3000) this.prizeProcess = 100
+					else this.prizeProcess = this.lotterUserNum / 3000 * 100
+				}
+			});
+		},
+		getUserCountInvited() {
+			this.$api.getUserCountInvited({
+				id: uni.getStorageSync('openid')
+			}).then(res => {
+				this.invitedNum = res.data
 			});
 		}
 	},
@@ -232,7 +299,37 @@ body {
   .activity-container {
     .top {
       width: 90vw;
-	  height: 90vw;
+		height: 80vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	.top-title {
+		font-size: 12vw;
+		font-weight: bold;
+		color: rgb(255, 233, 167);
+		position: absolute;
+		top: 10%;
+		left: 50%;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		&::after {
+			content: '回收分享赚取积分，兑换抽奖机会';
+			padding: 1vw 8vw;
+			background: rgb(255, 233, 167);
+			border-radius: 0 3vw 0 3vw;
+			position: absolute;
+			bottom: -40%;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 3vw;
+			color: rgb(255, 133, 41);
+		}
+	}
     }
     .prize-pool {
       padding: 20px 15px;
@@ -266,6 +363,7 @@ body {
         }
       }
       .status {
+		  margin-top: 1.5vw;
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
@@ -457,11 +555,16 @@ body {
         flex-direction: row;
         justify-content: space-between;
         .option {
+					margin: 0;
           padding: 2.5vw 8vw;
           background: rgb(243, 54, 54);
           color: white;
           font-size: 4.5vw; 
           border-radius: 2.5vw;
+					line-height: normal;
+					&:active {
+						background: rgb(180,32,39);
+					}
         }
       }
     }
@@ -484,6 +587,71 @@ body {
 			height: 20px;
 		}
   }
+  .my-coupon {
+	  width: 100%;
+	  height: 100%;
+	  background: rgba(0, 0, 0, 0.1);
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  .coupon-list {
+			padding: 4vw;
+		  width: 80vw;
+		  height: 60vw;
+		  background: white;
+		  border-radius: 2vw;
+		  position: relative;
+		  .list-title {
+				text-align: center;
+			  font-size: 4.5vw;
+			  font-weight: bold;
+			  color: rgb(216, 51, 51);
+		  }
+		  .coupons {
+			  margin-top: 2vw;
+			  height: calc(100% - 7vw);
+			  display: flex;
+			  flex-wrap: wrap;
+			  overflow: auto;
+			  .coupon-item {
+				  min-width: 8vw;
+				  margin: 2vw 2vw 0 0;
+				  padding: 1vw;
+				background: rgb(255, 223, 182);
+				border-radius: 1vw;
+				text-align: center;
+				color: rgb(216, 51, 51);
+				font-size: 3.5vw;
+			  }
+		  }
+		  .coupon-empty {
+			  height: 90%;
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: center;
+			  align-items: center;
+			  img {
+				width: 35vw;
+				height: 30vw;
+			  }
+			  .empty-desc {
+				  color: rgb(216, 51, 51);
+				  font-size: 3.5vw;
+				  font-weight: bold;
+			  }
+		  }
+		  .close-button {
+			  width: 7vw;
+			  height: 7vw;
+			  top: 2.5vw;
+			  right: 3vw;
+			  position: absolute;
+		  }
+	  }
+  }
 	.activity-rule {
 		width: 100%;
 		height: 100%;
@@ -494,9 +662,50 @@ body {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		img {
-			width: 80vw;
-			height: 120vw;
+		.rules {
+			padding: 3vw 8vw 0 8vw;
+			width: 90vw;
+			background: white;
+			border-radius: 2vw;
+			position: relative;
+			overflow: hidden;
+			.rules-title {
+				margin: 1vw 0 2vw 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				img {
+					width: 20vw;
+					height: 6vw;
+				}
+			}
+			.rules-content {
+				p {
+					font-size: 3.5vw;
+					color: black;
+					span {
+						font-size: 3.8vw;
+						color: rgb(216, 51, 51);
+						font-weight: bold;
+					}
+				}
+			}
+			.rule-back {
+				margin-top: 2vw;
+				display: flex;
+				justify-content: flex-end;
+				img {
+					margin-bottom: -0.6vw;
+					height: 28vw;
+				}
+			}
+		}
+		.close-button {
+			width: 7vw;
+			height: 7vw;
+			top: 2.5vw;
+			right: 3vw;
+			position: absolute;
 		}
 	}
 	.fade-enter-active,
