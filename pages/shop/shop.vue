@@ -1,18 +1,21 @@
 <template>
 	<view class="container">
-		<image src="/static/new-store-bgc.png" mode="" class="bgc"></image>
-		<view class="header">
-			<!-- <view class="top">当前积分<span style="margin-left: 30px;" @click="navigateToMiniProgram(openid)">打印</span></view> -->
-			<view class="middle">{{userPoint}}</view>
-			<view class="bottom" @click="goShopOrder">兑换记录 >></view>
+		<view style="background-color: #fff; padding-bottom: 10px;">
+			<image src="/static/new-store-bgc.png" mode="" class="bgc"></image>
+			<view class="header">
+				<!-- <view class="top">当前积分<span style="margin-left: 30px;" @click="navigateToMiniProgram(openid)">打印</span></view> -->
+				<view class="middle">{{userPoint}}</view>
+				<view class="bottom" @click="goShopOrder">兑换记录 >></view>
+			</view>
+			<view class="tip" style="display: flex; align-items: center; width: 90vw; margin-bottom: 10px; margin-left: 5vw; font-size: 12px; background-color: #34cd99; border-radius: 99999px; padding: 5px 10px; box-sizing: border-box;">
+				<span style="color: #fff; display: flex; align-items: center;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
+			</view>
+			<view class="nav">
+				<span v-for="(item, index) in nav" :key="item.id" :class="{choose: navStatus === index}" @click="selectNavStatus(index)">{{item.title}}</span>
+			</view>
 		</view>
-		<view class="exchange">
-			<img src="/static/exchange.jpg" alt="兑换打印" @click="navigateToMiniProgram">
-		</view>
-		<view class="tip" style="display: flex; align-items: center; width: 90vw; margin-bottom: 10px; margin-left: 5vw; font-size: 12px; background-color: #34cd99; border-radius: 99999px; padding: 5px 10px; box-sizing: border-box;">
-			<span style="color: #fff; display: flex; align-items: center;"><span style="font-size: 10px;">tips：</span>可送货上门，请填写宿舍楼和寝室号</span>
-		</view>
-		<view class="contain">
+		
+		<view class="contain" v-if="navStatus === 0">
 			<view class="item" v-for="item in products" :key="item.id">
 				<view class="img">
 					<image :src="item.productImg" mode=""></image>
@@ -28,6 +31,23 @@
 			</view>
 			<!-- <view style="text-align: center;">敬请期待</view> -->
 		</view>
+		
+		<view class="contain" v-if="navStatus === 1">
+			<view class="item" v-for="item in printProducts" :key="item.id">
+				<view class="img">
+					<image :src="item.productImg" mode=""></image>
+				</view>
+				<view class="footer">
+					<view class="name">{{item.productName}}</view>
+					<view class="price">
+						<span>1积分</span>
+						<!-- <span @click="buyProduct(item.id, item.productImg, item.productName, item.productPrice)">马上换</span> -->
+						<span @click="navigateToMiniProgram">马上换</span>
+					</view>
+				</view>
+			</view>
+		</view>
+
 		<view style="display: flex; justify-content: center; margin-top: 10px;">
 			<span style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">更多商品敬请期待</span>
 		</view>
@@ -39,10 +59,19 @@
 		data() {
 			return {
 				products: [],
+				printProducts: [
+					{productImg: '/static/print/print.jpg', productName: '自助打印', id: '001'}
+				],
 				userPoint: '',
 				userPointOrder: [],
 				userInfo: {},
-				openid: ''
+				openid: '',
+				nav: [
+					{title: '积分商品', id: '001'},
+					{title: '兑换服务', id: '002'},
+					{title: '趣味众筹', id: '003'}
+				],
+				navStatus: 0
 			}
 		},
 		methods: {
@@ -76,17 +105,21 @@
 			},
 			
 			navigateToMiniProgram() {
-				// uni.navigateToMiniProgram({
-				// 	appId: 'wx0051ea7ec7ed0ae8',
-				// 	// 可在ws.getLaunchOptionsSync()获得
-				// 	extraData: {
-				// 		openid: this.openid
-				// 	},
-				// 	envVersion: 'trial',
-				// 	success: res => {
-				// 		console.log(res);
-				// 	}
-				// })
+				uni.navigateToMiniProgram({
+					appId: 'wx0051ea7ec7ed0ae8',
+					// 可在ws.getLaunchOptionsSync()获得
+					extraData: {
+						openid: this.openid
+					},
+					envVersion: 'trial',
+					success: res => {
+						console.log(res);
+					}
+				})
+			},
+			
+			selectNavStatus(index) {
+				this.navStatus = index;
 			}
 		},
 		onShow() {
@@ -158,6 +191,21 @@
 				top: 12vh;
 				font-size: 12px;
 				color: #fff;
+			}
+		}
+		
+		.nav {
+			display: flex;
+			width: 90vw;
+			margin-left: 5vw;
+			.choose {
+				border-bottom: #34cd99 2px solid;
+			}
+			span {
+				flex: 1;
+				padding: 10px 0;
+				text-align: center;
+				color: #34cd99;
 			}
 		}
 		

@@ -1,6 +1,7 @@
 <template>
 	<view class="container">
-		<view :class="showInalipay? 'bgcali': 'bgc'"></view>
+		<view v-if="showInalipay" class="bgcali"></view>
+		<view v-if="!showInalipay" :class="windowHeight >= rootHeight ? 'bgc-window' : 'bgc-root'"></view>
 		<!-- #ifdef MP-WEIXIN -->
 		<view class="navbar"></view>
 		<view class="location flex">
@@ -127,13 +128,16 @@
 
 			<!-- <view class="banner mt-40 px-30"><u-swiper @click="goDetail" height="200rpx" keyName="bannerimage" indicator circular :list="bannerList"></u-swiper></view> -->
 			<view class="kefu">
-				<view style="position: absolute; right: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-					<img src="/static/icon/kefu.png" alt="" style="width: 30px; height: 30px;">
-					<span style="font-size: 12px; color: #222;">客服中心</span>
+				<view style="position: absolute; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+					<img src="/static/icon/kefu.png" alt="" style="width: 20px; height: 20px;">
+					<span style="font-size: 10px; color: #222;">客服中心</span>
 				</view>
-				<button open-type="contact" bindcontact="handleContact" style="position: absolute; right: 10px; opacity: 0;">
-					在线客服
+				<button open-type="contact" bindcontact="handleContact" style="position: absolute; right: 10px; opacity: 0; width: 52px; height: 52px;">
+					<!-- 在线客服 -->
 				</button>
+			</view>
+			<view @click="goShop">
+				<img src="/static/print/index-print.png" alt="" style="width: 100%; height: 140px;"/>
 			</view>
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
@@ -203,7 +207,9 @@ export default {
 			// 设备信息
 			systemInfo: '',
 			showInalipay: false,
-			showModal: false
+			showModal: false,
+			windowHeight: '',
+			rootHeight: ''
 		};
 	},
 	onShareAppMessage() {},
@@ -228,6 +234,16 @@ export default {
 		this.baseUrl = this.$tools.baseUrl;
 		// this.getNoticeList();
 		this.getSystemInfo();
+		uni.createSelectorQuery().select('.container').boundingClientRect().exec(data => {
+			console.log('111', data);
+			this.rootHeight = data[0].height;
+		})
+		uni.getSystemInfo({
+			success: res => {
+				console.log('sy', res)
+				this.windowHeight = res.windowHeight;
+			}
+		})
 	},
 
 	methods: {
@@ -406,21 +422,32 @@ export default {
 		right: 0;
 		z-index: 0;
 	}
-	.bgc {
+	.bgc-window {
 		position: absolute;
 		background: linear-gradient(to top, #80f9bc, #ffffff);
 		background-clip: content-box;
-		top: 560upx;
-		bottom: 0;
+		top: 40vh;
 		left: 0;
 		right: 0;
 		z-index: -1;
+		height: 60vh;
+	}
+	.bgc-root {
+		position: absolute;
+		background: linear-gradient(to top, #80f9bc, #ffffff);
+		background-clip: content-box;
+		top: 40%;
+		left: 0;
+		right: 0;
+		z-index: -1;
+		height: 60%;
 	}
 	.container {
 		// background-color: #02c99a;
 		background-size: 100% auto;
 		overflow-x: hidden;
 		padding: 0 20upx 0 20upx;
+		position: relative;
 		.navbar {
 			font-size: 34upx;
 			font-weight: 500;
@@ -732,14 +759,18 @@ export default {
 .main-banner-wrap{
 	position: relative;
 	.kefu {
-		position: relative;
+		position: absolute;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		text-align: center;
 		margin-top: 20upx;
-		height: 46px;
+		height: 52px;
+		width: 52px;
+		right: 10px;
+		background-color: #fff;
+		border-radius: 26px;
 	}
 }
 </style>
