@@ -733,6 +733,14 @@ const getUserCountInvited = (data) => {
 		data
 	})
 }
+
+// 获取中奖状态
+const getLotteryStatus = (data) => {
+	return http.get({
+		url: '/lottery/getLotteryStatus',
+		data
+	})
+}
 //
 
 export default {
@@ -812,4 +820,5 @@ export default {
 	getLotterCoupon,
 	getLotterUserCount,
 	getUserCountInvited,
+	getLotteryStatus,
 }

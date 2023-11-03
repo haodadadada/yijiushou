@@ -2,101 +2,132 @@
   <div class="activity-page">
     <div class="activity-container">
 			<div class="top">
-				<img src="../../static/activity/top.png" alt="">
+				<img src="https://www.19so.net/miniapp/gift.png" alt="">
 				<!-- <div class="top-title">豪礼抽不停</div> -->
 			</div>
     	<div class="prize-pool">
 				<div class="prize-pool-title">
 						<img src="../../static/activity/all-prize.png" alt="" />
 				</div>
-        <div class="countdown">
-          <div class="countdown-title">开奖倒计时： </div>
-          <div class="countdown-time">
-            {{ endTime }}
-          </div>
-        </div>
-				<div class="status">
-					<div class="status-item people-num">
-            <div class="title">当前人数： </div>
-            <div class="num">{{ lotterUserNum }}人</div>
-          </div>
+				<div class="lotter-status" v-if="isLotter && lotterStatus">
+					<img class="lotter-status-img" src="../../static/activity/lotter-status-title.png" alt="">
+					<div class="lotter-status-num">{{ lotterStatusInfo.lotteryNum }}</div>
+					<div class="lotter-status-tip">
+						<img src="../../static/activity/lotter-status-tip.png" alt="">
+					</div>
+					<div class="lotter-status-prize">
+						<img v-if="lotterUserNum >= 0 && lotterUserNum < 2000" src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
+						<img v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" src="https://www.apple.com.cn/v/ipad/home/ch/images/overview/compare_ipad_pro__erf9x8mw04sy_small.png" alt="">
+						<img v-if="lotterUserNum >= 3000" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-compare-iphone-15-pro-202309?wid=384&hei=512&fmt=jpeg&qlt=90&.v=1692827834790" alt="">
+						<span v-if="lotterUserNum >= 0 && lotterUserNum < 2000" class="prize-name">Airpods Pro</span>
+						<span v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" class="prize-name">ipad Pro 2022</span>
+						<span v-if="lotterUserNum >= 3000" class="prize-name">iPhone 15 Pro Max 1T</span>
+					</div>
+					<div class="contact-official">联系官方</div>
 				</div>
-        <div class="status">
-          <div class="status-item people-num">
-            <div class="title">剩余积分： </div>
-            <div class="num">{{ userPoint }}人</div>
-          </div>
-          <div class="status-item remaining-points">
-            <div class="title">分享成功次数： </div>
-            <div class="num">{{ invitedNum }}</div>
-          </div>
-        </div>
-        <!-- <div class="remaining-qualification">
-          <div class="title">您当前拥有&nbsp;</div>
-          <div class="num">1</div>
-          <div class="title">&nbsp;次抽奖资格</div>
-        </div> -->
-        <div class="lottery" @click="lotter()">
-          <span>参与抽奖</span>
-        </div>
-        <div class="prize-pool-status">
-		  <div class="pool-line">
-			<div class="line" :style="{height: prizeProcess + '%'}"></div>
-			<div class="engage-people" :style="{top: prizeProcess + '%'}">{{ lotterUserNum }}人</div>
-		  </div>
-		  <div class="prize-list">
-			<div class="list-item">
-			  <div class="item-title">
-				<img src="../../static/activity/option.png" alt="">
-				<span class="title">一级奖池</span>
-			  </div>
-			  <div class="item-info">
-				<div class="info-img">
-				  <img src="../../static/activity/iphone.png" alt="">
-				  <span>iPhone 15 Pro Max 1T</span>
+				<div class="lotter-status" v-if="!isLotter && lotterStatus">
+					<img class="lotter-status-img" src="../../static/activity/lotter-status-title.png" alt="">
+					<div class="lotter-status-num">{{ lotterStatusInfo.lotteryNum }}</div>
+					<div style="margin: 4vw 0 2vw 0;font-size: 4vw;font-weight: bold;color: #B41B23;text-align: center;">中奖用户</div>
+					<div class="lotter-status-user">
+						<img :src="lotterStatusInfo.avatarUrl" alt="">
+						<span style="margin-left: 1vw;" class="user-name">{{ lotterStatusInfo.userName }}</span>
+						<span class="phone">{{ lotterStatusInfo.phone }}</span>
+					</div>
+					<div class="lotter-status-tip2">
+						<img src="../../static/activity/no-lotter.png" alt="">
+					</div>
 				</div>
-				<div class="info">
-				  <span>参与抽奖人数达到1000人，即可参与一级奖池开奖，抽取1名幸运用户免费赠送一部iPhone 15 ProMax 1T。</span>
-				  <div class="info-state" :class="{'info-state-progressing': lotterUserNum >= 0 && lotterUserNum < 1000}">{{ lotterUserNum >= 0 && lotterUserNum < 1000 ? '进行中' : '奖池已升级' }}</div>
+				<div v-if="!lotterStatus">
+					<div class="countdown">
+						<div class="countdown-title">开奖倒计时： </div>
+						<div class="countdown-time">
+							{{ endTime }}
+						</div>
+					</div>
+					<div class="status">
+						<div class="status-item people-num">
+							<div class="title">当前人数： </div>
+							<div class="num">{{ lotterUserNum }}人</div>
+						</div>
+					</div>
+					<div class="status">
+						<div class="status-item people-num">
+							<div class="title">剩余积分： </div>
+							<div class="num">{{ userPoint }}</div>
+						</div>
+						<div class="status-item remaining-points">
+							<div class="title">分享成功人数： </div>
+							<div class="num">{{ invitedNum }}人</div>
+						</div>
+					</div>
+					<!-- <div class="remaining-qualification">
+						<div class="title">您当前拥有&nbsp;</div>
+						<div class="num">1</div>
+						<div class="title">&nbsp;次抽奖资格</div>
+					</div> -->
+					<div class="lottery" @click="lotter()">
+						<span>参与抽奖</span>
+					</div>
+					<div class="prize-pool-status">
+						<div class="pool-line">
+						<div class="line" :style="{height: prizeProcess + '%'}"></div>
+						<div class="engage-people" :style="{top: prizeProcess + '%'}">{{ lotterUserNum }}人</div>
+					</div>
+					<div class="prize-list">
+						<div class="list-item">
+							<div class="item-title">
+								<img src="../../static/activity/option.png" alt="">
+								<span class="title">一级奖池</span>
+							</div>
+							<div class="item-info">
+								<div class="info-img">
+									<img src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
+									<span>Airpods Pro</span>
+								</div>
+								<div class="info">
+									<span>参与抽奖人数满1000人，升级为一级奖池，抽取1名幸运用户免费赠送一副Airpods Pro。</span>
+									<div class="info-state" :class="{'info-state-progressing': lotterUserNum >= 0 && lotterUserNum < 1000}">{{ lotterUserNum >= 0 && lotterUserNum < 1000 ? '进行中' : '奖池已升级' }}</div>
+								</div>
+							</div>
+						</div>
+						<div class="list-item">
+							<div class="item-title">
+							<img src="../../static/activity/option.png" alt="">
+							<span class="title">二级奖池</span>
+							</div>
+							<div class="item-info">
+							<div class="info-img">
+								<img src="https://www.apple.com.cn/v/ipad/home/ch/images/overview/compare_ipad_pro__erf9x8mw04sy_small.png" alt="">
+								<span>ipad Pro 2022</span>
+							</div>
+								<div class="info">
+									<span>参与抽奖人数满2000人，升级为二级奖池，抽取1名幸运用户免费赠送一部iPad Pro。</span>
+									<div v-if="lotterUserNum < 1000" class="info-state">奖池待升级</div>
+									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 1000 && lotterUserNum < 2000}">{{ lotterUserNum >= 1000 && lotterUserNum < 2000 ? '进行中' : '奖池已升级' }}</div>
+								</div>
+								</div>
+							</div>
+							<div class="list-item">
+								<div class="item-title">
+								<img src="../../static/activity/option.png" alt="">
+								<span class="title">三级奖池</span>
+								</div>
+								<div class="item-info">
+								<div class="info-img">
+									<img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-compare-iphone-15-pro-202309?wid=384&hei=512&fmt=jpeg&qlt=90&.v=1692827834790" alt="">
+									<span>iPhone 15 Pro Max 1T</span>
+								</div>
+								<div class="info">
+									<span>参与抽奖人数达到3000人，即可参与三级奖池开奖，抽取1名幸运用户免费赠送一部iPhone 15 Pro Max 1T。</span>
+									<div v-if="lotterUserNum < 2000" class="info-state">奖池待升级</div>
+									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 2000 && lotterUserNum < 3000}">{{ lotterUserNum >= 2000 && lotterUserNum < 3000 ? '进行中' : '奖池已升级' }}</div>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			  </div>
-			</div>
-			<div class="list-item">
-			  <div class="item-title">
-				<img src="../../static/activity/option.png" alt="">
-				<span class="title">二级奖池</span>
-			  </div>
-			  <div class="item-info">
-				<div class="info-img">
-				  <img src="../../static/activity/huwei.png" alt="">
-				  <span>iPhone 15 Pro Max 1T</span>
-				</div>
-				<div class="info">
-				  <span>参与抽奖人数满2000人，升级为二级奖池，抽取1名幸运用户免费赠送一部华为mate 60Pro。</span>
-				  <div v-if="lotterUserNum < 1000" class="info-state">奖池待升级</div>
-					<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 1000 && lotterUserNum < 2000}">{{ lotterUserNum >= 1000 && lotterUserNum < 2000 ? '进行中' : '奖池已升级' }}</div>
-				</div>
-			  </div>
-			</div>
-			<div class="list-item">
-			  <div class="item-title">
-				<img src="../../static/activity/option.png" alt="">
-				<span class="title">三级奖池</span>
-			  </div>
-			  <div class="item-info">
-				<div class="info-img">
-				  <img src="../../static/activity/ipad.png" alt="">
-				  <span>iPhone 15 Pro Max 1T</span>
-				</div>
-				<div class="info">
-				  <span>参与抽奖人数满3000人，升级为三级奖池，抽取1名幸运用户免费赠送一部Pad。</span>
-				  <div v-if="lotterUserNum < 2000" class="info-state">奖池待升级</div>
-					<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 2000 && lotterUserNum < 3000}">{{ lotterUserNum >= 2000 && lotterUserNum < 3000 ? '进行中' : '奖池已升级' }}</div>
-				</div>
-			  </div>
-			</div>
-		  </div>
-		</div>
       </div>
       <div class="tip">
         <div class="tip-title">如何获得抽奖次数</div>
@@ -171,13 +202,22 @@ export default {
 			endTime: '0天 0:0:0',
 			checkRule: false,
 			checkMyCoupon: false,
+			lotterStatus: false,
+			lotterStatusInfo: null,
+			isLotter: false,
 		};
 	},
 	mounted() {
 
-		setInterval(() => {
+		if (new Date().getTime() >= 1699617600000) {
+			this.getLotterUser()
+			this.lotterStatus = true
+		} else {
 			this.lotterTimer()
-		}, 1000);
+			setInterval(() => {
+				this.lotterTimer()
+			}, 1000);
+		}
 
 		this.getPoint()
 		this.getUserCount()
@@ -195,7 +235,7 @@ export default {
 					icon: icon || 'none'
 				})
 				clearTimeout(timer)
-			}, 0);
+			}, 200);
 		},
 
 		lotterTimer() {
@@ -271,6 +311,14 @@ export default {
 				id: uni.getStorageSync('openid')
 			}).then(res => {
 				this.invitedNum = res.data
+			});
+		},
+		getLotterUser() {
+			this.$api.getLotteryStatus().then(res => {
+				this.lotterStatusInfo = res.data
+				console.log(this.lotterStatusInfo)
+				if (this.lotterStatusInfo.userId == uni.getStorageSync('openid')) this.isLotter = true
+				else this.isLotter = false
 			});
 		}
 	},
@@ -349,6 +397,77 @@ body {
 			width: 100%;
 			height: 100%;
 		}
+	  }
+	  .lotter-status {
+		  padding: 12vw 10vw 8vw 10vw;
+		  width: 100%;
+		  border-radius: 2vw;
+		  background: #F0C0C1;
+		  position: relative;
+		  .lotter-status-img {
+			  width: 40vw;
+			  height: 9vw;
+			  position: absolute;
+			  top: 0;
+			  left: 50%;
+			  transform: translateX(-50%);
+		  }
+		  .lotter-status-num {
+			  font-size: 10vw;
+			  font-weight: bold;
+			  color: #B41B23;
+			  text-align: center;
+		  }
+		  .lotter-status-user {
+			  display: flex;
+			  flex-direction: row;
+			  justify-content: center;
+			  align-items: center;
+			  img {
+				  width: 6vw;
+				  height: 6vw;
+				  border-radius: 20vw;
+			  }
+			  .phone {
+				  margin-left: 4vw;
+			  }
+		  }
+		  .lotter-status-tip {
+			  margin: 4vw 0;
+			  img {
+				  height: 10vw;
+			  }
+		  }
+		  .lotter-status-tip2 {
+			  margin-top: 10vw;
+			  img {
+				  width: 100%;
+				  height: 20vw;
+			  }
+		  }
+		  .lotter-status-prize {
+			  display: flex;
+			  flex-direction: column;
+			  justify-content: center;
+			  align-items: center;
+			  img {
+				  width: 20vw;
+				  height: 20vw;
+			  }
+			  .prize-name {
+				  margin-top: 2vw;
+				  font-size: 3.5vw;
+				  font-weight: bold;
+				  color: black;
+			  }
+		  }
+		  .contact-official {
+			  margin-top: 6vw;
+			  font-size: 3vw;
+			  color: black;
+			  text-decoration: underline;
+			  text-align: center;
+			}
 	  }
       .countdown {
         width: 100%;
@@ -469,7 +588,8 @@ body {
 				display: flex;
 				flex-direction: row;
 				.info-img {
-				  width: 80vw;
+					padding: 3.5vw;
+				  width: 42vw;
 				  height: 30vw;
 				  display: flex;
 				  flex-direction: column;
@@ -478,14 +598,13 @@ body {
 				  }
 				  span {
 					color: black;
-					font-size: 3.5vw;
+					font-size: 3vw;
 					font-weight: bold;
 					text-align: center;
 					line-height: 4vw;
-					overflow: hidden;
 					text-overflow: ellipsis;
 					display: -webkit-box;
-					-webkit-line-clamp: 2;
+					-webkit-line-clamp: 3;
 					-webkit-box-orient: vertical;
 				  }
 				}
@@ -503,7 +622,7 @@ body {
 				  }
 				  .info-state {
 						padding: 2vw;
-						width: 22vw;
+						min-width: 24vw;
 						text-align: center;
 						background: rgb(158, 158, 158);
 						border-radius: 2.5vw;
@@ -615,6 +734,7 @@ body {
 			  height: calc(100% - 7vw);
 			  display: flex;
 			  flex-wrap: wrap;
+				align-content: flex-start;
 			  overflow: auto;
 			  .coupon-item {
 				  min-width: 8vw;

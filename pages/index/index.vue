@@ -12,7 +12,7 @@
 		<!-- #endif -->
 		<!-- #ifdef MP-ALIPAY -->
 		<view class="navbar-ali"></view>
-		<view class="location flex" style="margin-left: 20px;">
+		<view class="location flex" style="margin-left: 20px;" @click="">
 			<image src="../../static/location-1.png" mode="aspectFill" class="headerImg"></image>
 			<span> {{community}} </span>
 			<text class="size-30 ml-8">{{ area }}</text>
@@ -23,10 +23,10 @@
 				<img src="/static/wenjuan.jpg" alt="" class="img-banner" @click="goQuestionnaire">
 			</view> -->
 			<swiper :autoplay="true" :interval="3000" :duration="1000" class="main-banner" style="width: 100%; height: 400rpx; margin-top: 10px;" :circular="true" >
-				<swiper-item style="display: flex; justify-content: center;">
-					<img src="/static/index.jpg" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
+				<swiper-item style="display: flex; justify-content: center;" @click="goQuestionnaire()">
+					<img src="https://www.19so.net/miniapp/banner.png" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
 				</swiper-item>
-				<swiper-item style="display: flex; justify-content: center;">
+				<swiper-item style="display: flex; justify-content: center;" @click="goActivity()">
 					<img src="/static/index1.png" alt="" style="width: 95%; height: 400rpx;">
 				</swiper-item>
 			</swiper>
@@ -368,6 +368,22 @@ export default {
 				}
 			})
 		},
+
+		goActivity() {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				setTimeout(() => {
+					uni.switchTab({
+						url: '../user/user'
+					});
+				}, 500);
+				return;
+			}
+
+			uni.navigateTo({
+				url: '/pages/activity/activity'
+			})
+		},
 		
 		/** 获取设备 */ 
 		getSystemInfo() {
@@ -377,10 +393,7 @@ export default {
 			}
 		},
 		soonComing() {
-			uni.navigateTo({
-				url: '/pages/activity/activity'
-			})
-			// this.showModal = true;
+			this.showModal = true;
 		},
 		goShop() {
 			if (!uni.getStorageSync('openid')) {
