@@ -270,8 +270,13 @@ export default {
 						uni.login({
 							onlyAuthorize: true,
 							success: res => {
+								console.log({
+										code: res.code,
+										inviteId: uni.getStorageSync('invitedId')
+									})
 								this.$api.getVxOpenid({
-										code: res.code
+										code: res.code,
+										inviteId: uni.getStorageSync('invitedId')
 									})
 								.then(res1 => {
 									if (res1.code == 200) {

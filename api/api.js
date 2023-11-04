@@ -719,10 +719,25 @@ const getLotterCoupon = (data) => {
 }
 
 // 获取参与人数
-
 const getLotterUserCount = (data) => {
 	return http.get({
 		url: '/lottery/getUserCount',
+		data
+	})
+}
+
+// 获取邀请成功人数
+const getUserCountInvited = (data) => {
+	return http.post({
+		url: '/lottery/getCountInvited',
+		data
+	})
+}
+
+// 获取中奖状态
+const getLotteryStatus = (data) => {
+	return http.get({
+		url: '/lottery/getLotteryStatus',
 		data
 	})
 }
@@ -803,5 +818,7 @@ export default {
 	givePoints,
 	lotteryDraw,
 	getLotterCoupon,
-	getLotterUserCount
+	getLotterUserCount,
+	getUserCountInvited,
+	getLotteryStatus,
 }
