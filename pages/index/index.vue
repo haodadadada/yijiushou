@@ -23,11 +23,11 @@
 				<img src="/static/wenjuan.jpg" alt="" class="img-banner" @click="goQuestionnaire">
 			</view> -->
 			<swiper :autoplay="true" :interval="3000" :duration="1000" class="main-banner" style="width: 100%; height: 400rpx; margin-top: 10px;" :circular="true" >
-				<swiper-item style="display: flex; justify-content: center;" @click="goQuestionnaire()">
-					<img src="https://www.19so.net/miniapp/banner.png" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
-				</swiper-item>
 				<swiper-item style="display: flex; justify-content: center;" @click="goActivity()">
 					<img src="/static/index1.png" alt="" style="width: 95%; height: 400rpx;">
+				</swiper-item>
+				<swiper-item style="display: flex; justify-content: center;" @click="goQuestionnaire()">
+					<img src="https://www.19so.net/miniapp/banner.png" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
 				</swiper-item>
 			</swiper>
 			<!-- <swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
