@@ -122,6 +122,11 @@
 				this.navStatus = index;
 			}
 		},
+		onLoad(e) {
+			if(e.status) {
+				this.navStatus = Number(e.status);
+			}
+		},
 		onShow() {
 			if (!uni.getStorageSync('openid')) {
 				this.$tools.toast('请先登录');
