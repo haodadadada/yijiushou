@@ -70,8 +70,10 @@
 						<span>参与抽奖</span>
 					</div>
 					<div class="prize-pool-status">
+					<div class="pool-line-wrapper">
 						<div class="pool-line">
-						<div class="line" :style="{height: prizeProcess + '%'}"></div>
+							<div class="line" :style="{height: prizeProcess + '%'}"></div>
+						</div>
 						<div class="engage-people" :style="{top: prizeProcess + '%'}">{{ lotterUserNum }}人</div>
 					</div>
 					<div class="prize-list">
@@ -530,29 +532,36 @@ body {
 		  width: 100%;
 		  display: flex;
 		  flex-direction: row;
-		  .pool-line {
-			margin-top: 8vw;
-			width: 5%;
-			background: rgb(175, 175, 175);
-			border-radius: 10vw;
-			position: relative;
-			.line {
-			  width: 100%;
-			  height: 50%;
-			  position: absolute;
-			  top: 0;
-			  left: 0;
-			  border-radius: 10vw;
-			  background: rgb(255, 102, 0);
-			}
-			.engage-people {
-			  position: absolute;
-			  color: rgb(180,32,39);;
-			  white-space: nowrap;
-			  right: 4.5vw;
-			  font-size: 3.5vw;
-			}
+		  .pool-line-wrapper {
+			  margin-top: 8vw;
+			  width: 5%;
+			  position: relative;
+			  .pool-line {
+				width: 100%;
+				height: 100%;
+				background: rgb(175, 175, 175);
+				border-radius: 10vw;
+				position: relative;
+				overflow: hidden;
+				.line {
+				  width: 100%;
+				  height: 50%;
+				  position: absolute;
+				  top: 0;
+				  left: 0;
+				  border-radius: 10vw;
+				  background: rgb(255, 102, 0);
+				}
+			  }
+			  .engage-people {
+			    position: absolute;
+			    color: rgb(180,32,39);;
+			    white-space: nowrap;
+			    right: 4.5vw;
+			    font-size: 3.5vw;
+			  }
 		  }
+		  
 		  .prize-list {
 			width: 95%;
 			display: flex;
