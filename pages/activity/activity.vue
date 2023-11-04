@@ -302,7 +302,7 @@ export default {
 		getUserCount() {
 			this.$api.getLotterUserCount().then(res => {
 				if(res.code === 200) {
-					this.lotterUserNum = res.data.userNum
+					this.lotterUserNum = res.data.userNum + 2000
 					if(this.lotterUserNum > 3000) this.prizeProcess = 100
 					else this.prizeProcess = this.lotterUserNum / 3000 * 100
 				}
@@ -533,9 +533,10 @@ body {
 		  display: flex;
 		  flex-direction: row;
 		  .pool-line-wrapper {
-			  margin-top: 8vw;
+			  // margin-top: 8vw;
 			  width: 5%;
 			  position: relative;
+			  top: 9vw;
 			  .pool-line {
 				width: 100%;
 				height: 100%;
