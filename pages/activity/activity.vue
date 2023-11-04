@@ -16,10 +16,10 @@
 						<img src="../../static/activity/lotter-status-tip.png" alt="">
 					</div>
 					<div class="lotter-status-prize">
-						<img v-if="lotterUserNum >= 0 && lotterUserNum < 2000" src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
+						<img v-if="lotterUserNum >= 1000 && lotterUserNum < 2000" src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
 						<img v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" src="https://www.apple.com.cn/v/ipad/home/ch/images/overview/compare_ipad_pro__erf9x8mw04sy_small.png" alt="">
 						<img v-if="lotterUserNum >= 3000" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-compare-iphone-15-pro-202309?wid=384&hei=512&fmt=jpeg&qlt=90&.v=1692827834790" alt="">
-						<span v-if="lotterUserNum >= 0 && lotterUserNum < 2000" class="prize-name">Airpods Pro</span>
+						<span v-if="lotterUserNum >= 1000 && lotterUserNum < 2000" class="prize-name">Airpods Pro</span>
 						<span v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" class="prize-name">ipad Pro 2022</span>
 						<span v-if="lotterUserNum >= 3000" class="prize-name">iPhone 15 Pro Max 1T</span>
 					</div>
@@ -89,7 +89,8 @@
 								</div>
 								<div class="info">
 									<span>参与抽奖人数满1000人，升级为一级奖池，抽取1名幸运用户免费赠送一副Airpods Pro。</span>
-									<div class="info-state" :class="{'info-state-progressing': lotterUserNum >= 0 && lotterUserNum < 1000}">{{ lotterUserNum >= 0 && lotterUserNum < 1000 ? '进行中' : '奖池已升级' }}</div>
+									<div v-if="lotterUserNum < 1000" class="info-state">奖池待升级</div>
+									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 1000 && lotterUserNum < 2000}">{{ lotterUserNum >= 1000 && lotterUserNum < 2000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
 							</div>
 						</div>
@@ -105,8 +106,8 @@
 							</div>
 								<div class="info">
 									<span>参与抽奖人数满2000人，升级为二级奖池，抽取1名幸运用户免费赠送一部iPad Pro。</span>
-									<div v-if="lotterUserNum < 1000" class="info-state">奖池待升级</div>
-									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 1000 && lotterUserNum < 2000}">{{ lotterUserNum >= 1000 && lotterUserNum < 2000 ? '进行中' : '奖池已升级' }}</div>
+									<div v-if="lotterUserNum < 2000" class="info-state">奖池待升级</div>
+									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 2000 && lotterUserNum < 3000}">{{ lotterUserNum >= 2000 && lotterUserNum < 3000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
 								</div>
 							</div>
@@ -122,8 +123,8 @@
 								</div>
 								<div class="info">
 									<span>参与抽奖人数达到3000人，即可参与三级奖池开奖，抽取1名幸运用户免费赠送一部iPhone 15 Pro Max 1T。</span>
-									<div v-if="lotterUserNum < 2000" class="info-state">奖池待升级</div>
-									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 2000 && lotterUserNum < 3000}">{{ lotterUserNum >= 2000 && lotterUserNum < 3000 ? '进行中' : '奖池已升级' }}</div>
+									<div v-if="lotterUserNum < 3000" class="info-state">奖池待升级</div>
+									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 3000}">{{ lotterUserNum >= 3000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
 								</div>
 							</div>
