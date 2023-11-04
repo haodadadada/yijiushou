@@ -136,8 +136,8 @@
 					<!-- 在线客服 -->
 				</button>
 			</view>
-			<view @click="goShop">
-				<img src="/static/print/index-print.png" alt="" style="width: 100%; height: 140px;"/>
+			<view @click="goShop(1)">
+				<img src="/static/print/index-print.png" alt="" style="width: 100%;" mode="widthFix"/>
 			</view>
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
@@ -376,7 +376,7 @@ export default {
 			})
 			// this.showModal = true;
 		},
-		goShop() {
+		goShop(status) {
 			if (!uni.getStorageSync('openid')) {
 				this.$tools.toast('请先登录');
 				setTimeout(() => {
@@ -387,7 +387,7 @@ export default {
 				return;
 			}
 			uni.navigateTo({
-				url: '/pages/shop/shop'
+				url: `/pages/shop/shop?status=${status}`
 			})
 		},
 		/** 自定义tabbar时切换高亮显示 */
