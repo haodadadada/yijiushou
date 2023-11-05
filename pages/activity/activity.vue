@@ -215,7 +215,22 @@ export default {
 		};
 	},
 	mounted() {
-
+		if (!uni.getStorageSync('openid')) {
+			this.$tools.toast('请先登录');
+			setTimeout(() => {
+				uni.switchTab({
+					url: '../user/user'
+				});
+			}, 1000);
+		}
+		if(!uni.getStorageSync('userInfo').name || !uni.getStorageSync('userInfo').phone) {
+			this.$tools.toast('请先填写完整信息');
+			setTimeout(() => {
+				uni.switchTab({
+					url: '../user/user'
+				});
+			}, 1000);
+		}
 		if (new Date().getTime() >= 1699617600000) {
 			this.getLotterUser()
 			this.lotterStatus = true
@@ -283,7 +298,7 @@ export default {
 		onShareAppMessage(res) {
 			return {
 				title: '回收分享赚取积分，最高可抽iPhone 15 Pro Max 1T！',
-				path: '/pages/index/index?invitedId=' + uni.getStorageSync('openid')
+				path: 'pages/activity/activity?invitedId=' + uni.getStorageSync('openid')
 			}
 		},
 
