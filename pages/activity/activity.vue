@@ -78,11 +78,8 @@
 					</div>
 					<div class="prize-list">
 						<div class="list-item">
-							<div class="item-title">
-								<img src="../../static/activity/option.png" alt="">
-								<span class="title">一级奖池</span>
-							</div>
-							<div class="item-info">
+	
+							<div class="item-info" style="margin-bottom: 4vw; margin-top: 4vw;">
 								<div class="info-img">
 									<img src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
 									<span>Airpods Pro</span>
@@ -93,13 +90,14 @@
 									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 1000 && lotterUserNum < 2000}">{{ lotterUserNum >= 1000 && lotterUserNum < 2000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
 							</div>
+							<div class="item-title">
+								<img src="../../static/activity/option.png" alt="">
+								<span class="title">一级奖池</span>
+							</div>
 						</div>
 						<div class="list-item">
-							<div class="item-title">
-							<img src="../../static/activity/option.png" alt="">
-							<span class="title">二级奖池</span>
-							</div>
-							<div class="item-info">
+			
+							<div class="item-info" style="margin-bottom: 4vw; margin-top: 4vw;">
 							<div class="info-img">
 								<img src="https://www.apple.com.cn/v/ipad/home/ch/images/overview/compare_ipad_pro__erf9x8mw04sy_small.png" alt="">
 								<span>ipad Pro 2022</span>
@@ -110,13 +108,15 @@
 									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 2000 && lotterUserNum < 3000}">{{ lotterUserNum >= 2000 && lotterUserNum < 3000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
 								</div>
-							</div>
-							<div class="list-item">
 								<div class="item-title">
 								<img src="../../static/activity/option.png" alt="">
-								<span class="title">三级奖池</span>
+								<span class="title">二级奖池</span>
 								</div>
-								<div class="item-info">
+							</div>
+			
+							<div class="list-item">
+					
+								<div class="item-info" style="margin-bottom: 4vw; margin-top: 4vw;">
 								<div class="info-img">
 									<img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-compare-iphone-15-pro-202309?wid=384&hei=512&fmt=jpeg&qlt=90&.v=1692827834790" alt="">
 									<span>iPhone 15 Pro Max 1T</span>
@@ -126,6 +126,10 @@
 									<div v-if="lotterUserNum < 3000" class="info-state">奖池待升级</div>
 									<div v-else class="info-state" :class="{'info-state-progressing': lotterUserNum >= 3000}">{{ lotterUserNum >= 3000 ? '进行中' : '奖池已升级' }}</div>
 								</div>
+								</div>
+								<div class="item-title">
+								<img src="../../static/activity/option.png" alt="">
+								<span class="title">三级奖池</span>
 								</div>
 							</div>
 						</div>
@@ -303,7 +307,7 @@ export default {
 		getUserCount() {
 			this.$api.getLotterUserCount().then(res => {
 				if(res.code === 200) {
-					this.lotterUserNum = res.data.userNum
+					this.lotterUserNum = res.data.userNum;
 					if(this.lotterUserNum > 3000) this.prizeProcess = 100
 					else this.prizeProcess = this.lotterUserNum / 3000 * 100
 				}
@@ -529,7 +533,8 @@ body {
 	  .prize-pool-status {
 		  padding-left: 10vw;
 		  padding-bottom: 30px;
-		  margin-top: 10px;
+		  // margin-top: 10px;
+		  margin-top: 10vw;
 		  width: 100%;
 		  display: flex;
 		  flex-direction: row;
@@ -537,7 +542,7 @@ body {
 			  // margin-top: 8vw;
 			  width: 5%;
 			  position: relative;
-			  top: 9vw;
+			  // top: 9vw;
 			  .pool-line {
 				width: 100%;
 				height: 100%;
@@ -572,7 +577,8 @@ body {
 			  margin-top: 20px;
 			  width: 100%;
 			  .item-title {
-				margin-bottom: 15px;
+				// margin-bottom: 15px;
+				transform: translateY(50%);
 				width: 35vw;
 				height: 8vw;
 				position: relative;
