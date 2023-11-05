@@ -9,13 +9,14 @@
 				<div class="prize-pool-title">
 						<img src="../../static/activity/all-prize.png" alt="" />
 				</div>
-				<div class="lotter-status" v-if="isLotter && lotterStatus">
+				<div class="lotter-status" v-if="isLotter && lotterStatus && lotterUserNum >= 1000">
 					<img class="lotter-status-img" src="../../static/activity/lotter-status-title.png" alt="">
 					<div class="lotter-status-num">{{ lotterStatusInfo.lotteryNum }}</div>
-					<div class="lotter-status-tip">
-						<img src="../../static/activity/lotter-status-tip.png" alt="">
+					<div class="lotter-status-tip" style="text-align: center; font-weight: 500; color: #B41B23; font-size: 20px;">
+						<span>恭喜您抽中奖品</span>
 					</div>
 					<div class="lotter-status-prize">
+						
 						<img v-if="lotterUserNum >= 1000 && lotterUserNum < 2000" src="https://www.apple.com.cn/v/airpods/shared/compare/d/images/compare/compare_airpods_pro__e9uzt0mzviem_medium.png" alt="">
 						<img v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" src="https://www.apple.com.cn/v/ipad/home/ch/images/overview/compare_ipad_pro__erf9x8mw04sy_small.png" alt="">
 						<img v-if="lotterUserNum >= 3000" src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-compare-iphone-15-pro-202309?wid=384&hei=512&fmt=jpeg&qlt=90&.v=1692827834790" alt="">
@@ -23,9 +24,9 @@
 						<span v-if="lotterUserNum >= 2000 && lotterUserNum < 3000" class="prize-name">ipad Pro 2022</span>
 						<span v-if="lotterUserNum >= 3000" class="prize-name">iPhone 15 Pro Max 1T</span>
 					</div>
-					<div class="contact-official">联系官方</div>
+					<div class="contact-official">请等待工作人员联系您</div>
 				</div>
-				<div class="lotter-status" v-if="!isLotter && lotterStatus">
+				<div class="lotter-status" v-if="!isLotter && lotterStatus && lotterUserNum >= 1000">
 					<img class="lotter-status-img" src="../../static/activity/lotter-status-title.png" alt="">
 					<div class="lotter-status-num">{{ lotterStatusInfo.lotteryNum }}</div>
 					<div style="margin: 4vw 0 2vw 0;font-size: 4vw;font-weight: bold;color: #B41B23;text-align: center;">中奖用户</div>
@@ -37,6 +38,9 @@
 					<div class="lotter-status-tip2">
 						<img src="../../static/activity/no-lotter.png" alt="">
 					</div>
+				</div>
+				<div v-if="lotterStatus && lotterUserNum < 1000" style="text-align: center; font-size: 20px; font-weight: 500;">
+					人数不足未开奖
 				</div>
 				<div v-if="!lotterStatus">
 					<div class="countdown">
@@ -214,37 +218,50 @@ export default {
 			isLotter: false,
 		};
 	},
-	mounted() {
+	onShow() {
 		if (!uni.getStorageSync('openid')) {
-			this.$tools.toast('请先登录');
+			// this.$tools.toast('请先登录');
+			uni.showToast({
+				title: '请先登录',
+				icon: 'none',
+				success: res => {
+					console.log('success', res);
+				},
+				fail: err => {
+					console.log('error', err);
+				}
+			})
 			setTimeout(() => {
 				uni.switchTab({
 					url: '../user/user'
 				});
 			}, 1000);
+			
 		}
-		if(!uni.getStorageSync('userInfo').name || !uni.getStorageSync('userInfo').phone) {
+		else if(!uni.getStorageSync('userInfo').name || !uni.getStorageSync('userInfo').phone) {
 			this.$tools.toast('请先填写完整信息');
 			setTimeout(() => {
 				uni.switchTab({
-					url: '../user/user'
+					url: '../editUser/editUser'
 				});
 			}, 1000);
 		}
-		if (new Date().getTime() >= 1699617600000) {
-			this.getLotterUser()
-			this.lotterStatus = true
-		} else {
-			this.lotterTimer()
-			setInterval(() => {
+		else {
+			if (new Date().getTime() >= 1699617600000) {
+				this.getLotterUser()
+				this.lotterStatus = true
+			} else {
 				this.lotterTimer()
-			}, 1000);
+				setInterval(() => {
+					this.lotterTimer()
+				}, 1000);
+			}
+			this.getPoint()
+			this.getUserCount()
+			this.getCoupon()
+			this.getUserCountInvited()
 		}
 
-		this.getPoint()
-		this.getUserCount()
-		this.getCoupon()
-		this.getUserCountInvited()
 	},
 	watch: {
 		
@@ -276,17 +293,22 @@ export default {
 		},
 
 		lotter() {
+			wx.requestSubscribeMessage({
+				tmplIds: ['XJC5O8Ee4_-KCpdcOZwsz-vhKeLoMB3XU31ZHne6yCk']
+			})
 			this.$api.lotteryDraw({
 				id: uni.getStorageSync('openid'),
 				copies: 1,
 			}).then(res => {
-				if (res == 200) {
-					this.toast('抽奖成功')
+				if (res.code == 200) {
+					this.$tools.toast('参与成功')
+					setTimeout(() => {
+						this.getPoint()
+						this.getUserCount()
+					}, 500)
 				} else {
-					this.toast(res.msg)
+					this.$tools.toast(res.msg)
 				}
-				this.getPoint()
-				this.getUserCount()
 			});
 		},
 		goToOrder() {
@@ -487,7 +509,7 @@ body {
 			  margin-top: 6vw;
 			  font-size: 3vw;
 			  color: black;
-			  text-decoration: underline;
+			  // text-decoration: underline;
 			  text-align: center;
 			}
 	  }
