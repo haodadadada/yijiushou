@@ -49,7 +49,8 @@
 		</view>
 
 		<view style="display: flex; justify-content: center; margin-top: 10px;">
-			<span style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">更多商品敬请期待</span>
+			<span v-if="navStatus === 0 || navStatus === 1" style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">更多商品敬请期待</span>
+			<span v-if="navStatus === 2" style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">功能待上线</span>
 		</view>
 	</view>
 </template>

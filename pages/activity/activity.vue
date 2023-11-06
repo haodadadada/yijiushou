@@ -1,10 +1,13 @@
 <template>
   <div class="activity-page">
     <div class="activity-container">
-			<div class="top">
-				<img src="https://www.19so.net/miniapp/gift.png" alt="">
-				<!-- <div class="top-title">豪礼抽不停</div> -->
-			</div>
+		<div style="display: inline-block;">
+			<button @click="getAuthorize" style="font-size: 14px; background-color: #666; color: #fff; opacity: 0.7; border-radius: 9999px;">刷新定位</button>
+		</div>
+		<div class="top">
+			<img src="https://www.19so.net/miniapp/gift.png" alt="">
+			<!-- <div class="top-title">豪礼抽不停</div> -->
+		</div>
     	<div class="prize-pool">
 				<div class="prize-pool-title">
 						<img src="../../static/activity/all-prize.png" alt="" />
@@ -51,8 +54,8 @@
 					</div>
 					<div class="status">
 						<div class="status-item people-num">
-							<div class="title">当前人数： </div>
-							<div class="num">{{ lotterUserNum }}人</div>
+							<div class="title">当前奖池内奖券数量： </div>
+							<div class="num">{{ lotterNum }}张</div>
 						</div>
 					</div>
 					<div class="status">
@@ -216,6 +219,11 @@ export default {
 			lotterStatus: false,
 			lotterStatusInfo: null,
 			isLotter: false,
+			longitude: '',
+			latitude: '',
+			isAuthorize: true,
+			isAround: true,
+			lotterNum: 0
 		};
 	},
 	onShow() {
@@ -247,6 +255,8 @@ export default {
 			}, 1000);
 		}
 		else {
+			this.getAuthorize();
+			this.initPosition();
 			this.checkLotteryStatus()
 			setInterval(() => {
 			    this.checkLotteryStatus(); // 定期执行时间比对
@@ -299,6 +309,14 @@ export default {
 		},
 
 		lotter() {
+			if(!this.isAuthorize) {
+				this.$tools.toast('请授权定位服务');
+				return;
+			}
+			if(!this.isAround) {
+				this.$tools.toast('当前位置未在服务范围内');
+				return;
+			}
 			wx.requestSubscribeMessage({
 				tmplIds: ['XJC5O8Ee4_-KCpdcOZwsz-vhKeLoMB3XU31ZHne6yCk']
 			})
@@ -306,6 +324,7 @@ export default {
 				id: uni.getStorageSync('openid'),
 				copies: 1,
 			}).then(res => {
+				console.log('res', res);
 				if (res.code == 200) {
 					this.$tools.toast('参与成功')
 					setTimeout(() => {
@@ -351,6 +370,7 @@ export default {
 			this.$api.getLotterUserCount().then(res => {
 				if(res.code === 200) {
 					this.lotterUserNum = res.data.userNum;
+					this.lotterNum = res.data.lotteryNum;
 					if(this.lotterUserNum > 3000) this.prizeProcess = 100
 					else this.prizeProcess = this.lotterUserNum / 3000 * 100
 				}
@@ -369,7 +389,131 @@ export default {
 				if (this.lotterStatusInfo.userId == uni.getStorageSync('openid')) this.isLotter = true
 				else this.isLotter = false
 			});
-		}
+		},
+		
+		getAuthorize() {
+			uni.getSystemInfo({
+				success: (res) => {
+					if (!res.locationEnabled || !res.locationAuthorized) {
+						uni.showModal({
+							title: '提示',
+							content: '请打开手机定位服务功能',
+						})
+						this.isAuthorize = false;
+						return;
+					}
+					else if(res.hostName == 'WeChat'){
+						uni.authorize({
+							scope: 'scope.userLocation',
+							success: () => {
+								this.isAuthorize = true;
+								this.initPosition()
+							},
+							fail: (err) => {
+								err = err['errMsg']
+								uni.showModal({
+									content: '需要授权位置信息',
+									confirmText: '确认授权'
+								}).then(res => {
+									if (res[1]['confirm']) {
+										uni.openSetting({
+											success: (res) => {
+												if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
+													// 授权成功
+													uni.showToast({
+														title: '授权成功',
+														icon: 'none'
+													})
+													this.isAuthorize = true;
+													this.initPosition();
+												} else {
+													// 未授权
+													uni.showToast({
+														title: '授权失败',
+														icon: 'none'
+													})
+													this.isAuthorize = false;
+												}
+											}	
+										})
+									}
+									if (res[1]['cancel']) {
+										// 取消授权
+										console.log('取消');
+										this.isAuthorize = false;
+										this.$tools.toast('请开启定位功能并授权获取地图服务');
+									}
+								})
+							}
+						})
+					}
+				}
+			})
+		},
+		getSite() {
+			var ok = 0;
+			this.userArea = '';
+			this.$api.getAllArea().then(res => {
+				const locationList = res.data;
+				// console.log("data:",locationList)
+				for (const location of locationList) {
+				  const location1 = location.location.split(',');
+				  const lat1 = parseFloat(location1[0]);
+				  const lon1 = parseFloat(location1[1]);
+				  // 获得经纬度比较
+				  const lat2 = parseFloat(this.latitude);
+				  const lon2 = parseFloat(this.longitude);
+				  const R = 6371; // 地球半径（单位：公里）
+			
+				  const dLat = toRad(lat2 - lat1);
+				  const dLon = toRad(lon2 - lon1);
+				  // console.log(dLat);
+				  // console.log(dLon);
+			
+				  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+					Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+					Math.sin(dLon / 2) * Math.sin(dLon / 2);
+			
+				  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+				  const distance = R * c;
+				  // console.log(distance)
+				  if (distance <= location.distance) {
+					this.userArea = location.id;
+					ok=1;
+					break;
+				  }else{
+					  ok = 2;
+				  }
+				}
+				if (ok==2) {
+				  uni.showToast({
+					title: '当前位置未开通服务',
+					icon: 'none'
+				  });
+				  this.isAround = false;
+				}
+				else {
+					this.isAround = true;
+				}
+			});
+			
+			function toRad(value) {
+				return value * Math.PI / 180;
+			}
+		},
+		initPosition() {
+		  uni.getLocation({
+		    type: 'gcj02',
+		    success: res => {
+		      this.longitude = res.longitude;
+		      this.latitude = res.latitude;
+			  this.getSite();
+		    },
+		    fail: (res) => {
+		      // 处理错误情况
+		    },
+		  });
+		},
 	},
 };
 </script>
