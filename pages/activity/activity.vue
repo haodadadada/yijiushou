@@ -247,15 +247,10 @@ export default {
 			}, 1000);
 		}
 		else {
-			if (new Date().getTime() >= 1699617600000) {
-				this.getLotterUser()
-				this.lotterStatus = true
-			} else {
-				this.lotterTimer()
-				setInterval(() => {
-					this.lotterTimer()
-				}, 1000);
-			}
+			this.checkLotteryStatus()
+			setInterval(() => {
+			    this.checkLotteryStatus(); // 定期执行时间比对
+			}, 1000);
 			this.getPoint()
 			this.getUserCount()
 			this.getCoupon()
@@ -275,6 +270,17 @@ export default {
 				})
 				clearTimeout(timer)
 			}, 200);
+		},
+		
+		checkLotteryStatus(){
+			if (new Date().getTime() >= 1699617600000 && this.lotterStatus == false) {
+				this.getLotterUser()
+				this.lotterStatus = true
+			}else if(new Date().getTime() >= 1699617600000 && this.lotterStatus == true){
+				return;
+			}else {
+				this.lotterTimer()
+			}
 		},
 
 		lotterTimer() {
@@ -360,7 +366,6 @@ export default {
 		getLotterUser() {
 			this.$api.getLotteryStatus().then(res => {
 				this.lotterStatusInfo = res.data
-				console.log(this.lotterStatusInfo)
 				if (this.lotterStatusInfo.userId == uni.getStorageSync('openid')) this.isLotter = true
 				else this.isLotter = false
 			});

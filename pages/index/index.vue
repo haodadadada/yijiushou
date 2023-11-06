@@ -236,12 +236,10 @@ export default {
 		// this.getNoticeList();
 		this.getSystemInfo();
 		uni.createSelectorQuery().select('.container').boundingClientRect().exec(data => {
-			console.log('111', data);
 			this.rootHeight = data[0].height;
 		})
 		uni.getSystemInfo({
 			success: res => {
-				console.log('sy', res)
 				this.windowHeight = res.windowHeight;
 			}
 		})
