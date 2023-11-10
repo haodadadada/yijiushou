@@ -24,9 +24,13 @@
 			</view> -->
 			<swiper :autoplay="true" :interval="3000" :duration="1000" class="main-banner" style="width: 100%; height: 400rpx; margin-top: 10px;" :circular="true" >
 				<swiper-item style="display: flex; justify-content: center;" @click="goActivity()">
-					<img src="/static/index1.png" alt="" style="width: 95%; height: 400rpx;">
+					<img src="https://www.19so.net/miniapp/lottery.jpg" alt="" style="width: 95%; height: 400rpx;">
 				</swiper-item>
-				<swiper-item style="display: flex; justify-content: center;" @click="goQuestionnaire()">
+				<swiper-item style="display: flex; justify-content: center;" @click="showCode()">
+					<img src="https://www.19so.net/miniapp/notice.jpg" alt="" style="width: 95%; height: 400rpx;">
+				</swiper-item>
+				<!-- <swiper-item style="display: flex; justify-content: center;" @click="goQuestionnaire()"> -->
+				<swiper-item style="display: flex; justify-content: center;">	
 					<img src="https://www.19so.net/miniapp/banner.png" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
 				</swiper-item>
 			</swiper>
@@ -58,7 +62,7 @@
 						<img src="../../static/new5.png" alt="分类">
 						<span class="title">价格类目</span>
 					</view>
-					<view class="item" @click="goShop()">
+					<view class="item" @click="goShop(0)">
 						<img src="../../static/shop.png" alt="商城">
 						<span class="title">积分商城</span>
 					</view>
@@ -137,7 +141,7 @@
 				</button>
 			</view>
 			<view @click="goShop(1)">
-				<img src="/static/print/index-print.png" alt="" style="width: 100%;" mode="widthFix"/>
+				<img src="https://www.19so.net/miniapp/print.jpg" alt="" style="width: 100%;" mode="widthFix"/>
 			</view>
 		</view>
 		<u-popup :show="isShowPrice" mode="bottom" @close="isShowPrice = false">
@@ -152,6 +156,9 @@
 		</u-popup>
 		<u-modal :show="showModal" closeOnClickOverlay=true @confirm="showModal = false" confirmColor='#34cd99'>
 			<span>敬请期待</span>
+		</u-modal>
+		<u-modal :show="qrCode" @confirm="qrCode = false">
+			<img src="/static/code.jpg" alt="" style="width: 200px; height: 288px;" />
 		</u-modal>
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
 	</view>
@@ -209,7 +216,8 @@ export default {
 			showInalipay: false,
 			showModal: false,
 			windowHeight: '',
-			rootHeight: ''
+			rootHeight: '',
+			qrCode: false
 		};
 	},
 
@@ -382,7 +390,9 @@ export default {
 				url: '/pages/activity/activity'
 			})
 		},
-		
+		showCode() {
+			this.qrCode = true;
+		},
 		/** 获取设备 */ 
 		getSystemInfo() {
 			this.systemInfo = uni.getSystemInfoSync()
