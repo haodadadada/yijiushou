@@ -227,6 +227,7 @@ export default {
 		};
 	},
 	onShow() {
+		console.log(uni.getStorageSync('userInfo') === null, !uni.getStorageSync('userInfo').name, !uni.getStorageSync('userInfo').phone)
 		if (!uni.getStorageSync('openid')) {
 			// this.$tools.toast('请先登录');
 			uni.showToast({
@@ -246,10 +247,10 @@ export default {
 			}, 1000);
 			
 		}
-		else if(!uni.getStorageSync('userInfo').name || !uni.getStorageSync('userInfo').phone) {
+		else if(uni.getStorageSync('userInfo') === null || !uni.getStorageSync('userInfo').name || !uni.getStorageSync('userInfo').phone) {
 			this.$tools.toast('请先填写完整信息');
 			setTimeout(() => {
-				uni.switchTab({
+				uni.navigateTo({
 					url: '../editUser/editUser'
 				});
 			}, 1000);
@@ -345,7 +346,7 @@ export default {
 		onShareAppMessage(res) {
 			return {
 				title: '回收分享赚取积分，最高可抽iPhone 15 Pro Max 1T！',
-				path: 'pages/activity/activity?invitedId=' + uni.getStorageSync('openid')
+				path: 'pages/index/index?invitedId=' + uni.getStorageSync('openid')
 			}
 		},
 

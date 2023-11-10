@@ -96,7 +96,16 @@
 								delta: 1
 							})
 						}, 500)
+						this.$api
+							.getUserInfo({
+								openid: this.openid
+							})
+							.then(res => {
+								this.userInfo = res.data;
+								uni.setStorageSync('userInfo', this.userInfo);
+							});
 					}
+					
 				})
 			},
 			onGetAuthorize() {
