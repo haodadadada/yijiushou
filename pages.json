@@ -153,6 +153,45 @@
 				"navigationBarTitleText": "活动",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/addCrowdFunding/addCrowdFunding",
+			"style": {
+				"navigationBarTitleText": "趣味众筹",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/addCrowdFundingSecond/addCrowdFundingSecond",
+			"style": {
+				"navigationBarTitleText": "趣味众筹",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#34cd99"
+			}
+		},
+		{
+			"path": "pages/crowdFundingOrder/crowdFundingOrder",
+			"style": {
+				"navigationBarTitleText": "众筹订单",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#34cd99"
+			}
+		},
+		{
+			"path": "pages/crowdFundingOrderDetail/crowdFundingOrderDetail",
+			"style": {
+				"navigationBarTitleText": "众筹订单",
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#34cd99"
+			}
+		},
+		{
+			"path": "pages/fundingSquare/fundingSquare",
+			"style": {
+				"navigationBarTitleText": "众筹广场",
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#34cd99"
+			}
 		}
     ],
 	"tabBar": {

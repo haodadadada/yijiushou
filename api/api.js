@@ -741,7 +741,29 @@ const getLotteryStatus = (data) => {
 		data
 	})
 }
-//
+
+const getPointPinProduct = () => {
+	return http.get({
+		url: '/pin/getPointPinProduct'
+	})
+}
+
+const joinPinProduct = (data) => {
+	return http.post({
+		header:'application/json',
+		url: '/pin/joinPinProduct',
+		data
+	})
+}
+
+const startPinProduct = data => {
+	return http.post({
+		header:'application/json',
+		url: '/pin/startPinProduct',
+		data
+	})
+}
+
 
 export default {
 	angelApply,
@@ -821,4 +843,7 @@ export default {
 	getLotterUserCount,
 	getUserCountInvited,
 	getLotteryStatus,
+	getPointPinProduct,
+	joinPinProduct,
+	startPinProduct
 }

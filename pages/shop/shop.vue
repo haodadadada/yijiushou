@@ -47,11 +47,28 @@
 				</view>
 			</view>
 		</view>
-
+		
+		<view class="crowd-funding" v-if="navStatus === 2">
+			<view class="item" v-for="item of crowdfunding">
+				<view class="left">
+					<img :src="item.imgUrl" alt="" style="width: 32px; height: 32px;" />
+				</view>
+				<view class="middle">
+					<span>{{item.title}}</span>
+					<span>{{item.content}}</span>
+				</view>
+				<view class="right" @click="forCrowdFunding(item.index)">
+					<img src="/static/crowdfunding/right-arrow.png" alt="" style="width: 20px; height: 20px;"/>
+				</view>
+			</view>
+		</view>
+		
 		<view style="display: flex; justify-content: center; margin-top: 10px;">
 			<span v-if="navStatus === 0 || navStatus === 1" style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">更多商品敬请期待</span>
-			<span v-if="navStatus === 2" style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">功能待上线</span>
+			<!-- <span v-if="navStatus === 2" style="font-family: Microsoft Yahei; font-weight: 500; color: #107855; text-shadow: 2px 2px 2px 2px grey;">功能待上线</span> -->
 		</view>
+		
+
 	</view>
 </template>
 
@@ -72,7 +89,27 @@
 					{title: '兑换服务', id: '002'},
 					{title: '趣味众筹', id: '003'}
 				],
-				navStatus: 0
+				navStatus: 0,
+				crowdfunding: [
+					{
+						index: 0,
+						title: '众筹广场',
+						content: '众多商品, 马上参与',
+						imgUrl: '/static/crowdfunding/gift.png'
+					},
+					{
+						index: 1,
+						title: '新建众筹',
+						content: '建立众筹, 发布商品',
+						imgUrl: '/static/crowdfunding/add-circle.png'
+					},
+					{
+						index: 2,
+						title: '众筹订单',
+						content: '参与众筹的商品订单',
+						imgUrl: '/static/crowdfunding/copy.png'
+					},
+				],
 			}
 		},
 		methods: {
@@ -89,7 +126,6 @@
 				if(result.code === 200)
 					this.userPoint = result.data;
 			},
-			
 			
 			buyProduct(item) {
 				console.log(item)
@@ -121,7 +157,25 @@
 			
 			selectNavStatus(index) {
 				this.navStatus = index;
+			},
+			
+			forCrowdFunding(index) {
+				if(index === 0) {
+					uni.navigateTo({
+						url: '/pages/fundingSquare/fundingSquare'
+					})
+				}
+				else if(index === 1) {
+					uni.navigateTo({
+						url: '/pages/addCrowdFunding/addCrowdFunding'
+					})
+				} else if(index === 2) {
+					uni.navigateTo({
+						url: '/pages/crowdFundingOrder/crowdFundingOrder'
+					})
+				}
 			}
+			
 		},
 		onLoad(e) {
 			if(e.status) {
@@ -275,11 +329,49 @@
 	
 			}
 			.item:nth-child(2n+1) {
-				margin-left: 5vw;
+				margin-left: 6vw;
 				margin-right: 4vw;
 			}
 			.item:nth-child(2n) {
-				margin-right: 5vw;
+				margin-right: 6vw;
+			}
+		}
+		.crowd-funding {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 20px;
+			.item {
+				display: flex;
+				align-items: center;
+				background-color: #fff;
+				width: 90vw;
+				padding: 25px 15px;
+				margin-bottom: 10px;
+				border-radius: 15px;
+				box-sizing: border-box;
+				.left {
+					flex: 1;
+					margin-right: 10px;
+				}
+				.middle {
+					flex: 8;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					span:first-child {
+						font-size: 16px;
+						font-weight: 550;
+						margin-bottom: 5px;
+					}
+					span:last-child {
+						font-size: 12px;
+						font-weight: 400;
+					}
+				}
+				.right {
+					flex: 1;
+				}
 			}
 		}
 	}
