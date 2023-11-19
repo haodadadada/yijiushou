@@ -227,6 +227,12 @@ export default {
 		};
 	},
 	onShow() {
+		// *****
+		wx.showShareMenu({
+		      withShareTicket: true,
+		      menus: ['shareAppMessage', 'shareTimeline']
+		})
+		// *****
 		console.log(uni.getStorageSync('userInfo') === null, !uni.getStorageSync('userInfo').name, !uni.getStorageSync('userInfo').phone)
 		if (!uni.getStorageSync('openid')) {
 			// this.$tools.toast('请先登录');

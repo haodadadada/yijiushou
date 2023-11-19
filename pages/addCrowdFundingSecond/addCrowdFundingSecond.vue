@@ -9,7 +9,7 @@
 						<span>(对参与者展示)</span>
 					</view>
 					<view class="right">
-						<input type="text" placeholder="必填"/>
+						<input type="text" placeholder="必填" v-model="startUserPhone"/>
 					</view>
 				</view>
 				<view class="option">
@@ -41,7 +41,7 @@
 					<img src="/static/icon/xiaoyuhao-white.png" alt="" style="width: 20px; height: 20px; margin-right: 10px;" />
 					<span>上一步</span>
 				</view>
-				<view class="submit">
+				<view class="submit" @click="handleSubmit">
 					<span>提交</span>
 				</view>
 			</view>
@@ -61,8 +61,11 @@
 				startUserPhone: '',
 				startTime: '',
 				endTime: '',
+				startTimestamp: '',
+				endTimestamp: '',
 				timeStatus: '',
-				nowTime: null
+				nowTime: null,
+				fundingInfo: {}
 			}
 		},
 		methods: {
@@ -85,9 +88,21 @@
 			confirmTime(e) {
 				console.log(e);
 				if(this.timeStatus === 1) {
+					this.startTimestamp = this.timeToTimestamp(e.fulldate);
+					if(this.endTime && this.endTimestamp < this.startTimestamp) {
+						this.$tools.toast('请选择正确的时间');
+						this.startTimestamp = this.timeToTimestamp(this.startTime);
+						return;
+					}
 					this.startTime = e.fulldate;
 				}
 				else if(this.timeStatus === 2) {
+					this.endTimestamp = this.timeToTimestamp(e.fulldate);
+					if(this.startTime && this.endTimestamp < this.startTimestamp) {
+						this.$tools.toast('请选择正确的时间');
+						this.endTimestamp = this.timeToTimestamp(this.endTime);
+						return;
+					}
 					this.endTime = e.fulldate;
 				}
 			},
@@ -99,9 +114,34 @@
 			    let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
 			    return Y + M + D;
 			},
+			timeToTimestamp(time){
+			    let timestamp = Date.parse(new Date(time).toString());
+			    //timestamp = timestamp / 1000; //时间戳为13位需除1000，时间戳为13位的话不需除1000
+			    // console.log(time + "的时间戳为：" + timestamp);
+			    return timestamp;
+			},
+			async handleSubmit() {
+				if(!this.startUserPhone || !this.startTime || !this.endTime) {
+					this.$tools.toast('请填写完整信息');
+					return;
+				}
+				const {fundingName, fundingNotice, fundingImg, fundingMoney} = this.fundingInfo;
+				let result = await this.$api.startPinProduct({
+					productName: fundingName,
+					pointsRequireMoney: Number(fundingMoney),
+					productImg: fundingImg,
+					productRemark: fundingNotice,
+					startUserPhone: this.startUserPhone,
+					startUser: uni.getStorageSync('openid'),
+					startTime: this.startTime,
+					endTime: this.endTime
+				})
+				console.log(result);
+			}
 		},
 		onLoad(e) {
-			console.log(e)
+			console.log(e);
+			this.fundingInfo = e;
 		},
 		onShow() {
 			this.nowTime = this.timestampToTime(new Date().getTime());
