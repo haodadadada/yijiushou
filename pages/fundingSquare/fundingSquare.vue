@@ -1,9 +1,13 @@
 <template>
 	<view class="container">
+		<image src="/static/new-store-bgc.png" mode="" class="bgc"></image>
+		<view class="header">
+			<view class="middle">{{userPoint}}<span style="font-size: 20px;">分</span></view>
+		</view>
 		<view class="contain">
 			<view class="item" v-for="item in products" :key="item.id">
 				<view class="img">
-					<image :src="item.productImg" mode=""></image>
+					<image :src="item.productImg" mode="" :lazy-load="true" bindload="loadLazyImgChange"></image>
 					<view class="statusDetail"><span>{{item.isEnd ? item.isFull ? '已成功' : '未成团' : '众筹中'}}</span></view>
 				</view>
 				<view class="footer">
@@ -33,7 +37,7 @@
 						<img :src="productsDetail.productImg" alt="" style="width: 100%; height: 100%;" />
 					</view>
 					<view class="right">
-						<view class="item" style="font-size: 16px;">{{productsDetail.productRemark}}</view>
+						<view class="item" style="font-size: 16px;">{{productsDetail.productName}}</view>
 						<view class="item" style="font-size: 12px;">众筹价：{{productsDetail.pointsRequire}}积分</view>
 						<view class="item" style="font-size: 12px;">当前积分：{{productsDetail.donateTotal}} / {{productsDetail.pointsRequire}}积分</view>
 						<view class="process">
@@ -41,16 +45,18 @@
 							<span style="position: absolute; left: 8px;  flex-grow: 1; height: 20px; border-radius: 99999px; background-color: orangered;" :style="'width:' + `${processFunding}%`"></span>
 							<span style="flex-grow: 1; height: 20px; transform: translateX(-10px); border-radius: 99999px; background-color: orangered; opacity: .3;"></span>
 						</view>
+						<view style="font-size: 10px;">{{productsDetail.productRemark}}</view>
 					</view>
 				</view>
 				<view style="text-align: center; color: #34cd99; font-weight: 600; font-family: sans-serif; margin-bottom: 10px;">第12期</view>
 				<view v-if="!isAccded">
 					<view style="text-align: center; margin-bottom: 10px;">{{`剩余时间：${remainingTime}`}}</view>
 					<view style="display: flex; justify-content: center; margin-bottom: 10px;">
-						<img src="" alt="" style="width: 32px; height: 32px; background-color: #ccc; border-radius: 16px;"/>
+						<img :src="item" alt="" style="width: 32px; height: 32px; background-color: #ccc; border-radius: 16px;" v-for="(item, index) of uniqueEnteringUserImg" :key="index"/>
 					</view>
 					<view class="enter" @click="isAccded = true">马上加入众筹</view>
-					<view class="invite">邀请好友参团</view>
+					<!-- <view class="invite">邀请好友参团</view> -->
+					<button class="invite" open-type="share">邀请好友参团</button>
 				</view>
 				<view v-if="isAccded" >
 					<view style="margin-bottom: 40px;">
@@ -67,7 +73,6 @@
 						<view style="width: 30vw; background-color: #ccc; padding: 10px 0; text-align: center; color: #fff; border-radius: 9999px;" @click="isAccded = false">取消</view>
 						<view style="width: 30vw; background-color: #34cd99; padding: 10px 0; text-align: center; color: #fff; border-radius: 9999px;" @click="joinFunding">加入众筹</view>
 					</view>
-					
 				</view>
 				<view style="text-align: center; font-size: 12px; color: #666;">众筹须知：人满开奖，人未满退分</view>
 			</view>
@@ -82,13 +87,18 @@
 				products: [],
 				productsDetail: {},
 				processFunding: 0,
+				current: 0,
 				showCrowdFunding: false,
 				startUserInfo: {},
 				remainingTime: '',
 				timer: null,
 				timeToEnd: '',
 				isAccded: false,
-				donatingPoints: ''
+				donatingPoints: '',
+				from: '',
+				enteringUserImg: [],
+				uniqueEnteringUserImg: [],
+				userPoint: ''
 			}
 		},
 		methods: {
@@ -107,7 +117,9 @@
 			},
 			enterCrowdFundingDetail(index) {
 				this.showCrowdFunding = true;
+				this.current = index;
 				this.productsDetail = this.products[index];
+				console.log('productdetail', this.productsDetail);
 				this.processFunding = this.productsDetail.donateTotal / this.productsDetail.pointsRequire * 100;
 				this.timeToEnd = this.timeToTimestamp(this.productsDetail.endTime);
 				this.remainingTime = this.countDown(this.timeToEnd);
@@ -116,6 +128,13 @@
 				}
 				this.getUserInfo();
 				this.isAccded = false;
+				this.getOrderUserAvatar(this.productsDetail.id);
+			},
+			async recoverCrowdFundingDetail() {
+				await this.getPointPinProduct();
+				this.productsDetail = this.products[this.current];
+				this.processFunding = this.productsDetail.donateTotal / this.productsDetail.pointsRequire * 100;
+				
 			},
 			async getUserInfo() {
 				let result = await this.$api.getUserInfo({
@@ -182,23 +201,89 @@
 				let result = await this.$api.joinPinProduct({
 					userId: uni.getStorageSync('openid'),
 					pinProductId: this.productsDetail.id,
-					donatePoints: Number(this.donatingPoints)
+					donatePoints: Number(this.donatingPoints),
+					pinProductName: this.productsDetail.productName,
+					description: this.productsDetail.productRemark
 				})
 				if(result.code === 200) {
-					this.$tools.toast('加入成功');
+					this.donatingPoints = '';
+					await this.recoverCrowdFundingDetail();
+					if(this.processFunding >= 100) {
+						this.$tools.toast('已成团');
+						this.closeCrowdFundingDetail();
+					}
+					else {
+						this.$tools.toast('已加入');
+						this.getOrderUserAvatar(this.productsDetail.id);
+					}
 				}
 				else if(result.code === 2) {
 					this.$tools.toast('积分已满');
 				}
 				this.isAccded = false;
 				console.log(result);
+			},
+			async getOrderUserAvatar(id) {
+				let result = await this.$api.getOrderUserAvatar({
+					id
+				})
+				if(result.code === 200) {
+					this.enteringUserImg = result.data;
+					this.uniqueEnteringUserImg = this.enteringUserImg.filter((ele, index) => {
+						return this.enteringUserImg.indexOf(ele) === index;
+					})
+					console.log('123', this.enteringUserImg)
+					console.log('123', this.uniqueEnteringUserImg)
+				}
+				else {
+					this.$tools.toast('获取参与用户头像失败');
+				}
+			},
+			async getUserPoint() {
+				let result = await this.$api.getUserPoint({
+					id: uni.getStorageSync('openid')
+				});
+				if(result.code === 200)
+					this.userPoint = result.data;
+			},
+			loadLazyImgChange(e) {
+				console.log('lazyload', e)
+			}
+		},
+		onLoad(e) {
+			console.log('onload', e)
+			if(e.from) {
+				this.from = e.from;
 			}
 		},
 		onShow() {
+			wx.showShareMenu({
+				withShareTicket: true,
+				menus: ['shareAppMessage', 'shareTimeline']
+			})
 			this.getPointPinProduct();
+			this.getUserPoint();
 		},
 		onPullDownRefresh() {
 			this.getPointPinProduct();
+		},
+		onUnload() {
+			if(this.from) {
+				uni.reLaunch({
+					url: '/pages/shop/shop'
+				})
+			}
+		},
+		onShareAppMessage() {
+			return {
+				title: '众筹广场',
+				path: `/pages/fundingSquare?id=123`
+			}
+		},
+		onShareTimeline() {
+			return {
+				title: '众筹广场'
+			}
 		}
 	}
 </script>
@@ -209,6 +294,42 @@
 	}
 	.container {
 		padding: 15px 0;
+		.bgc {
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			height: 15vh;
+			z-index: 0;
+			width: 90vw;
+			margin-left: 5vw;
+			margin-top: 15px;
+			border-radius: 20px;
+		}
+		.header {
+			position: relative;
+			margin: 20px 12vw 0px;
+			border-radius: 10px;
+			height: 18vh;
+			.top {
+				position: absolute;
+				top: 2vh;
+				color: #fff;
+				font-size: 12px;
+			}
+			.middle {
+				position: absolute;
+				top: 5vh;
+				font-size: 30px;
+				font-weight: 700;
+				color: #fff;
+			}
+			.bottom {
+				position: absolute;
+				top: 12vh;
+				font-size: 12px;
+				color: #fff;
+			}
+		}
 		.contain {
 			overflow: hidden;
 			.item {
@@ -317,20 +438,29 @@
 				}
 				.right {
 					.item {
-						margin-bottom: 10px;
+						margin-bottom: 5px;
 					}
 					.process {
 						display: flex;
 						align-items: center;
 						position: relative;
+						margin-bottom: 5px;
 					}
 				}
 			}
-			.enter, .invite {
+			.enter {
 				border-radius: 99999px;
 				background-color: #34cd99;
 				color: #fff;
 				padding: 10px 0;
+				text-align: center;
+				font-size: 16px;
+				margin-bottom: 10px;
+			}
+			.invite {
+				border-radius: 99999px;
+				background-color: #34cd99;
+				color: #fff;
 				text-align: center;
 				font-size: 16px;
 				margin-bottom: 10px;

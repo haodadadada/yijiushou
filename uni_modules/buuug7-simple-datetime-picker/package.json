@@ -1,15 +1,18 @@
 {
-  "id": "zui-calendar",
-  "displayName": "日历展示",
-  "version": "1.1.7",
-  "description": "日历展示",
+  "id": "buuug7-simple-datetime-picker",
+  "displayName": "简单的日期时间选择器",
+  "version": "0.7.0",
+  "description": "uniApp 简单的日期时间选择器, 可选择年, 月, 日, 时, 分, 秒",
   "keywords": [
-    "日历，时间，日历任务，时间任务控件，calendar,",
-    "date"
+    "时间",
+    "日期",
+    "时间选择器",
+    "日期时间选择器",
+    "datetime"
 ],
   "repository": "",
   "engines": {
-    "HBuilderX": "^3.4.18"
+    "HBuilderX": "^3.6.1"
   },
 "dcloudext": {
     "sale": {
@@ -21,11 +24,11 @@
       }
     },
     "contact": {
-      "qq": ""
+      "qq": "3190136675"
     },
     "declaration": {
       "ads": "无",
-      "data": "插件不采集任何数据",
+      "data": "无",
       "permissions": "无"
     },
     "npmurl": "",
@@ -40,13 +43,9 @@
         "aliyun": "y"
       },
       "client": {
-        "Vue": {
-          "vue2": "y",
-          "vue3": "u"
-        },
         "App": {
           "app-vue": "y",
-          "app-nvue": "y"
+          "app-nvue": "u"
         },
         "H5-mobile": {
           "Safari": "y",
@@ -56,21 +55,21 @@
         },
         "H5-pc": {
           "Chrome": "y",
-          "IE": "u",
-          "Edge": "u",
-          "Firefox": "u",
-          "Safari": "u"
+          "IE": "n",
+          "Edge": "y",
+          "Firefox": "y",
+          "Safari": "y"
         },
         "小程序": {
           "微信": "y",
           "阿里": "u",
-          "百度": "y",
+          "百度": "u",
           "字节跳动": "u",
           "QQ": "u"
         },
         "快应用": {
-          "华为": "y",
-          "联盟": "y"
+          "华为": "u",
+          "联盟": "u"
         }
       }
     }

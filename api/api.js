@@ -764,6 +764,20 @@ const startPinProduct = data => {
 	})
 }
 
+const getPointPinOrder = data => {
+	return http.get({
+		url: '/pin/getPointPinOrder',
+		data
+	})
+}
+
+const getOrderUserAvatar = data => {
+	return http.get({
+		url: '/pin/getOrderUserAvatar',
+		data
+	})
+}
+
 
 export default {
 	angelApply,
@@ -845,5 +859,7 @@ export default {
 	getLotteryStatus,
 	getPointPinProduct,
 	joinPinProduct,
-	startPinProduct
+	startPinProduct,
+	getPointPinOrder,
+	getOrderUserAvatar
 }

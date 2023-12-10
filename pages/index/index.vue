@@ -170,7 +170,7 @@ var qqmapsdk;
 import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
 export default {
 	components: {
-		orderStatus
+		orderStatus,
 	},
 	data() {
 		return {

@@ -1,28 +1,29 @@
 <template>
 	<view class="container">
 		<header>
-			<view style="font-weight: 530; font-size: 20px;">活动已完成</view>
-			<view style="font-size: 12px;">完成时间：2023-11-14 17:56</view>
+			<view style="font-weight: 530; font-size: 20px; margin-bottom: 10px;">{{itemDetail.status === 0 ? '众筹中' : itemDetail.status === 1 ? '未成团' : '已成团'}}</view>
 		</header>
 		<view class="content">
 			<view class="top">
-				<view class="img"></view>
+				<view class="img">
+					<img :src="itemDetail.pinProductImg" alt="" style="width: 100%; height: 100%;" />
+				</view>
 				<view class="info">
-					<view style="margin-bottom: 10px; font-size: 14px;">流浪猫救助</view>
-					<view>xxxxxxxxx</view>
+					<view style="margin-bottom: 10px; font-size: 18px;">{{itemDetail.pinProductName}}</view>
+					<view>{{itemDetail.description}}</view>
 				</view>
 			</view>
 			<view class="item">
 				<span>众筹积分</span>
-				<span>400分</span>
+				<span>{{itemDetail.donatePoints}}分</span>
 			</view>
 			<view class="item">
 				<span>订单编号</span>
-				<span>1234567890</span>
+				<span>{{itemDetail.id}}</span>
 			</view>
 			<view class="item">
-				<span>完成时间</span>
-				<span>2023-11-14 17:56</span>
+				<span>结束时间</span>
+				<span>{{itemDetail.endTime}}</span>
 			</view>
 			<view class="item">
 				<span>活动快照</span>
@@ -33,7 +34,15 @@
 
 <script>
 	export default {
-		
+		data() {
+			return {
+				itemDetail: {}
+			}
+		},
+		onLoad(e) {
+			this.itemDetail = JSON.parse(e.item);
+			console.log(this.itemDetail)
+		}
 	}
 </script>
 
@@ -51,7 +60,6 @@
 					width: 30vw;
 					height: 30vw;
 					margin-right: 10px;
-					background-color: pink;
 					border-radius: 10px;
 				}
 				.info {

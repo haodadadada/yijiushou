@@ -1,28 +1,30 @@
 <template>
 	<view class="container">
 		<header class="navigation">
-			<span v-for="(item, index) of navContent" @click="navCurrent = index" :class="{active: navCurrent === index}">{{item}}</span>
+			<span v-for="(item, index) of navContent" @click="changeNavCurrent(index)" :class="{active: navCurrent === index}">{{item}}</span>
 		</header>
 		<view class="content">
-			<view class="item">
+			<view class="item" v-for="item of newOrder" :key="item.id">
 				<view class="top">
-					<span>订单编号: 1234567890</span>
-					<span>待发货</span>
+					<span>订单编号: {{item.id}}</span>
+					<span>{{item.status === 0 ? '众筹中' : item.status === 1 ? '未成团' : '已成团'}}</span>
 				</view>
 				<view class="middle">
-					<view class="img"></view>
+					<view class="img">
+						<img :src="item.pinProductImg" alt="" style="width: 100%; height: 100%;" />
+					</view>
 					<view class="info">
-						<span>校园流浪猫救助</span>
-						<span>参与成员</span>
-						<span>xxxxxxxxxxxxxxxxxxx</span>
+						<span>{{item.pinProductName}}</span>
+						<!-- <span>参与成员</span> -->
+						<span>{{item.description}}</span>
 					</view>
 					<view class="count">
-						<span>400积分</span>
-						<img src="" alt="" />
+						<span style="margin-bottom: 5px;">{{item.donatePoints}}积分</span>
+						<img :src="item.status === 0 ? '' : item.status === 1 ? '/static/crowdfunding/fail.png' : '/static/crowdfunding/success.png'" alt="" />
 					</view>
 				</view>
 				<view class="bottom">
-					<span @click="goCrowdFundingOrderDetail">订单详情</span>
+					<span @click="goCrowdFundingOrderDetail(item)">订单详情</span>
 					<span>联系平台</span>
 				</view>
 			</view>
@@ -35,18 +37,71 @@
 		data() {
 			return {
 				navCurrent: 0,
-				navContent: ['全部', '众筹中', '未成团', '待收货', '已完成']
+				navContent: ['全部', '众筹中', '未成团', '已完成'],
+				userOrder: [],
+				newOrder: [],
 			}
 		},
 		methods: {
-			goCrowdFundingOrderDetail() {
+			goCrowdFundingOrderDetail(item) {
+				let itemJson = JSON.stringify(item)
 				uni.navigateTo({
-					url: '/pages/crowdFundingOrderDetail/crowdFundingOrderDetail'
+					url: `/pages/crowdFundingOrderDetail/crowdFundingOrderDetail?item=${itemJson}`
 				})
+			},
+			async getUserOrder() {
+				let result = await this.$api.getPointPinOrder({
+					userId: uni.getStorageSync('openid')
+				})
+				console.log(result);
+				if(result.code === 200) {
+					this.userOrder = result.data.reverse();
+					this.filterOrder();
+				}
+				else {
+					this.$tools.toast('获取订单失败');
+				}
+			},
+			changeNavCurrent(index) {
+				this.navCurrent = index;
+				this.filterOrder();
+			},
+			filterOrder() {
+				if(this.navCurrent === 0) {
+					this.newOrder = this.userOrder;
+				}
+				else if(this.navCurrent === 1) {
+					this.newOrder = this.userOrder.filter(ele => {
+						return ele.status === 0;
+					})
+				}
+				else if(this.navCurrent === 2) {
+					this.newOrder = this.userOrder.filter(ele => {
+						return ele.status === 1;
+					})
+				}
+				else if(this.navCurrent === 3) {
+					this.newOrder = this.userOrder.filter(ele => {
+						return ele.status === 2;
+					})
+				}
+				console.log('111', this.newOrder);
+			},
+			async getOrderUserAvatar(id) {
+				let result = await this.$api.getOrderUserAvatar({
+					id
+				})
+				console.log('useimg', result);
+				if(result.code === 200) {
+					this.enteringUserImg = result.data;
+				}
+				else {
+					this.$tools.toast('获取参与用户头像失败');
+				}
 			}
 		},
 		onShow() {
-			
+			this.getUserOrder();
 		}
 	}
 </script>
@@ -73,6 +128,7 @@
 			margin-top: 10px;
 			.item {
 				background-color: #fff;
+				margin-bottom: 20px;
 				.top {
 					display: flex;
 					justify-content: space-between;
@@ -90,7 +146,7 @@
 				.middle {
 					display: flex;
 					justify-content: space-between;
-					background-color: #ccc;
+					background-color: #eee;
 					padding: 10px;
 					margin-bottom: 15vw;
 					.img {
@@ -98,7 +154,6 @@
 						width: 20vw;
 						height: 20vw;
 						border-radius: 10px;
-						background-color: pink;
 					}
 					.info {
 						display: flex;
@@ -118,13 +173,13 @@
 					.count {
 						display: flex;
 						flex-direction: column;
+						text-align: center;
 						span {
 							color: crimson;
 						}
 						img {
 							width: 15vw;
 							height: 15vw;
-							background-color: pink;
 						}
 					}
 				}

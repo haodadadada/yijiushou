@@ -33,7 +33,7 @@
 		</view>
 		
 		<view class="contain" v-if="navStatus === 1">
-			<view class="item" v-for="item in printProducts" :key="item.id">
+			<view class="item" v-for="item in printProducts" :key="item.index">
 				<view class="img">
 					<image :src="item.productImg" mode=""></image>
 				</view>
@@ -49,7 +49,7 @@
 		</view>
 		
 		<view class="crowd-funding" v-if="navStatus === 2">
-			<view class="item" v-for="item of crowdfunding">
+			<view class="item" v-for="item of crowdfunding" :key="item.index" @click="forCrowdFunding(item.index)">
 				<view class="left">
 					<img :src="item.imgUrl" alt="" style="width: 32px; height: 32px;" />
 				</view>
@@ -57,7 +57,7 @@
 					<span>{{item.title}}</span>
 					<span>{{item.content}}</span>
 				</view>
-				<view class="right" @click="forCrowdFunding(item.index)">
+				<view class="right" >
 					<img src="/static/crowdfunding/right-arrow.png" alt="" style="width: 20px; height: 20px;"/>
 				</view>
 			</view>
@@ -117,6 +117,7 @@
 				let result = await this.$api.getPointProduct();
 				if(result.code === 200)
 					this.products = result.data;
+				console.log(this.products)
 			},
 			
 			async getUserPoint() {

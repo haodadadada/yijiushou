@@ -95,17 +95,17 @@
 		</view>
 		</view>
 			
-		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
+		<!-- <orderStatus :show="show" @closePopup="closePopup"></orderStatus> -->
 	</view>
 </template>
 
 <script>
-import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
-import userVue from './user.vue';
+// import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
+// import userVue from './user.vue';
 export default {
-	components: {
-		orderStatus
-	},
+	// components: {
+	// 	orderStatus
+	// },
 	data() {
 		return {
 			bgColor:'transparent',

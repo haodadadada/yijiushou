@@ -4,18 +4,18 @@
 			<view class="header"><span style="font-size: 24px; font-weight: 550; color: #34cd99;">1、</span>请输入众筹名称</view>
 			<view class="content">
 				<span style="color: #666;">众筹名称</span>
-				<input type="text" placeholder="请输入众筹名称" placeholder-class="placeholder-style" v-model="fundingName"/>
+				<input type="text" placeholder="请输入众筹名称" placeholder-class="placeholder-style" v-model="fundingName" style="background-color: #ddd;"/>
 				
 				<span style="color: #666;">众筹描述(必填)</span>
-				<textarea type="text" placeholder="请输入众筹相关描述/注意事项" placeholder-class="placeholder-style" v-model="fundingNotice"/>
+				<textarea type="text" placeholder="请输入众筹相关描述/注意事项" placeholder-class="placeholder-style" v-model="fundingNotice" style="background-color: #ddd;"/>
 			</view>
 		</view>
 		<view class="second">
-			<view class="header"><span style="font-size: 24px; font-weight: 550; color: #34cd99;">2、</span>编辑众筹名称</view>
+			<view class="header"><span style="font-size: 24px; font-weight: 550; color: #34cd99;">2、</span>编辑众筹商品</view>
 			<view class="content">
-				<view class="img">
+				<view class="img" @click="chooseImage">
 					<img :src="fundingImg ? fundingImg : '/static/img/img.png'" alt="" />
-					<span @click="chooseImage">点击上传商品图片</span>
+					<span>点击上传商品图片</span>
 				</view>
 				<view class="count">
 					<view class="money">
@@ -26,6 +26,7 @@
 				</view>
 			</view>
 		</view>
+		<view style="width: 100%; height: 10vh;"></view>
 		<view class="next">
 			<view class="content" @click="goNext">
 				<span>下一步</span>
@@ -58,16 +59,17 @@
 				})
 			},
 			chooseImage() {
-				wx.chooseImage({
+				wx.chooseMedia({
 					count: 1,
-					sizeType: ['original', 'compressed'],
+					mediaType: ['image'],
 					sourceType: ['album', 'camera'],
 					success: async res => {
 						// tempFilePath可以作为img标签的src属性显示图片
-						const tempFilePaths = res.tempFilePaths;
+						const tempFilePaths = res.tempFiles[0].tempFilePath;
+						console.log(tempFilePaths)
 						uni.uploadFile({
 							url: 'http://110.42.228.141:10010/pin/uploadProdcutPicture',
-							filePath: tempFilePaths[0],
+							filePath: tempFilePaths,
 							name: 'file',
 							success: res => {
 								let data = JSON.parse(res.data);
@@ -78,6 +80,9 @@
 								console.log('uploadfile', error)
 							}
 						})
+					},
+					fail: err => {
+						console.log('choosefail', err);
 					}
 				})
 			}
@@ -111,6 +116,7 @@
 				}
 				.placeholder-style {
 					color: #666;
+					background-color: #ddd;
 				}
 			}
 		}
@@ -137,7 +143,7 @@
 						width: 16vw;
 						height: 16vw;
 						margin-bottom: 10px;
-						background-color: #ccc;
+						background-color: #ddd;
 					}
 					span {
 						font-size: 12px; 
@@ -153,6 +159,7 @@
 					.money {
 						display: flex;
 						align-items: center;
+						justify-content: space-between;
 						border-bottom: 1px #ccc solid;
 						margin-bottom: 10px;
 						.iptPoint {
@@ -161,6 +168,8 @@
 						}
 						span {
 							margin-right: 5px;
+							flex-grow: 1;
+							white-space: nowrap;
 						}
 					}	
 					.tips {
