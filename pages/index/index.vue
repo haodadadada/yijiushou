@@ -19,9 +19,6 @@
 		</view>
 		<!-- #endif -->
 		<view class="main-banner-wrap">
-<!-- 			<view class="main-banner">
-				<img src="/static/wenjuan.jpg" alt="" class="img-banner" @click="goQuestionnaire">
-			</view> -->
 			<swiper :autoplay="true" :interval="3000" :duration="1000" class="main-banner" style="width: 100%; height: 400rpx; margin-top: 10px;" :circular="true" >
 <!-- 				<swiper-item style="display: flex; justify-content: center;" @click="goActivity()">
 					<img src="https://www.19so.net/miniapp/lottery.jpg" alt="" style="width: 95%; height: 400rpx;">
@@ -34,29 +31,11 @@
 					<img src="https://www.19so.net/miniapp/banner.png" alt="" style="width: 95%; height: 400rpx; border-radius: 30px;">
 				</swiper-item>
 			</swiper>
-			<!-- <swiper class="swiper" :autoplay="true" :vertical="true" :interval="3000" :duration="1000">
-				<swiper-item v-for="item in noticeList" :key="item.id">
-					<view class="swiper-item">
-						<view class="title">接单大厅</view>
-						<image class="avatar" :src="item.avatar" mode="aspectFill"></image>
-						<view class="size-18">{{ item.nickname }}</view>
-						<view class="size-18">预约上门回收成功</view>
-					</view>
-				</swiper-item>
-			</swiper> -->
-<!-- 
-			<view class="menu">
-				<view class="item" v-for="item in menuList" :key="item.id" @click="routerPush(item.url,item.id)">
-					<image :src="item.icon" mode="aspectFill"></image>
-					<view class="title">{{ item.title }}</view>
-					<view class="title">{{ item.prize }} 元/公斤</view>
-				</view>
-			</view> -->
 			<view class="clearfix" style="">
 				<view class="menu" >
-					<view class="item" @click="soonComing">
+					<view class="item" @click="goCatRoom">
 						<img src="../../static/new4.png" alt="指南">
-						<span class="title">二手交易</span>
+						<span class="title">校喵池</span>
 					</view>
 					<view class="item" @click="openPrice">
 						<img src="../../static/new5.png" alt="分类">
@@ -66,10 +45,6 @@
 						<img src="../../static/shop.png" alt="商城">
 						<span class="title">积分商城</span>
 					</view>
-<!-- 					<view class="item" @click="makePhone('17682378225')">
-						<img src="../../static/new6.png" alt="客服">
-						<span class="title">客服中心</span>
-					</view> -->
 		
 				</view>
 				
@@ -417,6 +392,13 @@ export default {
 				url: `/pages/shop/shop?status=${status}`
 			})
 		},
+		
+		goCatRoom() {
+			uni.navigateTo({
+				url: '/pages/cat-room/cat-room'
+			})
+		},
+		
 		/** 自定义tabbar时切换高亮显示 */
 		handleTabBarShow (index) {
 			const page = this.$mp.page 

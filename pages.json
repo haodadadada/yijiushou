@@ -192,6 +192,34 @@
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#34cd99"
 			}
+		},
+		{
+			"path": "pages/cat-explain/cat-explain",
+			"style": {
+				"navigationBarTitleText": "校喵池",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/cat-upload/cat-upload",
+			"style": {
+				"navigationBarTitleText": "校喵池",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/cat-detail/cat-detail",
+			"style": {
+				"navigationBarTitleText": "校喵池",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/cat-room/cat-room",
+			"style": {
+				"navigationBarTitleText": "校喵池",
+				"enablePullDownRefresh": false
+			}
 		}
     ],
 	"tabBar": {

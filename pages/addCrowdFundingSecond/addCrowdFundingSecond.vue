@@ -46,7 +46,7 @@
 		<view class="footer">
 			<view class="content">
 				<view class="back" @click="goBack">
-					<img src="/static/icon/xiaoyuhao-white.png" alt="" style="width: 20px; height: 20px; margin-right: 10px;" />
+					<!-- <img src="/static/icon/xiaoyuhao-white.png" alt="" style="width: 20px; height: 20px; margin-right: 10px;" /> -->
 					<span>上一步</span>
 				</view>
 				<view class="submit" @click="handleSubmit">
@@ -264,17 +264,22 @@
 			.content {
 				display: flex;
 				justify-content: space-between;
+				
 				.back {
 					display: flex;
-					justify-content: space-between;
+					justify-content: center;
 					align-items: center;
-					padding: 10px 30px;
+					width: 35vw;
+					margin: 0 10vw;
+					padding: 10px 0;
 					color: #fff;
 					background-color: #34cd99;
 					border-radius: 10px;
 				}
 				.submit {
-					padding: 10px 30px;
+					width: 35vw;
+					margin-right: 10vw;
+					padding: 10px 0;
 					text-align: center;
 					color: #fff;
 					background-color: #34cd99;

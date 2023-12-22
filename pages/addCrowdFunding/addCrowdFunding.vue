@@ -30,7 +30,7 @@
 		<view class="next">
 			<view class="content" @click="goNext">
 				<span>下一步</span>
-				<img src="/static/icon/dayuhao-white.png" alt="" style="width: 20px; height: 20px;" />
+				<!-- <img src="/static/icon/dayuhao-white.png" alt="" style="width: 20px; height: 20px;" /> -->
 			</view>
 		</view>
 	</view>
