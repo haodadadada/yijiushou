@@ -20,7 +20,7 @@
 				<span class="nav-icon"></span>
 				<span>众筹说明</span>
 			</view>
-			<view class="item flex-center">
+			<view class="item flex-center" @click="gotoscience">
 				<span class="nav-icon"></span>
 				<span>科普中心</span>
 			</view>
@@ -124,6 +124,12 @@
 			confirmSetScale() {
 				this.setScale = false;
 			},
+			gotoscience(){
+				uni.navigateTo({
+					url: '/pages/cat-science/cat-science'
+				})
+			}
+			,
 			fundingExplain() {
 				uni.navigateTo({
 					url: '/pages/cat-explain/cat-explain'
