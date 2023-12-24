@@ -160,6 +160,12 @@
 			confirmSetScale() {
 				this.setScale = false;
 			},
+			gotoscience(){
+				uni.navigateTo({
+					url: '/pages/cat-science/cat-science'
+				})
+			}
+			,
 			fundingExplain() {
 				uni.navigateTo({
 					url: '/pages/cat-explain/cat-explain'
