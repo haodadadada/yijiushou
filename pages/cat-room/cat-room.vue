@@ -17,27 +17,41 @@
 		</view>
 		<view class="nav flex-around">
 			<view class="item flex-center" @click="fundingExplain">
-				<span class="nav-icon"></span>
-				<span>众筹说明</span>
+				<span class="nav-icon">
+					<img src="/static/cat/item1.png" alt="" mode="widthFix" />
+				</span>
+				<span style="font-size: 14px;">众筹说明</span>
 			</view>
 			<view class="item flex-center">
-				<span class="nav-icon"></span>
-				<span>科普中心</span>
+				<span class="nav-icon">
+					<img src="/static/cat/item2.png" alt="" mode="widthFix" />
+				</span>
+				<span style="font-size: 14px;">科普中心</span>
 			</view>
 			<view class="item flex-center">
-				<span class="nav-icon"></span>
-				<span>留言反馈</span>
+				<span class="nav-icon">
+					<img src="/static/cat/item3.png" alt="" mode="widthFix" />
+				</span>
+				<span style="font-size: 14px;">留言反馈</span>
 			</view>
 			<view class="item flex-center">
-				<span class="nav-icon"></span>
-				<span>关于我们</span>
+				<span class="nav-icon">
+					<img src="/static/cat/item4.png" alt="" mode="widthFix" />
+				</span>
+				<span style="font-size: 14px;">关于我们</span>
+			</view>
+			<view class="item flex-center" @click="goUpload">
+				<span class="nav-icon">
+					<img src="/static/cat/item5.png" alt="" mode="widthFix" />
+				</span>
+				<span style="font-size: 14px;">新喵上传</span>
 			</view>
 		</view>
 		<view class="contain">
 			<view class="top">
-				<span class="item">西校区</span>
-				<span class="item item-bgc">中校区</span>
-				<span class="item">东校区</span>
+				<span class="item" :class="{'item-bgc': status === 0}" @click="status = 0">西校区</span>
+				<span class="item" :class="{'item-bgc': status === 1}" @click="status = 1">中校区</span>
+				<span class="item" :class="{'item-bgc': status === 2}" @click="status = 2">东校区</span>
 			</view>
 			<view class="search">
 				<img src="/static/cat/search.png" alt=""/>
@@ -49,16 +63,18 @@
 					<span class="title-font">在校</span>
 				</view>
 				<view class="box-cat">
-					<view class="cat-school">
-						<view class="cat-item" @click="goCatDetail">
-							<img src="" alt="" />
-							<view class="name">111</view>
-						</view>
-						<view class="cat-item"></view>
-					</view>
+					<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="firstOptionStatus" @change="changeOption(0, $event)" >
+						<swiper-item style="display: flex;" v-for="(item, index) of firstOptionPage" :key="index">
+							<view class="cat-school">
+								<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
+									<img src="" alt="" />
+									<view class="name">111</view>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
 					<view class="cat-option flex-center">
-						<view class="cat-option-item choose"></view>
-						<view class="cat-option-item notchoose"></view>
+						<view class="cat-option-item" :class="{'choose': firstOptionStatus === index}" @click="firstOptionStatus = index" v-for="(item, index) of firstOptionPage" :key="index"></view>
 					</view>
 				</view>
 			</view>
@@ -68,16 +84,18 @@
 					<span class="title-font">毕业</span>
 				</view>
 				<view class="box-cat">
-					<view class="cat-school">
-						<view class="cat-item">
-							<img src="" alt="" />
-							<view class="name">111</view>
-						</view>
-						<view class="cat-item"></view>
-					</view>
+					<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="secondOptionStatus" @change="changeOption(1, $event)">
+						<swiper-item style="display: flex;" v-for="(item, index) of secondOptionPage" :key="index">
+							<view class="cat-school">
+								<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
+									<img src="" alt="" />
+									<view class="name">111</view>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
 					<view class="cat-option flex-center">
-						<view class="cat-option-item choose"></view>
-						<view class="cat-option-item notchoose"></view>
+						<view class="cat-option-item" :class="{'choose': secondOptionStatus === index}" @click="secondOptionStatus = index" v-for="(item, index) of secondOptionPage" :key="index"></view>
 					</view>
 				</view>
 			</view>
@@ -96,16 +114,24 @@
 					</view>
 					<view class="cat-option flex-center">
 						<view class="cat-option-item choose"></view>
-						<view class="cat-option-item notchoose"></view>
+						<view class="cat-option-item"></view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view style="width: 100vw; height: 5vh; background-color: #fff;"></view>
-		<u-modal :show="setScale" @confirm="confirmSetScale">
+		<u-modal :show="setScale" @confirm="confirmSetScale" :showConfirmButton="false">
 			<view class="modal">
 				<view class="icon" @click="setScale = false"></view>
 				<view class="title">设置投入比例</view>
+				<view class="main-word">
+					在设定了投入比例之后，您每次通过回收活动所获得的积分，将会根据这个事先设定好的比例自动投入到众筹池中。感谢您对校园猫咪的帮助～
+				</view>
+				<view class="process">
+					<span style="position: absolute; transform: translate(-10px); width: 16px; height: 16px; background-image: url(/static/cat/cat-icon.png); background-size: 100%; border-radius: 10px; padding: 2px; z-index: 1;" :style="'left:' + `${20}%`"></span>
+					<span style="position: absolute; flex-grow: 1; height: 20px; border-radius: 99999px;background-color: rgba(118, 196, 181, 1);" :style="'width:' + `${20}%`"></span>
+					<span style="flex-grow: 1; height: 20px; border-radius: 99999px; background-color: #ddd; opacity: .3;"></span>
+				</view>
 			</view>
 		</u-modal>
 	</view>
@@ -116,8 +142,18 @@
 		data() {
 			return {
 				windowHeight: '',
+				windowWidth: '',
 				rootHeight: '',
-				setScale: false
+				setScale: false,
+				status: 0,
+				optionCount: 0,
+				firstOptionStatus: 0,
+				firstOptionPage: 0,
+				firstOptionImgs: 10,
+				
+				secondOptionStatus: 0,
+				secondOptionPage: 0,
+				secondOptionImgs: 7
 			}
 		},
 		methods: {
@@ -133,17 +169,36 @@
 				uni.navigateTo({
 					url: '/pages/cat-detail/cat-detail'
 				})
+			},
+			goUpload() {
+				uni.navigateTo({
+					url: '/pages/cat-upload/cat-upload'
+				})
+			},
+			changeOption(index, e) {
+				if(index === 0) {
+					this.firstOptionStatus = e.detail.current;
+				}
+				else if(index === 1) {
+					this.secondOptionStatus = e.detail.current;
+				}
 			}
 		},
 		onLoad() {
 			uni.getSystemInfo({
 				success: res => {
 					this.windowHeight = res.windowHeight;
+					this.windowWidth = res.windowWidth;
 				}
 			})
 			uni.createSelectorQuery().select('.container').boundingClientRect().exec(data => {
 				this.rootHeight = data[0].height;
 			})
+			// this.firstOptionPage = Math.ceil();
+			// 一页的数量
+			this.optionCount = Math.floor(this.windowWidth * 0.92 / 80);
+			this.firstOptionPage = Math.ceil(this.firstOptionImgs / this.optionCount);
+			this.secondOptionPage = Math.ceil(this.secondOptionImgs / this.optionCount);
 		}
 	}
 </script>
@@ -197,9 +252,9 @@
 				flex-direction: column;
 			}
 			.nav-icon {
-				width: 16px; 
-				height: 16px; 
-				background-color: pink;
+				img {
+					width: 27px;
+				}
 			}
 		}
 		.contain {
@@ -259,9 +314,10 @@
 				.box-cat {
 					.cat-school {
 						display: flex;
-						flex-wrap: wrap;
+						flex-wrap: nowrap;
 						margin-bottom: 10px;
 						.cat-item {
+							flex-shrink: 0;
 							display: flex;
 							flex-direction: column;
 							overflow: hidden;
@@ -287,16 +343,15 @@
 					}
 					.cat-option {
 						.cat-option-item {
+							transition: .3s;
 							height: 5px;
 							background-color: rgba(118, 196, 181, 1);
 							border-radius: 9999px;
 							margin-right: 5px;
+							width: 12px;
 						}
 						.choose {
-							width: 15px;
-						}
-						.notchoose {
-							width: 8px;
+							width: 20px;
 						}
 					}
 				}
@@ -316,9 +371,27 @@
 		.title {
 			opacity: 1;
 			font-size: 16px;
-			font-weight: 500;
+			font-weight: 550;
 			line-height: 21.95px;
 			vertical-align: top;
+			text-align: center;
+			margin-bottom: 5px;
+		}
+		.main-word {
+			opacity: 1;
+			font-size: 12px;
+			font-weight: 400;
+			letter-spacing: 0px;
+			line-height: 13.72px;
+			text-align: left;
+			vertical-align: top;
+			margin-bottom: 10px;
+		}
+		.process {
+			display: flex;
+			align-items: center;
+			position: relative;
+			margin-bottom: 5px;
 		}
 	}
 
