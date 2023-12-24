@@ -25,6 +25,7 @@
 					<span class="info-item-value">xxxxxxx</span>
 				</view>
 			</view>
+			<view class="upload-img" :style="{'--height-info': infoHeight + 'px'}" @click="goUploadImg"></view>
 			<view class="photos">
 				<view class="title">xx的照片墙(共xx张)</view>
 				<view>
@@ -44,7 +45,15 @@
 			return {
 				windowHeight: '',
 				rootHeight: '',
-				bgcHeight: ''
+				bgcHeight: '',
+				infoHeight: ''
+			}
+		},
+		methods: {
+			goUploadImg() {
+				uni.navigateTo({
+					url: '/pages/cat-upload-img/cat-upload-img'
+				})
 			}
 		},
 		onLoad() {
@@ -58,6 +67,9 @@
 			})
 			uni.createSelectorQuery().select('.bgc').boundingClientRect().exec(data => {
 				this.bgcHeight = data[0].height;
+			})
+			uni.createSelectorQuery().select('.info').boundingClientRect().exec(data => {
+				this.infoHeight = data[0].height;
 			})
 		}
 	}
@@ -119,6 +131,15 @@
 						font-size: 12px;
 					}
 				}
+			}
+			.upload-img {
+				position: absolute;
+				right: 20px;
+				top: calc(var(--height-info) + 30vh - 70px);
+				width: 32px;
+				height: 32px;
+				border-radius: 9999px;
+				background-color: rgba(118, 196, 181, 1);
 			}
 			.photos {
 				flex: 1;

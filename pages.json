@@ -246,8 +246,15 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-            
-        }
+        },
+		{
+		    "path" : "pages/cat-upload-img/cat-upload-img",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "图片上传栏",
+		        "enablePullDownRefresh": false
+		    }
+		}
     ],
 	"tabBar": {
 		"color": "#606060",

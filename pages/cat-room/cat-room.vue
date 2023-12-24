@@ -8,7 +8,7 @@
 				</view>
 				<view class="flex-between bottom">
 					<span @click="setScale = true">设置投入比例</span>
-					<span>投入现有积分</span>
+					<span @click="setScore = true">投入现有积分</span>
 				</view>
 			</view>
 			<view class="right">
@@ -22,7 +22,7 @@
 				</span>
 				<span style="font-size: 14px;">众筹说明</span>
 			</view>
-			<view class="item flex-center">
+			<view class="item flex-center" @click="gotoscience">
 				<span class="nav-icon">
 					<img src="/static/cat/item2.png" alt="" mode="widthFix" />
 				</span>
@@ -134,6 +134,23 @@
 				</view>
 			</view>
 		</u-modal>
+		<u-modal :show="setScore" @confirm="confirmSetScore" :showConfirmButton="false">
+			<view class="modal">
+				<view class="icon" @click="setScore = false"></view>
+				<view class="title">投入现有积分</view>
+				<view class="main-word">
+					您可以自行输入要投入到众筹池中的积分数，从当前已有的积分中，输入一定数量的积分投入众筹池。感谢您对校园猫咪的帮助～
+				</view>
+				<view class="current-score flex">
+					<view style="margin-right: 10px;">当前积分:</view>
+					<view style="color: rgba(118, 196, 181, 1);">xxxx</view>
+				</view>
+				<view class="enter-score flex">
+					<view style="margin-right: 10px;">请输入投入的积分:</view>
+					<input type="number" style="background-color: #ddd; padding: 3px 10px; flex: 1; border-radius: 10px; font-size: 12px;" />
+				</view>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -145,6 +162,8 @@
 				windowWidth: '',
 				rootHeight: '',
 				setScale: false,
+				setScore: false,
+				
 				status: 0,
 				optionCount: 0,
 				firstOptionStatus: 0,
@@ -160,12 +179,14 @@
 			confirmSetScale() {
 				this.setScale = false;
 			},
+			confirmSetScore() {
+				this.setScore = false;
+			},
 			gotoscience(){
 				uni.navigateTo({
 					url: '/pages/cat-science/cat-science'
 				})
-			}
-			,
+			},
 			fundingExplain() {
 				uni.navigateTo({
 					url: '/pages/cat-explain/cat-explain'
@@ -398,6 +419,9 @@
 			align-items: center;
 			position: relative;
 			margin-bottom: 5px;
+		}
+		.current-score {
+			margin-bottom: 10px;
 		}
 	}
 
