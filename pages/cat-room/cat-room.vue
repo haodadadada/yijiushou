@@ -15,7 +15,7 @@
 				
 			</view>
 		</view>
-		<view class="nav flex-around">
+		<view class="nav">
 			<view class="item flex-center" @click="fundingExplain">
 				<span class="nav-icon">
 					<img src="/static/cat/item1.png" alt="" mode="widthFix" />
@@ -49,75 +49,82 @@
 		</view>
 		<view class="contain">
 			<view class="top">
-				<span class="item" :class="{'item-bgc': status === 0}" @click="status = 0">西校区</span>
-				<span class="item" :class="{'item-bgc': status === 1}" @click="status = 1">中校区</span>
-				<span class="item" :class="{'item-bgc': status === 2}" @click="status = 2">东校区</span>
+				<span class="item" :class="{'item-bgc': locationStatus === 0}" @click="locationStatus = 0">西校区</span>
+				<span class="item" :class="{'item-bgc': locationStatus === 1}" @click="locationStatus = 1">中校区</span>
+				<span class="item" :class="{'item-bgc': locationStatus === 2}" @click="locationStatus = 2">东校区</span>
 			</view>
 			<view class="search">
 				<img src="/static/cat/search.png" alt=""/>
 				<input type="text" placeholder="请输入猫咪昵称进行查找" placeholder-style="color: rgba(118, 196, 181, 1); font-size: 12px;" />
 			</view>
-			<view class="box-item">
-				<view class="title">
-					<span class="title-icon"></span>
-					<span class="title-font">在校</span>
-				</view>
-				<view class="box-cat">
-					<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="firstOptionStatus" @change="changeOption(0, $event)" >
-						<swiper-item style="display: flex;" v-for="(item, index) of firstOptionPage" :key="index">
-							<view class="cat-school">
-								<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
-									<img src="" alt="" />
-									<view class="name">111</view>
-								</view>
-							</view>
-						</swiper-item>
-					</swiper>
-					<view class="cat-option flex-center">
-						<view class="cat-option-item" :class="{'choose': firstOptionStatus === index}" @click="firstOptionStatus = index" v-for="(item, index) of firstOptionPage" :key="index"></view>
+			<view class="box-cat" v-if="locationStatus === 0">
+				<view class="box-item">
+					<view class="title">
+						<span class="title-icon"></span>
+						<span class="title-font">在校</span>
 					</view>
-				</view>
-			</view>
-			<view class="box-item">
-				<view class="title">
-					<span class="title-icon"></span>
-					<span class="title-font">毕业</span>
-				</view>
-				<view class="box-cat">
-					<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="secondOptionStatus" @change="changeOption(1, $event)">
-						<swiper-item style="display: flex;" v-for="(item, index) of secondOptionPage" :key="index">
-							<view class="cat-school">
-								<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
-									<img src="" alt="" />
-									<view class="name">111</view>
+					<view class="box-cat">
+						<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="firstOptionStatus" @change="changeOption(0, $event)" >
+							<swiper-item style="display: flex;" v-for="(item, pageIndex) of firstOptionPage" :key="pageIndex">
+								<view class="cat-school">
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index" v-if="pageIndex !== firstOptionPage - 1">
+										<img src="" alt="" />
+										<view class="name">{{catInfo[0][index + pageIndex * optionCount].name}}</view>
+									</view>
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of (firstOptionImgs - pageIndex * optionCount)" :key="index" v-else>
+										<img src="" alt="" />
+										<view class="name">{{catInfo[0][index + pageIndex * optionCount].name}}</view>
+									</view>
 								</view>
-							</view>
-						</swiper-item>
-					</swiper>
-					<view class="cat-option flex-center">
-						<view class="cat-option-item" :class="{'choose': secondOptionStatus === index}" @click="secondOptionStatus = index" v-for="(item, index) of secondOptionPage" :key="index"></view>
-					</view>
-				</view>
-			</view>
-			<view class="box-item">
-				<view class="title">
-					<span class="title-icon"></span>
-					<span class="title-font">喵星</span>
-				</view>
-				<view class="box-cat">
-					<view class="cat-school">
-						<view class="cat-item">
-							<img src="" alt="" />
-							<view class="name">111</view>
+							</swiper-item>
+						</swiper>
+						<view class="cat-option flex-center">
+							<view class="cat-option-item" :class="{'choose': firstOptionStatus === index}" @click="firstOptionStatus = index" v-for="(item, index) of firstOptionPage" :key="index"></view>
 						</view>
-						<view class="cat-item"></view>
 					</view>
-					<view class="cat-option flex-center">
-						<view class="cat-option-item choose"></view>
-						<view class="cat-option-item"></view>
+				</view>
+				<view class="box-item">
+					<view class="title">
+						<span class="title-icon"></span>
+						<span class="title-font">毕业</span>
+					</view>
+					<view class="box-cat">
+						<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="secondOptionStatus" @change="changeOption(1, $event)">
+							<swiper-item style="display: flex;" v-for="(item, index) of secondOptionPage" :key="index">
+								<view class="cat-school">
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
+										<img src="" alt="" />
+										<view class="name">111</view>
+									</view>
+								</view>
+							</swiper-item>
+						</swiper>
+						<view class="cat-option flex-center">
+							<view class="cat-option-item" :class="{'choose': secondOptionStatus === index}" @click="secondOptionStatus = index" v-for="(item, index) of secondOptionPage" :key="index"></view>
+						</view>
+					</view>
+				</view>
+				<view class="box-item">
+					<view class="title">
+						<span class="title-icon"></span>
+						<span class="title-font">喵星</span>
+					</view>
+					<view class="box-cat">
+						<view class="cat-school">
+							<view class="cat-item">
+								<img src="" alt="" />
+								<view class="name">111</view>
+							</view>
+							<view class="cat-item"></view>
+						</view>
+						<view class="cat-option flex-center">
+							<view class="cat-option-item choose"></view>
+							<view class="cat-option-item"></view>
+						</view>
 					</view>
 				</view>
 			</view>
+
 		</view>
 		<view style="width: 100vw; height: 5vh; background-color: #fff;"></view>
 		<u-modal :show="setScale" @confirm="confirmSetScale" :showConfirmButton="false">
@@ -164,15 +171,17 @@
 				setScale: false,
 				setScore: false,
 				
-				status: 0,
+				locationStatus: 0,
+				catInfo: [],
 				optionCount: 0,
+				
 				firstOptionStatus: 0,
 				firstOptionPage: 0,
-				firstOptionImgs: 10,
+				firstOptionImgs: 0,
 				
 				secondOptionStatus: 0,
 				secondOptionPage: 0,
-				secondOptionImgs: 7
+				secondOptionImgs: 0
 			}
 		},
 		methods: {
@@ -209,6 +218,22 @@
 				else if(index === 1) {
 					this.secondOptionStatus = e.detail.current;
 				}
+			},
+			async homepageDisplay() {
+				console.log('000');
+				let result = await this.$api.homepageDisplay();
+				if(result.code === 200) {
+					this.catInfo = result.data;
+					
+					this.firstOptionImgs = this.catInfo[0].length;
+					this.secondOptionImgs = this.catInfo[1].length;
+					this.firstOptionPage = Math.ceil(this.firstOptionImgs / this.optionCount);
+					this.secondOptionPage = Math.ceil(this.secondOptionImgs / this.optionCount);
+				}
+				else {
+					this.$tools.toast('获取信息失败');
+				}
+				console.log('111', result);
 			}
 		},
 		onLoad() {
@@ -221,11 +246,11 @@
 			uni.createSelectorQuery().select('.container').boundingClientRect().exec(data => {
 				this.rootHeight = data[0].height;
 			})
-			// this.firstOptionPage = Math.ceil();
 			// 一页的数量
 			this.optionCount = Math.floor(this.windowWidth * 0.92 / 80);
-			this.firstOptionPage = Math.ceil(this.firstOptionImgs / this.optionCount);
-			this.secondOptionPage = Math.ceil(this.secondOptionImgs / this.optionCount);
+		},
+		onShow() {
+			this.homepageDisplay();
 		}
 	}
 </script>
@@ -274,6 +299,9 @@
 			}
 		}
 		.nav {
+			display: flex;
+			justify-content: space-around;
+			align-items: flex-end;
 			margin-top: 20px;
 			.item {
 				flex-direction: column;

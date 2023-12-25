@@ -778,6 +778,18 @@ const getOrderUserAvatar = data => {
 	})
 }
 
+const homepageDisplay = () => {
+	return http.get({
+		url: '/cat/homepageDisplay'
+	})
+}
+
+const catAdd = data => {
+	return http.post({
+		url: '/cat/upload/catAdd',
+		data
+	})
+}
 
 export default {
 	angelApply,
@@ -861,5 +873,7 @@ export default {
 	joinPinProduct,
 	startPinProduct,
 	getPointPinOrder,
-	getOrderUserAvatar
+	getOrderUserAvatar,
+	homepageDisplay,
+	catAdd
 }

@@ -23,7 +23,9 @@
 				</view>
 				<view class="info-item">
 					<view class="left">图片</view>
-					<view class="item"></view>
+					<view class="item">
+						<img :src="tempFilePaths" alt="" style="width: 100%; height: 100%;"/>
+					</view>
 					<view style="display: flex;">
 						<view class="img" @click="chooseImage">
 							<img src="/static/img/img.png" alt="" />
@@ -38,7 +40,7 @@
 				</view>
 			</view>
 			<view class="bottom flex-center">
-				<view class="submit-btn">提交</view>
+				<view class="submit-btn" @click="submit">提交</view>
 			</view>
 		</view>
 	</view>
@@ -48,7 +50,7 @@
 	export default {
 		data() {
 			return {
-				
+				tempFilePaths: ''
 			}
 		},
 		methods: {
@@ -59,12 +61,17 @@
 					sourceType: ['album', 'camera'],
 					success: async res => {
 						// tempFilePath可以作为img标签的src属性显示图片
-						const tempFilePaths = res.tempFiles[0].tempFilePath;
-						console.log(tempFilePaths)
+						this.tempFilePaths = res.tempFiles[0].tempFilePath;
+						console.log(this.tempFilePaths)
 					},
 					fail: err => {
 						console.log('choosefail', err);
 					}
+				})
+			},
+			submit() {
+				this.$api.catAdd({
+					
 				})
 			}
 		}
