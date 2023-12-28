@@ -4,10 +4,10 @@
 			<view class="left">
 				<view class="top">
 					<view>猫咪众筹池</view>
-					<view>当前积分：<span>xxxx</span></view>
+					<view>当前积分：<span>{{userPoint}}</span></view>
 				</view>
 				<view class="flex-between bottom">
-					<span @click="setScale = true">设置投入比例</span>
+					<span @click="handleSetScale">设置投入比例</span>
 					<span @click="setScore = true">投入现有积分</span>
 				</view>
 			</view>
@@ -57,7 +57,7 @@
 				<img src="/static/cat/search.png" alt=""/>
 				<input type="text" placeholder="请输入猫咪昵称进行查找" placeholder-style="color: rgba(118, 196, 181, 1); font-size: 12px;" />
 			</view>
-			<view class="box-cat" v-if="locationStatus === 0">
+			<view class="box-cat">
 				<view class="box-item">
 					<view class="title">
 						<span class="title-icon"></span>
@@ -65,21 +65,23 @@
 					</view>
 					<view class="box-cat">
 						<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="firstOptionStatus" @change="changeOption(0, $event)" >
-							<swiper-item style="display: flex;" v-for="(item, pageIndex) of firstOptionPage" :key="pageIndex">
-								<view class="cat-school">
-									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index" v-if="pageIndex !== firstOptionPage - 1">
-										<img src="" alt="" />
-										<view class="name">{{catInfo[0][index + pageIndex * optionCount].name}}</view>
-									</view>
-									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of (firstOptionImgs - pageIndex * optionCount)" :key="index" v-else>
-										<img src="" alt="" />
-										<view class="name">{{catInfo[0][index + pageIndex * optionCount].name}}</view>
+							<swiper-item style="display: flex;" v-for="(item, pageIndex) of firstOptionPage[locationStatus]" :key="pageIndex">
+								<view class="cat-school" v-if="pageIndex !== firstOptionPage[locationStatus] - 1">
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="catInfo[locationStatus][0][index + pageIndex * optionCount].id" >
+										<img :src="catInfo[locationStatus][0][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][0][index + pageIndex * optionCount].name}}</view>
 									</view>
 								</view>
-							</swiper-item>
+								<view class="cat-school" v-else>
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of (firstOptionImgs[locationStatus] - pageIndex * optionCount)" :key="catInfo[locationStatus][0][index + pageIndex * optionCount].id">
+										<img :src="catInfo[locationStatus][0][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][0][index + pageIndex * optionCount].name}}</view>
+									</view>
+								</view>
+							</swiper-item> 
 						</swiper>
-						<view class="cat-option flex-center">
-							<view class="cat-option-item" :class="{'choose': firstOptionStatus === index}" @click="firstOptionStatus = index" v-for="(item, index) of firstOptionPage" :key="index"></view>
+						<view class="cat-option flex-center" v-if="firstOptionPage[locationStatus] !== 1">
+							<view class="cat-option-item" :class="{'choose': firstOptionStatus === index}" @click="firstOptionStatus = index" v-for="(item, index) of firstOptionPage[locationStatus]" :key="index" ></view>
 						</view>
 					</view>
 				</view>
@@ -90,17 +92,23 @@
 					</view>
 					<view class="box-cat">
 						<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="secondOptionStatus" @change="changeOption(1, $event)">
-							<swiper-item style="display: flex;" v-for="(item, index) of secondOptionPage" :key="index">
-								<view class="cat-school">
-									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="index">
-										<img src="" alt="" />
-										<view class="name">111</view>
+							<swiper-item style="display: flex;" v-for="(item, pageIndex) of secondOptionPage[locationStatus]" :key="pageIndex">
+								<view class="cat-school" v-if="pageIndex !== secondOptionPage[locationStatus] - 1">
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="catInfo[locationStatus][1][index + pageIndex * optionCount].id">
+										<img :src="catInfo[locationStatus][1][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][1][index + pageIndex * optionCount].name}}</view>
+									</view>
+								</view>
+								<view class="cat-school" v-else>
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of (secondOptionImgs[locationStatus] - pageIndex * optionCount)" :key="catInfo[locationStatus][1][index + pageIndex * optionCount].id">
+										<img :src="catInfo[locationStatus][1][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][1][index + pageIndex * optionCount].name}}</view>
 									</view>
 								</view>
 							</swiper-item>
 						</swiper>
-						<view class="cat-option flex-center">
-							<view class="cat-option-item" :class="{'choose': secondOptionStatus === index}" @click="secondOptionStatus = index" v-for="(item, index) of secondOptionPage" :key="index"></view>
+						<view class="cat-option flex-center" v-if="secondOptionPage[locationStatus] !== 1">
+							<view class="cat-option-item" :class="{'choose': secondOptionStatus === index}" @click="secondOptionStatus = index" v-for="(item, index) of secondOptionPage[locationStatus]" :key="index"></view>
 						</view>
 					</view>
 				</view>
@@ -110,16 +118,24 @@
 						<span class="title-font">喵星</span>
 					</view>
 					<view class="box-cat">
-						<view class="cat-school">
-							<view class="cat-item">
-								<img src="" alt="" />
-								<view class="name">111</view>
-							</view>
-							<view class="cat-item"></view>
-						</view>
-						<view class="cat-option flex-center">
-							<view class="cat-option-item choose"></view>
-							<view class="cat-option-item"></view>
+						<swiper :autoplay="false"class="main-banner" style="width: 100%; height: 75px; margin-top: 10px;" :circular="true" :current="thirdOptionStatus" @change="changeOption(2, $event)">
+							<swiper-item style="display: flex;" v-for="(item, pageIndex) of thirdOptionPage[locationStatus]" :key="pageIndex">
+								<view class="cat-school" v-if="pageIndex !== thirdOptionPage[locationStatus] - 1">
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of optionCount" :key="catInfo[locationStatus][2][index + pageIndex * optionCount].id">
+										<img :src="catInfo[locationStatus][2][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][2][index + pageIndex * optionCount].name}}</view>
+									</view>
+								</view>
+								<view class="cat-school" v-else>
+									<view class="cat-item" @click="goCatDetail" v-for="(item, index) of (thirdOptionImgs[locationStatus] - pageIndex * optionCount)" :key="catInfo[locationStatus][2][index + pageIndex * optionCount].id">
+										<img :src="catInfo[locationStatus][2][index + pageIndex * optionCount].img" alt="" />
+										<view class="name">{{catInfo[locationStatus][2][index + pageIndex * optionCount].name}}</view>
+									</view>
+								</view>
+							</swiper-item>
+						</swiper>
+						<view class="cat-option flex-center" v-if="thirdOptionPage[locationStatus] !== 1">
+							<view class="cat-option-item" :class="{'choose': thirdOptionStatus === index}" @click="thirdOptionStatus = index" v-for="(item, index) of thirdOptionPage[locationStatus]" :key="index"></view>
 						</view>
 					</view>
 				</view>
@@ -127,7 +143,7 @@
 
 		</view>
 		<view style="width: 100vw; height: 5vh; background-color: #fff;"></view>
-		<u-modal :show="setScale" @confirm="confirmSetScale" :showConfirmButton="false">
+		<u-modal :show="setScale" :showConfirmButton="false">
 			<view class="modal">
 				<view class="icon" @click="setScale = false"></view>
 				<view class="title">设置投入比例</view>
@@ -135,10 +151,14 @@
 					在设定了投入比例之后，您每次通过回收活动所获得的积分，将会根据这个事先设定好的比例自动投入到众筹池中。感谢您对校园猫咪的帮助～
 				</view>
 				<view class="process">
-					<span style="position: absolute; transform: translate(-10px); width: 16px; height: 16px; background-image: url(/static/cat/cat-icon.png); background-size: 100%; border-radius: 10px; padding: 2px; z-index: 1;" :style="'left:' + `${20}%`"></span>
-					<span style="position: absolute; flex-grow: 1; height: 20px; border-radius: 99999px;background-color: rgba(118, 196, 181, 1);" :style="'width:' + `${20}%`"></span>
+					<span class="processIcon" @touchmove="touchMove" @touchstart="touchStart" style="position: absolute; transform: translate(-10px); width: 20px; height: 20px; border-radius: 10px; z-index: 1;" :style="'left:' + `${iconLeftPrecent}%`">
+						<img src="/static/cat/cat-icon.png" alt=""  style="width: 100%; height: 100%;"/>
+					</span>
+					<span style="position: absolute; flex-grow: 1; height: 20px; border-radius: 99999px; background-color: rgba(118, 196, 181, 1);" :style="'width:' + `${iconLeftPrecent}%`"></span>
 					<span style="flex-grow: 1; height: 20px; border-radius: 99999px; background-color: #ddd; opacity: .3;"></span>
 				</view>
+				<span>{{Math.floor(iconLeftPrecent)}}</span>
+				<view class="flex-center" style="margin-top: 50px; text-align: center; color: #fff;"><span style="width: 40vw; padding: 5px; background-color: rgba(118, 196, 181, 1); border-radius: 10px;" @click="confirmSetScale">确定</span></view>
 			</view>
 		</u-modal>
 		<u-modal :show="setScore" @confirm="confirmSetScore" :showConfirmButton="false">
@@ -150,7 +170,7 @@
 				</view>
 				<view class="current-score flex">
 					<view style="margin-right: 10px;">当前积分:</view>
-					<view style="color: rgba(118, 196, 181, 1);">xxxx</view>
+					<view style="color: rgba(118, 196, 181, 1);">{{userPoint}}</view>
 				</view>
 				<view class="enter-score flex">
 					<view style="margin-right: 10px;">请输入投入的积分:</view>
@@ -165,6 +185,8 @@
 	export default {
 		data() {
 			return {
+				userInfo: {},
+				userPoint: '',
 				windowHeight: '',
 				windowWidth: '',
 				rootHeight: '',
@@ -175,17 +197,52 @@
 				catInfo: [],
 				optionCount: 0,
 				
+				// 第几页
 				firstOptionStatus: 0,
-				firstOptionPage: 0,
-				firstOptionImgs: 0,
+				firstOptionPage: [],
+				firstOptionImgs: [],
 				
 				secondOptionStatus: 0,
-				secondOptionPage: 0,
-				secondOptionImgs: 0
+				secondOptionPage: [],
+				secondOptionImgs: [],
+				
+				thirdOptionStatus: 0,
+				thirdOptionPage: [],
+				thirdOptionImgs: [],
+				
+				iconLeftPrecent: 100,
+				processWidth: '',
+				processLeft: ''
 			}
 		},
 		methods: {
-			confirmSetScale() {
+			handleSetScale() {
+				this.setScale = true;
+			},
+			touchStart() {
+				this.getProcessWidth();
+			},
+			touchMove(event) {
+				this.iconLeftPrecent = ((event.changedTouches[0].clientX - this.processLeft) / this.processWidth) * 100;
+				if(this.iconLeftPrecent <= 0) {
+					this.iconLeftPrecent = 0;
+				}
+				else if(this.iconLeftPrecent >= 100){
+					this.iconLeftPrecent = 100;
+				}
+			},
+			getProcessWidth() {
+				uni.createSelectorQuery().select('.process').boundingClientRect().exec(data => {
+					this.processWidth = data[0].width;
+					this.processLeft = data[0].left;
+				})
+			},
+			async confirmSetScale() {
+				let res = await this.$api.setUserInputRatio({
+					id: this.userInfo.openid,
+					ratio: Math.floor(this.iconLeftPrecent)
+				})
+				console.log(res);
 				this.setScale = false;
 			},
 			confirmSetScore() {
@@ -218,25 +275,42 @@
 				else if(index === 1) {
 					this.secondOptionStatus = e.detail.current;
 				}
+				else if(index === 2) {
+					this.thirdOptionStatus = e.detail.current;
+				}
 			},
 			async homepageDisplay() {
-				console.log('000');
 				let result = await this.$api.homepageDisplay();
 				if(result.code === 200) {
 					this.catInfo = result.data;
+					console.log(this.catInfo);
+					this.firstOptionImgs = [this.catInfo[0][0].length, this.catInfo[1][0].length, this.catInfo[2][0].length];
+					this.secondOptionImgs = [this.catInfo[0][1].length, this.catInfo[1][1].length, this.catInfo[2][1].length];
+					this.thirdOptionImgs = [this.catInfo[0][2].length, this.catInfo[1][2].length, this.catInfo[2][2].length];
 					
-					this.firstOptionImgs = this.catInfo[0].length;
-					this.secondOptionImgs = this.catInfo[1].length;
-					this.firstOptionPage = Math.ceil(this.firstOptionImgs / this.optionCount);
-					this.secondOptionPage = Math.ceil(this.secondOptionImgs / this.optionCount);
+					this.firstOptionPage = [Math.ceil(this.firstOptionImgs[0] / this.optionCount), Math.ceil(this.firstOptionImgs[1] / this.optionCount), Math.ceil(this.firstOptionImgs[2] / this.optionCount)];
+					this.secondOptionPage = [Math.ceil(this.secondOptionImgs[0] / this.optionCount), Math.ceil(this.secondOptionImgs[1] / this.optionCount), Math.ceil(this.secondOptionImgs[2] / this.optionCount)];
+					this.thirdOptionPage = [Math.ceil(this.thirdOptionImgs[0] / this.optionCount), Math.ceil(this.thirdOptionImgs[1] / this.optionCount), Math.ceil(this.thirdOptionImgs[2] / this.optionCount)];
 				}
 				else {
 					this.$tools.toast('获取信息失败');
 				}
-				console.log('111', result);
+			},
+			async getUserPoint() {
+				let res = await this.$api.getUserPoint({
+					id: this.userInfo.openid
+				})
+				if(res.code === 200) {
+					this.userPoint = res.data;
+				}
+				else {
+					this.$tools.toast('获取积分失败');
+				}
 			}
 		},
 		onLoad() {
+			this.userInfo = uni.getStorageSync('userInfo');
+			this.getUserPoint();
 			uni.getSystemInfo({
 				success: res => {
 					this.windowHeight = res.windowHeight;
@@ -353,6 +427,10 @@
 			}
 			.box-item {
 				margin-top: 10px;
+				img {
+					width: 100%;
+					height: 100%;
+				}
 				.title {
 					display: flex;
 					align-items: center;

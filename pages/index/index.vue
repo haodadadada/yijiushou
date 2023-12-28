@@ -394,6 +394,15 @@ export default {
 		},
 		
 		goCatRoom() {
+			if(!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				setTimeout(() => {
+					uni.switchTab({
+						url: '/pages/user/user'
+					})
+				}, 500)
+				return;
+			}
 			uni.navigateTo({
 				url: '/pages/cat-room/cat-room'
 			})

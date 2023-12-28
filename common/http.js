@@ -155,9 +155,92 @@ const post = async (options) => {
 	})
 }
 
+const put = async (options) => {
+	return new Promise((resolve, reject) => {
+		uni.showLoading({
+			title: '加载中..'
+		})
+		try {
+			if (process.env.NODE_ENV === 'development') {
+				BASE_URL=DEV_BASE_URL;
+			} else {
+				BASE_URL=PROD_BASE_URL;
+			}
+			uni.request({
+				url: (options.BASE_URL || BASE_URL) + options.url,
+				method: 'PUT',
+				data: options.data,
+				header: {
+					'content-Type': options.header || 'application/x-www-form-urlencoded',
+				},
+				success: res => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+					if (res.statusCode == 200) {
+						if(res.data.code==-1){
+							uni.showModal({
+								title:'请先登录',
+								showCancel:false,
+								success: (res) => {
+									if(res.confirm){
+										uni.navigateTo({
+											url:'/pages/login/login'
+										})
+									}
+								}
+							})
+						}else{
+							resolve(res.data)
+						}
+					}
+					if (res.statusCode == 401) {
+						uni.showToast({
+							title: '请先登录',
+							icon: 'none'
+						})
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/user/user',
+							})
+						}, 50)
+					}
+					if (res.statusCode == 500) {
+						uni.showToast({
+							title: '系统错误，请稍后重试',
+							icon: 'none'
+						})
+					}
+					
+					if(res.statusCode == 400) {
+						reject(res);
+					}
+				},
+				fail: err => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+					reject(err.data)
+				},
+				complete: () => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+				}
+			})
+		} catch (e) {
+			uni.stopPullDownRefresh()
+			uni.hideLoading()
+			uni.showToast({
+				title: '服务器或网络异常，请稍候重试',
+				icon: 'none'
+			})
+		}
+	})
+}
+
+
 export default {
 	BASE_URL,
 	get,
 	post,
+	put,
 	IMG_URL
 }

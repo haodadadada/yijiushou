@@ -787,6 +787,21 @@ const homepageDisplay = () => {
 const catAdd = data => {
 	return http.post({
 		url: '/cat/upload/catAdd',
+		data,
+		header:'application/json',
+	})
+}
+
+const picturesToCat = data => {
+	return http.put({
+		url: '/cat/upload/picturesToCat',
+		data
+	})
+}
+
+const setUserInputRatio = data => {
+	return http.post({
+		url: '/cat/setUserInputRatio',
 		data
 	})
 }
@@ -875,5 +890,7 @@ export default {
 	getPointPinOrder,
 	getOrderUserAvatar,
 	homepageDisplay,
-	catAdd
+	catAdd,
+	picturesToCat,
+	setUserInputRatio
 }
