@@ -2,14 +2,16 @@
 	<view class="container">
 		<view class="header">
 			<view class="icon flex">
-				<img src="" alt="" />
+				<img src="/static/cat/item5.png" alt="" />
 				<view>新喵上传</view>
 			</view>
 			<view class="tip">若您发现有新猫咪未被收录进校喵池，可填写相关信息然后点击上传，管理员进行核实后会及时更新校喵池～</view>
 		</view>
 		<view class="contain">
 			<view class="top flex">
-				<view class="icon"></view>
+				<view class="icon">
+					<img src="/static/cat/cat-icon.png" alt="" style="width: 100%; height: 100%;" />
+				</view>
 				<view class="title">信息表</view>
 			</view>
 			<view class="info">
@@ -55,6 +57,7 @@
 				catArea: '',
 				catFeature: '',
 				catImgs: [],
+				catImgString: '',
 				otherTip: '',
 			}
 		},
@@ -70,6 +73,7 @@
 						for(let i = 0; i < tempFiles.length; i++) {
 							uni.uploadFile({
 								url: 'http://110.42.228.141:10010/cat/upload/pictures', //仅为示例，非真实的接口地址
+								// url: 'http://192.168.1.219:10010/cat/upload/pictures',
 								filePath: tempFiles[i].tempFilePath,
 								name: 'files',
 								formData: {
@@ -77,7 +81,10 @@
 								},
 								success: (uploadFileRes) => {
 									let res = JSON.parse(uploadFileRes.data);
+									console.log(res.data[0])
 									this.catImgs.push(res.data[0]);
+									this.catImgString = this.catImgs.toString();
+									console.log(this.catImgString);
 								},
 								fail: err => {
 									console.log(err);
@@ -95,13 +102,13 @@
 					locationOfDiscovery: this.catArea,
 					coatColor: this.catFeature,
 					others: this.otherTip,
-					picture: this.catImgs[0],
+					picture: this.catImgString,
 					uploadUser: this.userInfo.openid,
 					userPhone: this.userInfo.phone
 				})
 				console.log(res1);
 				let res2 = await this.$api.picturesToCat({
-					imgUrls: '"' + this.catImgs[0] + '"',
+					imgUrls: this.catImgString,
 					catUploadId: res1.data.id
 				})
 				console.log(res2);
@@ -125,7 +132,6 @@
 					width: 40px;
 					height: 45px;
 					margin-right: 15px;
-					background-color: pink;
 				}
 			}
 			.tip {
@@ -143,7 +149,6 @@
 					width: 24px;
 					height: 24px;
 					margin-right: 10px;
-					background-color: #34cd99;
 				}
 				.title {
 					font-size: 20px;

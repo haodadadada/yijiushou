@@ -46,7 +46,8 @@
 				windowHeight: '',
 				rootHeight: '',
 				bgcHeight: '',
-				infoHeight: ''
+				infoHeight: '',
+				catId: ''
 			}
 		},
 		methods: {
@@ -54,9 +55,15 @@
 				uni.navigateTo({
 					url: '/pages/cat-upload-img/cat-upload-img'
 				})
+			},
+			async getCatInfo() {
+				let res = await this.$api.getCatInfo({id: this.id});
+				console.log(res);
 			}
 		},
-		onLoad() {
+		onLoad(e) {
+			this.catId = e.id;
+			this.getCatInfo();
 			uni.getSystemInfo({
 				success: res => {
 					this.windowHeight = res.windowHeight;

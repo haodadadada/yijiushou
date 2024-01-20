@@ -806,6 +806,20 @@ const setUserInputRatio = data => {
 	})
 }
 
+const setUserInputScore = data => {
+	return http.put({
+		url: '/cat/inputPoints',
+		data
+	})
+}
+
+const getCatInfo = data => {
+	return http.get({
+		url: '/cat/getCatInfo',
+		data
+	})
+}
+
 export default {
 	angelApply,
 	cancelOrder,
@@ -892,5 +906,7 @@ export default {
 	homepageDisplay,
 	catAdd,
 	picturesToCat,
-	setUserInputRatio
+	setUserInputRatio,
+	setUserInputScore,
+	getCatInfo
 }

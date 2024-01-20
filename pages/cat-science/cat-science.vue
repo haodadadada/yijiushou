@@ -1,7 +1,7 @@
 <template>
 	<view class="center">
 		<view class="science">
-			<img src="/static/cat/cat-icon.png" alt="" class="img">
+			<img src="/static/cat/item2.png" alt="" class="img">
 			<span class="title">猫咪科普中心</span>
 		</view>
 		<view class="text">

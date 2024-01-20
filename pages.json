@@ -254,6 +254,13 @@
 		        "navigationBarTitleText": "图片上传栏",
 		        "enablePullDownRefresh": false
 		    }
+		},
+		{
+			"path": "pages/cat-feedback/cat-feedback",
+			"style": {
+				"navigationBarTitleText": "留言反馈",
+				"enablePullDownRefresh": false
+			}
 		}
     ],
 	"tabBar": {
