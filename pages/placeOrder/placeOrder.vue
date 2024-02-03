@@ -356,7 +356,6 @@ export default {
 			  this.latitude = p.latitude;
 		  }
 		  // this.getSite();
-		  console.log('click', this.latitude, this.longitude)
 		  this.covers = [{
 		    latitude: this.latitude,
 		    longitude: this.longitude,
@@ -396,7 +395,6 @@ export default {
 			  },
 			  fail: (error) => {
 			    // 定位失败的处理
-			    console.log('定位失败', error)
 			  }
 			})
 		},

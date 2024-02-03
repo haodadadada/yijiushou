@@ -29,7 +29,7 @@
 			info(e){
 				if(e==1){
 					uni.navigateTo({
-						url:'/pages/cat-info/cat-info'
+						url:'/pages-second/cat/cat-info/cat-info'
 					})
 				}else if(e==2){
 					

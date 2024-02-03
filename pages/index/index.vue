@@ -404,7 +404,7 @@ export default {
 				return;
 			}
 			uni.navigateTo({
-				url: '/pages/cat-room/cat-room'
+				url: '/pages-second/cat/cat-room/cat-room'
 			})
 		},
 		

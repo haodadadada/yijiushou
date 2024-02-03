@@ -820,6 +820,28 @@ const getCatInfo = data => {
 	})
 }
 
+// 物流
+const getOrders = data => {
+	return http.get({
+		url: '/getOrders',
+		data
+	})
+}
+
+const saveUserAddress = data => {
+	return http.post({
+		url: '/saveUserAddress',
+		data,
+		header:'application/json',
+	})
+}
+
+const getUserAddress = data => {
+	return http.get({
+		url: '/getUserAddress',
+		data
+	})
+}
 export default {
 	angelApply,
 	cancelOrder,
@@ -908,5 +930,8 @@ export default {
 	picturesToCat,
 	setUserInputRatio,
 	setUserInputScore,
-	getCatInfo
+	getCatInfo,
+	getOrders,
+	saveUserAddress,
+	getUserAddress
 }

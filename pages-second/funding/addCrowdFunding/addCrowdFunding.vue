@@ -55,7 +55,7 @@
 				}
 				const {fundingName, fundingNotice, fundingImg, fundingMoney} = this;
 				uni.navigateTo({
-					url: `/pages/addCrowdFundingSecond/addCrowdFundingSecond?fundingName=${fundingName}&fundingNotice=${fundingNotice}&fundingImg=${fundingImg}&fundingMoney=${fundingMoney}`
+					url: `/pages-second/funding/addCrowdFundingSecond/addCrowdFundingSecond?fundingName=${fundingName}&fundingNotice=${fundingNotice}&fundingImg=${fundingImg}&fundingMoney=${fundingMoney}`
 				})
 			},
 			chooseImage() {

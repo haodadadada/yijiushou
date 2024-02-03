@@ -169,7 +169,7 @@
 					this.$tools.toast('发起众筹成功');
 					setTimeout(() => {
 						uni.navigateTo({
-							url: '/pages/fundingSquare/fundingSquare?from="addCrowdFunding"'
+							url: '/pages-second/funding/fundingSquare/fundingSquare?from="addCrowdFunding"'
 						})
 					}, 500)
 				}

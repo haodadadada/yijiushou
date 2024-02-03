@@ -53,12 +53,11 @@
 		methods: {
 			goUploadImg() {
 				uni.navigateTo({
-					url: '/pages/cat-upload-img/cat-upload-img'
+					url: '/pages-second/cat/cat-upload-img/cat-upload-img'
 				})
 			},
 			async getCatInfo() {
 				let res = await this.$api.getCatInfo({id: this.id});
-				console.log(res);
 			}
 		},
 		onLoad(e) {

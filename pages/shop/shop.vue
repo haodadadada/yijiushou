@@ -163,16 +163,16 @@
 			forCrowdFunding(index) {
 				if(index === 0) {
 					uni.navigateTo({
-						url: '/pages/fundingSquare/fundingSquare'
+						url: '/pages-second/funding/fundingSquare/fundingSquare'
 					})
 				}
 				else if(index === 1) {
 					uni.navigateTo({
-						url: '/pages/addCrowdFunding/addCrowdFunding'
+						url: '/pages-second/funding/addCrowdFunding/addCrowdFunding'
 					})
 				} else if(index === 2) {
 					uni.navigateTo({
-						url: '/pages/crowdFundingOrder/crowdFundingOrder'
+						url: '/pages-second/funding/crowdFundingOrder/crowdFundingOrder'
 					})
 				}
 			}

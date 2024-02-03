@@ -23,7 +23,7 @@
 			},
 			go(){
 				uni.navigateTo({
-					url:'/pages/cat-info-detail/cat-info-detail'
+					url:'/pages-second/cat/cat-info-detail/cat-info-detail'
 				})
 			}
 		}

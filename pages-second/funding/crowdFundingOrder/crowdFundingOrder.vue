@@ -46,7 +46,7 @@
 			goCrowdFundingOrderDetail(item) {
 				let itemJson = JSON.stringify(item)
 				uni.navigateTo({
-					url: `/pages/crowdFundingOrderDetail/crowdFundingOrderDetail?item=${itemJson}`
+					url: `/pages-second/funding/crowdFundingOrderDetail/crowdFundingOrderDetail?item=${itemJson}`
 				})
 			},
 			async getUserOrder() {

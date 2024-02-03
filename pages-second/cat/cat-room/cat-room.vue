@@ -279,27 +279,27 @@
 			},
 			gotoscience(){
 				uni.navigateTo({
-					url: '/pages/cat-science/cat-science'
+					url: '/pages-second/cat/cat-science/cat-science'
 				})
 			},
 			fundingExplain() {
 				uni.navigateTo({
-					url: '/pages/cat-explain/cat-explain'
+					url: '/pages-second/cat/cat-explain/cat-explain'
 				})
 			},
 			goCatDetail(id) {
 				uni.navigateTo({
-					url: `/pages/cat-detail/cat-detail?id=${id}`
+					url: `/pages-second/cat/cat-detail/cat-detail?id=${id}`
 				})
 			},
 			goUpload() {
 				uni.navigateTo({
-					url: '/pages/cat-upload/cat-upload'
+					url: '/pages-second/cat/cat-upload/cat-upload'
 				})
 			},
 			goFeedback() {
 				uni.navigateTo({
-					url: '/pages/cat-feedback/cat-feedback'
+					url: '/pages-second/cat/cat-feedback/cat-feedback'
 				})
 			},
 			changeOption(index, e) {
@@ -317,7 +317,6 @@
 				let result = await this.$api.homepageDisplay();
 				if(result.code === 200) {
 					this.catInfo = result.data;
-					console.log(this.catInfo);
 					this.firstOptionImgs = [this.catInfo[0][0].length, this.catInfo[1][0].length, this.catInfo[2][0].length];
 					this.secondOptionImgs = [this.catInfo[0][1].length, this.catInfo[1][1].length, this.catInfo[2][1].length];
 					this.thirdOptionImgs = [this.catInfo[0][2].length, this.catInfo[1][2].length, this.catInfo[2][2].length];

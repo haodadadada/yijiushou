@@ -52,32 +52,46 @@
 		</view> -->
 		<view class="order">
 			<view class="flex-between">
-				<view class="title">我的订单</view>
+				<view class="title">校园订单</view>
 				<!-- <navigator url="../order/order" hover-class="none" class="flex" @click="goOrder(0)">全部<u-icon name="arrow-right" color="#999999"></u-icon></navigator> -->
 			</view>
 			<view class="list">
-				<!-- <view class="item" v-for="item in orders" :key="item.id" @click="goOrder(item.id)"> -->
-		<!-- 		<view class="item" v-for="item in orders" :key="item.id" @click="goOrder()">
-					<image :src="this.openid === '' ? item.icon1 : item.icon2" mode="aspectFill"></image>
-					<view>{{item.title}}</view>
-					</view> -->
 				<view class="item" @click="goOrder()">
-					<image :src="this.openid === '' ? orders[0].icon1 : orders[0].icon2" mode="aspectFill"></image>
-					<view>{{orders[0].title}}</view>
+					<image :src="this.openid === '' ? schoolOrders[0].icon1 : schoolOrders[0].icon2" mode="aspectFill"></image>
+					<view>{{schoolOrders[0].title}}</view>
 				</view>
 				<view class="item" @click="goAddress()">
-					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
-					<view>{{orders[1].title}}</view>
+					<image :src="this.openid === '' ? schoolOrders[1].icon1 : schoolOrders[1].icon2" mode="aspectFill"></image>
+					<view>{{schoolOrders[1].title}}</view>
 				</view>
 				<!-- #ifdef MP-ALIPAY -->
 				<view class="item" @click="goBind()">
-					<image :src="this.openid === '' ? orders[1].icon1 : orders[1].icon2" mode="aspectFill"></image>
-					<view>{{orders[1].title}}</view>
+					<image :src="this.openid === '' ? schoolOrders[1].icon1 : schoolOrders[1].icon2" mode="aspectFill"></image>
+					<view>{{schoolOrders[1].title}}</view>
 				</view>
 				<!-- #endif -->
 				<view class="item" @click="makePhone('17682378225')">
-					<image :src="this.openid === '' ? orders[2].icon1 : orders[2].icon2" mode="aspectFill"></image>
-					<view>{{orders[2].title}}</view>
+					<image :src="this.openid === '' ? schoolOrders[2].icon1 : schoolOrders[2].icon2" mode="aspectFill"></image>
+					<view>{{schoolOrders[2].title}}</view>
+				</view>
+			</view>
+		</view>
+		<view class="order">
+			<view class="flex-between">
+				<view class="title">全国订单</view>
+			</view>
+			<view class="list">
+				<view class="item" @click="goCountryOrder(1)">
+					<image :src="this.openid === '' ? countryOrders[0].icon1 : countryOrders[0].icon2" mode="aspectFill"></image>
+					<view>{{countryOrders[0].title}}</view>
+				</view>
+				<view class="item" @click="goCountryOrder(2)">
+					<image :src="this.openid === '' ? countryOrders[1].icon1 : countryOrders[1].icon2" mode="aspectFill"></image>
+					<view>{{countryOrders[1].title}}</view>
+				</view>
+				<view class="item" @click="goCountryOrder(3)">
+					<image :src="this.openid === '' ? countryOrders[2].icon1 : countryOrders[2].icon2" mode="aspectFill"></image>
+					<view>{{countryOrders[2].title}}</view>
 				</view>
 			</view>
 		</view>
@@ -112,7 +126,7 @@ export default {
 			show: false,
 			openid: '',
 			userInfo: {},
-			orders:[
+			schoolOrders:[
 				{
 					id: 1,
 					icon1: require('../../static/new-user9.png'),
@@ -145,6 +159,26 @@ export default {
 				// 	icon2: require('../../static/new-user16.png'),
 				// 	title: '找回物品',
 				// }
+			],
+			countryOrders: [
+				{
+					id: 1,
+					icon1: require('../../static/new-user9.png'),
+					icon2: require('../../static/new-user10.png'),
+					title: '待回收',
+				},
+				{
+					id: 2,
+					icon1: require('../../static/new-user11.png'),
+					icon2: require('../../static/new-user12.png'),
+					title: '已完成',
+				},
+				{
+					id: 3,
+					icon1: require('../../static/new-user13.png'),
+					icon2: require('../../static/new-user14.png'),
+					title: '已取消',
+				},
 			],
 			tools: [
 
@@ -254,6 +288,17 @@ export default {
 				url
 			});
 		},
+		
+		goCountryOrder(status) {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				return;
+			}
+			uni.navigateTo({
+				url: `/pages/delivery/delivery-orders?status=${status}`
+			})
+		},
+		
 		editUser() {
 			uni.navigateTo({
 				url: '../editUser/editUser'
@@ -352,6 +397,8 @@ export default {
 				}
 			});
 		},
+	
+		
 		/** 获取设备 */ 
 		getSystemInfo() {
 			this.systemInfo = uni.getSystemInfoSync()
@@ -549,13 +596,13 @@ body {
 .order{
 	background: #FFFFFF;
 	border-radius: 16upx;
-	margin: 10upx 0;
+	margin:0 0 15px;
 	padding: 15upx 0;
 	.title {
 		font-size: 25upx;
 		font-weight: bold;
 		color: #333333;
-		padding: 42upx 32upx 46upx;
+		padding: 21upx 32upx 23upx;
 	}
 	.flex{
 		font-size: 26upx;
@@ -598,7 +645,7 @@ body {
 		font-size: 25upx;
 		font-weight: bold;
 		color: #333333;
-		padding: 42upx 32upx 46upx;
+		padding: 21upx 32upx 23upx;
 	}
 	.flex {
 		flex-wrap: wrap;

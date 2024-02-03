@@ -119,13 +119,13 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		{
-			"path": "pages/questionnaire/questionnaire",
-			"style": {
-				"navigationBarTitleText": "问卷调查",
-				"enablePullDownRefresh": false
-			}
-		},
+		// {
+		// 	"path": "pages/questionnaire/questionnaire",
+		// 	"style": {
+		// 		"navigationBarTitleText": "问卷调查",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
 		{
 			"path": "pages/shop-detail/shop-detail",
 			"style": {
@@ -147,122 +147,266 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		{
-			"path": "pages/activity/activity",
-			"style": {
-				"navigationBarTitleText": "活动",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/addCrowdFunding/addCrowdFunding",
-			"style": {
-				"navigationBarTitleText": "趣味众筹",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/addCrowdFundingSecond/addCrowdFundingSecond",
-			"style": {
-				"navigationBarTitleText": "趣味众筹",
-				"enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#34cd99"
-			}
-		},
-		{
-			"path": "pages/crowdFundingOrder/crowdFundingOrder",
-			"style": {
-				"navigationBarTitleText": "众筹订单",
-				"enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#34cd99"
-			}
-		},
-		{
-			"path": "pages/crowdFundingOrderDetail/crowdFundingOrderDetail",
-			"style": {
-				"navigationBarTitleText": "众筹订单",
-				"enablePullDownRefresh": true,
-				"navigationBarBackgroundColor": "#34cd99"
-			}
-		},
-		{
-			"path": "pages/fundingSquare/fundingSquare",
-			"style": {
-				"navigationBarTitleText": "众筹广场",
-				"enablePullDownRefresh": true,
-				"navigationBarBackgroundColor": "#34cd99"
-			}
-		},
-		{
-			"path": "pages/cat-explain/cat-explain",
-			"style": {
-				"navigationBarTitleText": "校喵池",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/cat-upload/cat-upload",
-			"style": {
-				"navigationBarTitleText": "校喵池",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/cat-detail/cat-detail",
-			"style": {
-				"navigationBarTitleText": "校喵池",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/cat-room/cat-room",
-			"style": {
-				"navigationBarTitleText": "校喵池",
-				"enablePullDownRefresh": false
-			}
-		}
-        ,{
-            "path" : "pages/cat-science/cat-science",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+		// {
+		// 	"path": "pages/activity/activity",
+		// 	"style": {
+		// 		"navigationBarTitleText": "活动",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
+		
+		
+		// {
+		// 	"path": "pages/addCrowdFunding/addCrowdFunding",
+		// 	"style": {
+		// 		"navigationBarTitleText": "趣味众筹",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/addCrowdFundingSecond/addCrowdFundingSecond",
+		// 	"style": {
+		// 		"navigationBarTitleText": "趣味众筹",
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarBackgroundColor": "#34cd99"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/crowdFundingOrder/crowdFundingOrder",
+		// 	"style": {
+		// 		"navigationBarTitleText": "众筹订单",
+		// 		"enablePullDownRefresh": false,
+		// 		"navigationBarBackgroundColor": "#34cd99"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/crowdFundingOrderDetail/crowdFundingOrderDetail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "众筹订单",
+		// 		"enablePullDownRefresh": true,
+		// 		"navigationBarBackgroundColor": "#34cd99"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/fundingSquare/fundingSquare",
+		// 	"style": {
+		// 		"navigationBarTitleText": "众筹广场",
+		// 		"enablePullDownRefresh": true,
+		// 		"navigationBarBackgroundColor": "#34cd99"
+		// 	}
+		// },
+		
+		// {
+		// 	"path": "pages/cat/cat-explain/cat-explain",
+		// 	"style": {
+		// 		"navigationBarTitleText": "校喵池",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/cat/cat-upload/cat-upload",
+		// 	"style": {
+		// 		"navigationBarTitleText": "校喵池",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/cat/cat-detail/cat-detail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "校喵池",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/cat/cat-room/cat-room",
+		// 	"style": {
+		// 		"navigationBarTitleText": "校喵池",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// }
+  //       ,{
+  //           "path" : "pages/cat/cat-science/cat-science",
+  //           "style" :                                                                                    
+  //           {
+  //               "navigationBarTitleText": "",
+  //               "enablePullDownRefresh": false
+  //           }
             
-        }
-        ,{
-            "path" : "pages/cat-info/cat-info",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
+  //       }
+  //       ,{
+  //           "path" : "pages/cat/cat-info/cat-info",
+  //           "style" :                                                                                    
+  //           {
+  //               "navigationBarTitleText": "",
+  //               "enablePullDownRefresh": false
+  //           }
             
-        }
-        ,{
-            "path" : "pages/cat-info-detail/cat-info-detail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-        },
+  //       }
+  //       ,{
+  //           "path" : "pages/cat/cat-info-detail/cat-info-detail",
+  //           "style" :                                                                                    
+  //           {
+  //               "navigationBarTitleText": "",
+  //               "enablePullDownRefresh": false
+  //           }
+  //       },
+		// {
+		//     "path" : "pages/cat/cat-upload-img/cat-upload-img",
+		//     "style" :                                                                                    
+		//     {
+		//         "navigationBarTitleText": "图片上传栏",
+		//         "enablePullDownRefresh": false
+		//     }
+		// },
+		// {
+		// 	"path": "pages/cat/cat-feedback/cat-feedback",
+		// 	"style": {
+		// 		"navigationBarTitleText": "留言反馈",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
 		{
-		    "path" : "pages/cat-upload-img/cat-upload-img",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "图片上传栏",
-		        "enablePullDownRefresh": false
-		    }
+			"path": "pages/delivery/delivery-recycle",
+			"style": {
+				"navigationBarTitleText": "全国回收",
+				"enablePullDownRefresh": false
+			}
 		},
 		{
-			"path": "pages/cat-feedback/cat-feedback",
+			"path": "pages/delivery/delivery-order",
 			"style": {
-				"navigationBarTitleText": "留言反馈",
+				"navigationBarTitleText": "全国回收",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/delivery/delivery-orders",
+			"style": {
+				"navigationBarTitleText": "全国回收",
 				"enablePullDownRefresh": false
 			}
 		}
     ],
+	"subpackages": [
+		{
+			"root": "pages-second",
+			"name": "cat",
+			"pages": [
+				{
+					"path": "cat/cat-explain/cat-explain",
+					"style": {
+						"navigationBarTitleText": "校喵池",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cat/cat-upload/cat-upload",
+					"style": {
+						"navigationBarTitleText": "校喵池",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cat/cat-detail/cat-detail",
+					"style": {
+						"navigationBarTitleText": "校喵池",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cat/cat-room/cat-room",
+					"style": {
+						"navigationBarTitleText": "校喵池",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cat/cat-science/cat-science",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path" : "cat/cat-info/cat-info",
+					"style" :                                                                                    
+					{
+					  "navigationBarTitleText": "",
+					  "enablePullDownRefresh": false
+					}
+				  
+				}
+			  ,{
+				  "path" : "cat/cat-info-detail/cat-info-detail",
+				  "style" :                                                                                    
+				  {
+					  "navigationBarTitleText": "",
+					  "enablePullDownRefresh": false
+				  }
+			  },
+				{
+					"path" : "cat/cat-upload-img/cat-upload-img",
+					"style" :                                                                                    
+					{
+						"navigationBarTitleText": "图片上传栏",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cat/cat-feedback/cat-feedback",
+					"style": {
+						"navigationBarTitleText": "留言反馈",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		},
+		{
+			"root": "pages-second",
+			"name": "funding",
+			"pages": [
+				{
+					"path": "funding/addCrowdFunding/addCrowdFunding",
+					"style": {
+						"navigationBarTitleText": "趣味众筹",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "funding/addCrowdFundingSecond/addCrowdFundingSecond",
+					"style": {
+						"navigationBarTitleText": "趣味众筹",
+						"enablePullDownRefresh": false,
+						"navigationBarBackgroundColor": "#34cd99"
+					}
+				},
+				{
+					"path": "funding/crowdFundingOrder/crowdFundingOrder",
+					"style": {
+						"navigationBarTitleText": "众筹订单",
+						"enablePullDownRefresh": false,
+						"navigationBarBackgroundColor": "#34cd99"
+					}
+				},
+				{
+					"path": "funding/crowdFundingOrderDetail/crowdFundingOrderDetail",
+					"style": {
+						"navigationBarTitleText": "众筹订单",
+						"enablePullDownRefresh": true,
+						"navigationBarBackgroundColor": "#34cd99"
+					}
+				},
+				{
+					"path": "funding/fundingSquare/fundingSquare",
+					"style": {
+						"navigationBarTitleText": "众筹广场",
+						"enablePullDownRefresh": true,
+						"navigationBarBackgroundColor": "#34cd99"
+					}
+				}
+			]
+		}
+	],
 	"tabBar": {
 		"color": "#606060",
 		"selectedColor": "#3BB061",
@@ -278,6 +422,12 @@
 				"iconPath": "static/new9.png",
 				"selectedIconPath": "static/new10.png",
 				"text": "预约"
+			}, 
+			{
+				"pagePath": "pages/delivery/delivery-recycle",
+				"iconPath": "static/new9.png",
+				"selectedIconPath": "static/new10.png",
+				"text": "全国回收"
 			}, 
 			{
 				"pagePath": "pages/user/user",
