@@ -99,7 +99,8 @@
 						</view>
 					</view>
 				</view>
-				<view class="address-confirm" @click="confirmAddress">保存使用</view>
+				<view class="address-confirm" @click="saveAddressInfo">保存信息</view>
+				<view class="address-confirm" @click="confirmAddress">确认信息</view>
 			</view>
 			<!-- 省市区选择 province city area初始省市区设置 show:是否显示  @changeClick：更改省市区事件 @sureSelectArea：确认事件 @hideShow：隐藏事件-->
 			<cc-selectDity :province="province" :city="city" :area="area" :show="showPicker" @sureSelectArea="onsetCity" @hideShow="onhideShow"  @changeClick="changeClick"></cc-selectDity>
@@ -265,34 +266,50 @@
 					}
 				})
 			},
-			handleSubmit() {
+			async handleSubmit() {
 				if(!this.deliveryUserDay.toString() || !this.currentWeightIndex.toString() || !this.deliveryUserAddress || !this.deliveryUserAddressDetail || !this.deliveryUserName || !this.deliveryUserPhone) {
 					this.$tools.toast('请完善信息');
 					return;
 				}
-				uni.navigateTo({
-					url: '/pages/delivery/delivery-orders'
+				// uni.navigateTo({
+				// 	url: '/pages/delivery/delivery-orders'
+				// })
+				let result = await this.$api.holdOrders({
+					userId: uni.getStorageSync('openid'),
+					userAddress: this.deliveryUserAddress,
+					userAddressDetail: this.deliveryUserAddressDetail,
+					recycleCategory: this.weight[this.currentWeightIndex].toString(),
+					reserveTime: this.totalDays[this.currentDayIndex].toString(),
+					phone: this.deliveryUserPhone
 				})
+				console.log(result);
 				this.resetData();
 			},
 			async confirmAddress() {
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
+					this.$tools.toast('请完整填写信息');
 					return;
 				}
 				this.deliveryUserAddress = this.address;
 				this.deliveryUserAddressDetail = this.addressDetail;
 				this.deliveryUserName = this.recycleName;
 				this.deliveryUserPhone = this.phone;
+				this.showAddress = false;
+			},
+			async saveAddressInfo() {
+				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
+					this.$tools.toast('请完整填写信息');
+					return;
+				}
 				let result = await this.$api.saveUserAddress({
 					useId: uni.getStorageSync('openid'),
-					name: this.deliveryUserName,
-					phone: this.deliveryUserPhone,
-					address: this.deliveryUserAddress,
-					detailAddress: this.deliveryUserAddressDetail
+					name: this.recycleName,
+					phone: this.phone,
+					address: this.address,
+					detailAddress: this.addressDetail
 				})
 				if(result.code === 200) {
 					this.$tools.toast('保存成功');
-					this.showAddress = false;
 				}
 				else {
 					this.$tools.toast('网络繁忙请稍后再试');
@@ -483,7 +500,7 @@
 			}
 		}
 		.address-order {
-			height: 60vh;
+			// height: 70vh;
 			width: 100%;
 			.top-authroize {
 				padding: 20px 15px;
@@ -526,10 +543,11 @@
 				border-radius: 15px;
 				background: rgba(120, 206, 162, 1);
 				color: #fff;
-				padding: 10px;
 				box-sizing: border-box;
 				text-align: center;
 				margin-bottom: 15px;
+				margin-top: 15px;
+				padding: 5px 0;
 			}
 		}
 	}

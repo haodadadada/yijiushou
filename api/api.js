@@ -842,6 +842,13 @@ const getUserAddress = data => {
 		data
 	})
 }
+const holdOrders = data => {
+	return http.post({
+		url: '/holdOrders',
+		data,
+		header:'application/json',
+	})
+}
 export default {
 	angelApply,
 	cancelOrder,
@@ -933,5 +940,6 @@ export default {
 	getCatInfo,
 	getOrders,
 	saveUserAddress,
-	getUserAddress
+	getUserAddress,
+	holdOrders
 }
