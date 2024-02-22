@@ -374,7 +374,6 @@ export default {
 			  location: this.latitude+','+this.longitude,
 			  sig: '4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
 			};
-			console.log('params',params);
 			// 调用定位方法
 			this.qqMap.reverseGeocoder({
 				...params,
@@ -460,7 +459,6 @@ export default {
 			uni.getLocation({
 			  type: 'gcj02',
 			  success: res => {
-				  console.log(res)
 			    this.longitude = res.longitude;
 			    this.latitude = res.latitude;
 			    this.covers = [{

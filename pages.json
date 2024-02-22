@@ -285,7 +285,15 @@
 				"navigationBarTitleText": "全国回收",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/delivery/delivery-logistics",
+			"style": {
+				"navigationBarTitleText": "快递详情",
+				"enablePullDownRefresh": true
+			}
 		}
+
     ],
 	"subpackages": [
 		{

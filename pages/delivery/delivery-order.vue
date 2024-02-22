@@ -4,26 +4,36 @@
 		<view class="classify-content">
 			<view class="title">回收品类</view>
 			<view class="classify-detail flex-around">
-				<view class="flex-1">
-					<view class="classify-img"></view>
-					<view class="classify-name">四季衣物</view>
-				</view>
-				<view class="flex-1">
-					<view class="classify-img"></view>
-					<view class="classify-name">各类鞋靴</view>
-				</view>
-				<view class="flex-1">
-					<view class="classify-img"></view>
-					<view class="classify-name">闲置旧包</view>
-				</view>
-				<view class="flex-1">
-					<view class="classify-img"></view>
-					<view class="classify-name">各类首饰</view>
-				</view>
-				<view class="flex-1">
-					<view class="classify-img"></view>
-					<view class="classify-name">毛绒玩具</view>
-				</view>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/yifu.png" alt="" mode="widthFix"/>
+					</div>
+					<div class="classify-name">四季衣物</div>
+				</div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/xie.png" alt=""  mode="widthFix" />
+					</div>
+					<div class="classify-name">各类鞋靴</div>
+				</div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/bao.png" alt=""  mode="widthFix" />
+					</div>
+					<div class="classify-name">闲置旧包</div>
+				</div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/shoushi.png" alt=""  mode="widthFix" />
+					</div>
+					<div class="classify-name">各类首饰</div>
+				</div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/maorong.png" alt=""  mode="widthFix" />
+					</div>
+					<div class="classify-name">毛绒玩具</div>
+				</div>
 			</view>
 		</view>
 		<view class="delivery-content flex-col">
@@ -35,6 +45,7 @@
 			</view>
 			<view class="item flex-between" @click="handleChooseAddress">
 				<view>取件信息</view>
+				<input type="text" :disabled="true" v-bind:value="deliveryUserAddress" style="color: rgba(166, 166, 166, 1); font-size: 14px;"/>
 				<view class="icon-right"><img src="/static/icon/dayuhao.png" alt="" /></view>
 			</view>
 			<view class="item" style="flex-grow: 1;">
@@ -71,8 +82,7 @@
 			<view class="address-order flex-col flex-between">
 				<view style="width: 100%;">
 					<view class="top-authroize flex-between">
-						<span @click="getAuthorize">授权使用微信地址</span>
-						<span @click="chooseAddress">选择地址</span>
+						<span @click="chooseAddress">使用微信地址</span>
 					</view>
 					<view class="address-title">新增回收信息</view>
 					<view class="address-content">
@@ -99,11 +109,14 @@
 						</view>
 					</view>
 				</view>
-				<view class="address-confirm" @click="saveAddressInfo">保存信息</view>
+				<!-- <view class="address-confirm" @click="saveAddressInfo">保存信息</view> -->
 				<view class="address-confirm" @click="confirmAddress">确认信息</view>
 			</view>
 			<!-- 省市区选择 province city area初始省市区设置 show:是否显示  @changeClick：更改省市区事件 @sureSelectArea：确认事件 @hideShow：隐藏事件-->
 			<cc-selectDity :province="province" :city="city" :area="area" :show="showPicker" @sureSelectArea="onsetCity" @hideShow="onhideShow"  @changeClick="changeClick"></cc-selectDity>
+		</u-modal>
+		<u-modal :show="showConfirm" @confirm="handleConfirm()" @cancel="showConfirm = false" confirmColor="#6cf" showCancelButton=true>
+			<view style="line-height: 15vh; font-size: 16px;">请确认提交信息</view>
 		</u-modal>
 	</view>
 </template>
@@ -116,7 +129,6 @@
 				showDate: false,
 				daysDistance: 7,
 				currentDifference: 0,
-				daysItem: [],
 				totalDays: [],
 				currentDayIndex: 0,
 				
@@ -141,7 +153,9 @@
 				province: '浙江省',
 				city: '杭州市',
 				area: '上城区',
-				showPicker: false
+				showPicker: false,
+				
+				showConfirm: false
 			}
 		},
 		methods: {
@@ -177,112 +191,42 @@
 				this.city = '湖州市';
 				this.area = '吴兴区';
 			},
-			getLatitudeAndLongitude() {
-				uni.getLocation({
-				    type: 'gcj02',
-				    success: res => {
-				        this.longitude = res.longitude;
-				        this.latitude = res.latitude;
-						// 等待异步回调结果返回后再调用
-						this.getLocation()
-				    },
-				    fail: res => {
-						this.$tools.toast('请打开定位功能并授权定位');
-					}
-				});
-			},
-			getLocation() {
-				const params = {
-				  location: this.latitude+','+this.longitude,
-				  sig: '4NZ8JTPFCfuMz5ND8wewajIo84hlJ4QT',
-				};
-				// 调用定位方法
-				this.qqMap.reverseGeocoder({
-					...params,
-					success: (res) => {
-					this.address = res.result.address_component.province + res.result.address_component.city + res.result.address_component.district;
-					this.addressDetail = res.result.address_component.street;
-						// 获取定位成功的结果
-						// const address = res.result.address_component.district;
-						// this.address = address;
-				  },
-				  fail: (error) => {
-				    // 定位失败的处理
-				    console.log('定位失败', error)
-				  }
-				})
-			},
-			getAuthorize() {
-				uni.getSystemInfo({
-					success: (res) => {
-						if (!res.locationEnabled || !res.locationAuthorized) {
-							uni.showModal({
-								title: '提示',
-								content: '请打开手机定位服务功能',
-							})
-							return;
-						}
-						else if(res.hostName == 'WeChat'){
-							uni.authorize({
-								scope: 'scope.userLocation',
-								success: () => {
-									this.getLatitudeAndLongitude()
-								},
-								fail: (err) => {
-									err = err['errMsg']
-									uni.showModal({
-										content: '需要授权位置信息',
-										confirmText: '确认授权'
-									}).then(res => {
-										if (res[1]['confirm']) {
-											uni.openSetting({
-												success: (res) => {
-													if (res.authSetting['scope.userLocation'] || res.authSetting['location']) {
-														// 授权成功
-														uni.showToast({
-															title: '授权成功',
-															icon: 'none'
-														})
-														this.getLatitudeAndLongitude();
-													} else {
-														// 未授权
-														uni.showToast({
-															title: '授权失败',
-															icon: 'none'
-														})
-													}
-												}	
-											})
-										}
-										if (res[1]['cancel']) {
-											// 取消授权
-											console.log('取消');
-											this.$tools.toast('请开启定位功能并授权获取地图服务');
-										}
-									})
-								}
-							})
-						}
-					}
-				})
-			},
 			async handleSubmit() {
 				if(!this.deliveryUserDay.toString() || !this.currentWeightIndex.toString() || !this.deliveryUserAddress || !this.deliveryUserAddressDetail || !this.deliveryUserName || !this.deliveryUserPhone) {
 					this.$tools.toast('请完善信息');
 					return;
 				}
-				// uni.navigateTo({
-				// 	url: '/pages/delivery/delivery-orders'
-				// })
+				if(!this.$tools.verifyTelPhone(this.deliveryUserPhone)) {
+					this.$tools.toast('请输入正确的手机号');
+					return;
+				}
+				this.showConfirm = true;
+			},
+			
+			async handleConfirm() {
 				let result = await this.$api.holdOrders({
 					userId: uni.getStorageSync('openid'),
 					userAddress: this.deliveryUserAddress,
 					userAddressDetail: this.deliveryUserAddressDetail,
 					recycleCategory: this.weight[this.currentWeightIndex].toString(),
-					reserveTime: this.totalDays[this.currentDayIndex].toString(),
-					phone: this.deliveryUserPhone
+					// reserveTime: this.totalDays[this.currentDayIndex].toString(),
+					reserveTime: moment().add(this.currentDayIndex, 'days').format(),
+					phone: this.deliveryUserPhone,
+					userAddreessId: "1751828914228809730",
 				})
-				console.log(result);
+				if(result.code === 200) {
+					this.$tools.toast('提交成功');
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/delivery/delivery-orders'
+						})
+					}, 500)
+				}
+				else {
+					this.$tools.toast('网络繁忙请稍后再试');
+					return;
+				}
+				this.showConfirm = false;
 				this.resetData();
 			},
 			async confirmAddress() {
@@ -296,6 +240,8 @@
 				this.deliveryUserPhone = this.phone;
 				this.showAddress = false;
 			},
+			
+			
 			async saveAddressInfo() {
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
 					this.$tools.toast('请完整填写信息');
@@ -315,6 +261,8 @@
 					this.$tools.toast('网络繁忙请稍后再试');
 				}
 			},
+			
+			
 			confirmDate() {
 				this.deliveryUserDay = this.currentDayIndex;
 				this.showDate = false;
@@ -333,14 +281,34 @@
 				this.city = value2;
 				this.area = value3;
 			},
+			
+			
 			async getUserAddress() {
 				let result = await this.$api.getUserAddress({
 					userId: uni.getStorageSync('openid')
 				})
-				console.log(result);
 			},
+			
+			
 			async chooseAddress() {
-				await this.getUserAddress();
+				wx.getSetting({
+					success:(result1)=>{
+						const scopeAddress = result1.authSetting["scope.address"];
+						if(scopeAddress === true || scopeAddress === undefined){
+							wx.chooseAddress({
+								success:(result2)=>{
+									this.address = result2.cityName + ',' + result2.countyName;
+									this.addressDetail = result2.detailInfo;
+									this.recycleName = result2.userName;
+									this.phone = result2.telNumber;
+								}
+							})
+						}
+						else {
+							this.$tools.toast('请授权获取地址信息');
+						}
+					}
+				})
 			}
 
 		},
@@ -373,8 +341,7 @@
 			transform: translateY(calc(30vw - 50%));
 			width: 90vw;
 			margin-left: 5vw;
-			height: 100px;
-			background-color: #6cf;
+			background-color: #fff;
 			border-radius: 10px;
 			padding: 10px;
 			box-sizing: border-box;
@@ -383,10 +350,18 @@
 				font-weight: 550;
 			}
 			.classify-detail {
+				margin-top: 10px;
+				align-items: flex-end;
+				.classify-item {
+					margin: 0 10px;
+				}
 				.classify-img {
-					width: 100%;
-					height: 20px;
+					width: 80%;
+					margin: 0 auto;
 					margin-bottom: 10px;
+					img {
+						width: 100%;
+					}
 				}
 				.classify-name {
 					font-size: 12px;
@@ -428,10 +403,10 @@
 				font-size: 12px;
 				margin-right: 10px;
 				text-align: center;
-				box-sizing: border-box;
 			}
 			.weight-choosing {
-				background-color: #ccc;
+				background: rgba(120, 206, 162, 0.5);
+				color: #34cd99;
 			}
 		}
 		.submit {

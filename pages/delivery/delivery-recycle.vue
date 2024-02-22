@@ -5,24 +5,34 @@
 		<div class="classify-content">
 			<div class="title">回收品类</div>
 			<div class="classify-detail flex-around">
-				<div class="flex-1">
-					<div class="classify-img"></div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/yifu.png" alt="" mode="widthFix"/>
+					</div>
 					<div class="classify-name">四季衣物</div>
 				</div>
-				<div class="flex-1">
-					<div class="classify-img"></div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/xie.png" alt=""  mode="widthFix" />
+					</div>
 					<div class="classify-name">各类鞋靴</div>
 				</div>
-				<div class="flex-1">
-					<div class="classify-img"></div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/bao.png" alt=""  mode="widthFix" />
+					</div>
 					<div class="classify-name">闲置旧包</div>
 				</div>
-				<div class="flex-1">
-					<div class="classify-img"></div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/shoushi.png" alt=""  mode="widthFix" />
+					</div>
 					<div class="classify-name">各类首饰</div>
 				</div>
-				<div class="flex-1">
-					<div class="classify-img"></div>
+				<div class="flex-1 classify-item">
+					<div class="classify-img">
+						<img src="/static/delivery/maorong.png" alt=""  mode="widthFix" />
+					</div>
 					<div class="classify-name">毛绒玩具</div>
 				</div>
 			</div>
@@ -72,7 +82,7 @@
 			top: 0;
 			width: 100vw;
 			height: 50vw;
-			background-color: pink;
+			background: rgba(148, 227, 186, 1);
 		}
 		.bgc-bottom {
 			position: absolute;
@@ -85,8 +95,7 @@
 			transform: translateY(calc(50vw - 50%));
 			width: 90vw;
 			margin-left: 5vw;
-			height: 100px;
-			background-color: #6cf;
+			background-color: #fff;
 			border-radius: 10px;
 			padding: 10px;
 			box-sizing: border-box;
@@ -95,10 +104,18 @@
 				font-weight: 550;
 			}
 			.classify-detail {
+				align-items: flex-end;
+				margin-top: 10px;
+				.classify-item {
+					margin: 0 10px;
+				}
 				.classify-img {
-					width: 100%;
-					height: 20px;
+					width: 80%;
+					margin: 0 auto;
 					margin-bottom: 10px;
+					img {
+						width: 100%;
+					}
 				}
 				.classify-name {
 					font-size: 12px;

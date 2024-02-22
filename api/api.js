@@ -849,6 +849,20 @@ const holdOrders = data => {
 		header:'application/json',
 	})
 }
+
+const updateInfo = data => {
+	return http.put({
+		url: '/updateInfo',
+		data
+	})
+}
+
+const getInfo = data => {
+	return http.post({
+		url: '/getInfo',
+		data
+	})
+}
 export default {
 	angelApply,
 	cancelOrder,
@@ -941,5 +955,7 @@ export default {
 	getOrders,
 	saveUserAddress,
 	getUserAddress,
-	holdOrders
+	holdOrders,
+	updateInfo,
+	getInfo
 }
