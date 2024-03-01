@@ -76,7 +76,7 @@
 				<view style="line-height: 23px; margin-top: 15px;">请选择预约时间段</view>
 				<picker-view v-if="true" :indicator-style="indicatorStyle" :value="1" @change="bindChange" class="picker-view">
 				     <picker-view-column>
-				         <view class="item-picker" v-for="(item,index) in hours" :key="index">{{item}}</view>
+						<view class="item-picker" v-for="(item,index) in hours" :key="index">{{item}}</view>
 				     </picker-view-column>
 				 </picker-view>	
 				<view class="date-confirm" @click="confirmDate">确定</view>
@@ -138,7 +138,7 @@
 				showDate: false,
 				daysDistance: 3,
 				totalDays: [],
-				currentDayIndex: 0,
+				currentDayIndex: 1,
 				
 				showAddress: false,
 				
@@ -154,7 +154,7 @@
 				deliveryUserAddressDetail: '',
 				deliveryUserName: '',
 				deliveryUserPhone: '',
-				deliveryUserDay: 0,
+				deliveryUserDay: 1,
 				deliveryUserTime: '09:00-11:00',
 				province: '浙江省',
 				city: '杭州市',
@@ -168,9 +168,24 @@
 			reserveTime() {
 				if(this.totalDays.length === 0) return '';
 				return this.totalDays[this.deliveryUserDay][0] + ',' + this.deliveryUserTime;
-			}
+			},
 		},
 		methods: {
+			isTimeOver(hours) {
+				if(this.currentDayIndex !== 0) {
+					return true;
+				}
+				else {
+					let day = moment().format('MM-DD')
+					let endHour = hours.split('-')[1];
+					let nowTime = new Date().getTime();
+					let listTime = new Date(this.year + '-' + day + ' ' + endHour + ':00').getTime();
+					if(listTime < nowTime) {
+						return false;
+					}
+					return true;
+				}
+			},
 			resetData() {
 				this.deliveryUserAddress = '';
 				this.deliveryUserAddressDetail = '';
@@ -217,29 +232,30 @@
 			
 			async handleConfirm() {
 				this.showConfirm = false;
-				let result = await this.$api.deliveryPlaceOrder({
-					userId: uni.getStorageSync('openid'),
-					userName: this.deliveryUserName,
-					userAddress: this.deliveryUserAddress,
-					userAddressDetail: this.deliveryUserAddressDetail,
-					recycleCategory: this.weight[this.currentWeightIndex].toString(),
-					reserveTime: this.year + '-' + this.reserveTime,
-					phone: this.deliveryUserPhone,
-					userAddreessId: "1751828914228809730",
-				})
-				if(result.code === 200) {
-					this.$tools.toast('提交成功');
-					setTimeout(() => {
-						uni.navigateTo({
-							url: '/pages/delivery/delivery-orders'
-						})
-					}, 500)
-				}
-				else {
-					this.$tools.toast('网络繁忙请稍后再试');
-					return;
-				}
-				this.resetData();
+				console.log(this.year + '-' + this.reserveTime)
+				// let result = await this.$api.deliveryPlaceOrder({
+				// 	userId: uni.getStorageSync('openid'),
+				// 	userName: this.deliveryUserName,
+				// 	userAddress: this.deliveryUserAddress,
+				// 	userAddressDetail: this.deliveryUserAddressDetail,
+				// 	recycleCategory: this.weight[this.currentWeightIndex].toString(),
+				// 	reserveTime: this.year + '-' + this.reserveTime,
+				// 	phone: this.deliveryUserPhone,
+				// 	userAddreessId: "1751828914228809730",
+				// })
+				// if(result.code === 200) {
+				// 	this.$tools.toast('提交成功');
+				// 	setTimeout(() => {
+				// 		uni.navigateTo({
+				// 			url: '/pages/delivery/delivery-orders'
+				// 		})
+				// 	}, 500)
+				// }
+				// else {
+				// 	this.$tools.toast('网络繁忙请稍后再试');
+				// 	return;
+				// }
+				// this.resetData();
 			},
 			async confirmAddress() {
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
@@ -276,6 +292,10 @@
 			
 			
 			confirmDate() {
+				if(!this.isTimeOver(this.currentTime)) {
+					this.$tools.toast('已经超过这个时间了');
+					return;
+				}
 				this.deliveryUserDay = this.currentDayIndex;
 				this.deliveryUserTime = this.currentTime;
 				this.showDate = false;
@@ -310,8 +330,7 @@
 						if(scopeAddress === true || scopeAddress === undefined){
 							wx.chooseAddress({
 								success:(result2)=>{
-									console.log(result2);
-									this.address = result2.provinceName + ',' + result2.cityName + ',' + result2.countyName;
+									this.address = result2.provinceName + result2.cityName + result2.countyName;
 									this.addressDetail = result2.detailInfo;
 									this.recycleName = result2.userName;
 									this.phone = result2.telNumber;
