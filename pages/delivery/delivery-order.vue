@@ -132,7 +132,7 @@
 			return {
 				indicatorStyle: `height: 50px;`,
 				year: '',
-				hours: ['09:00-11:00', '11:00-13:00', '13:00-15:00', '17:00-19:00'],
+				hours: ['09:00-11:00', '11:00-13:00', '13:00-15:00', '15:00-17:00', '17:00-19:00'],
 				currentTime: '09:00-11:00',
 				
 				showDate: false,
@@ -310,7 +310,8 @@
 						if(scopeAddress === true || scopeAddress === undefined){
 							wx.chooseAddress({
 								success:(result2)=>{
-									this.address = result2.cityName + ',' + result2.countyName;
+									console.log(result2);
+									this.address = result2.provinceName + ',' + result2.cityName + ',' + result2.countyName;
 									this.addressDetail = result2.detailInfo;
 									this.recycleName = result2.userName;
 									this.phone = result2.telNumber;
