@@ -9,9 +9,10 @@
 	export default {
 		data() {
 			return {
+				id: null,
 				colors:"#fa436a",
 				//模拟后台返回的数据
-				stepData: [ 
+				stepData: [
 					// {
 					// 	name: '提交申请',
 					// 	time: '2023-06-09 20:01:49',
@@ -72,36 +73,35 @@
 			}
 		},
 		methods: {
-			async getInfo() {
-				let result = await this.$api.getInfo({
-					nu: "YT7439343051954",
-					userId: "oMSl85dF9hhBAx_URtFxIkz4SuNA",
-					ordersId: "1753718160589950978"
+			async deliveryGetOrderInfo() {
+				let result = await this.$api.deliveryGetOrderInfo({
+					id: this.id
 				})
-				if(result.message === 'ok') {
-					result.data.forEach((ele, index) => {
-						if(index === 0) {
-							this.stepData.push({
-								time: ele.time,
-								isNow: 1,
-								type: 1,
-								desc: ele.context
-							})
-						}
-						else {
-							this.stepData.push({
-								time: ele.time,
-								isNow: 0,
-								type: 1,
-								desc: ele.context
-							})
-						}
-					})
-				}
+				let logisticsInfo = JSON.parse(result.data.logisticsInfo);
+				console.log(logisticsInfo)
+				logisticsInfo.forEach((ele, index) => {
+					if(index === 0) {
+						this.stepData.push({
+							time: ele.ftime,
+							desc: ele.context,
+							isNow: 1
+						})
+					}
+					else {
+						this.stepData.push({
+							time: ele.ftime,
+							desc: ele.context,
+							isNow: 0
+						})
+					}
+				})
 			}
 		},
 		onShow() {
-			this.getInfo();
+			this.deliveryGetOrderInfo();
+		},
+		onLoad(e) {
+			this.id = e.id;
 		}
 	}
 

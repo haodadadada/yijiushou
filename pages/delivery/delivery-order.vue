@@ -40,7 +40,7 @@
 			<view class="title">快递上门取件</view>
 			<view class="item flex-between" @click="handleChooseTime">
 				<view>取件时间</view>
-				<input type="text" :disabled="true" v-bind:value="totalDays[deliveryUserDay][0] + ' 周' + totalDays[deliveryUserDay][1]" style="color: rgba(166, 166, 166, 1); font-size: 14px;"/>
+				<input type="text" :disabled="true" v-bind:value="reserveTime" style="color: rgba(166, 166, 166, 1); font-size: 14px;"/>
 				<view class="icon-right"><img src="/static/icon/dayuhao.png" alt="" /></view>
 			</view>
 			<view class="item flex-between" @click="handleChooseAddress">
@@ -75,6 +75,11 @@
 					</scroll-view>
 				</view>
 				<view style="line-height: 23px; margin-top: 15px;">请选择预约时间段</view>
+				<picker-view v-if="true" :indicator-style="indicatorStyle" :value="1" @change="bindChange" class="picker-view">
+				     <picker-view-column>
+				         <view class="item-picker" v-for="(item,index) in hours" :key="index">{{item}}</view>
+				     </picker-view-column>
+				 </picker-view>	
 				<view class="date-confirm" @click="confirmDate">确定</view>
 			</view>
 		</u-popup>
@@ -126,16 +131,17 @@
 	export default {
 		data() {
 			return {
+				indicatorStyle: `height: 50px;`,
+				hours: ['09:00-11:00', '11:00-13:00', '13:00-15:00', '17:00-19:00'],
+				currentTime: '09:00-11:00',
+				
 				showDate: false,
-				daysDistance: 7,
-				currentDifference: 0,
+				daysDistance: 3,
 				totalDays: [],
 				currentDayIndex: 0,
 				
 				showAddress: false,
 				
-				longitude: '',
-				latitude: '',
 				address: '',
 				addressDetail: '',
 				recycleName: '',
@@ -149,13 +155,19 @@
 				deliveryUserName: '',
 				deliveryUserPhone: '',
 				deliveryUserDay: 0,
-				
+				deliveryUserTime: '09:00-11:00',
 				province: '浙江省',
 				city: '杭州市',
 				area: '上城区',
 				showPicker: false,
 				
 				showConfirm: false
+			}
+		},
+		computed: {
+			reserveTime() {
+				if(this.totalDays.length === 0) return '';
+				return this.totalDays[this.deliveryUserDay][0] + ',' + this.deliveryUserTime;
 			}
 		},
 		methods: {
@@ -204,13 +216,13 @@
 			},
 			
 			async handleConfirm() {
-				let result = await this.$api.holdOrders({
+				this.showConfirm = false;
+				let result = await this.$api.deliveryPlaceOrder({
 					userId: uni.getStorageSync('openid'),
 					userAddress: this.deliveryUserAddress,
 					userAddressDetail: this.deliveryUserAddressDetail,
 					recycleCategory: this.weight[this.currentWeightIndex].toString(),
-					// reserveTime: this.totalDays[this.currentDayIndex].toString(),
-					reserveTime: moment().add(this.currentDayIndex, 'days').format(),
+					reserveTime: this.reserveTime,
 					phone: this.deliveryUserPhone,
 					userAddreessId: "1751828914228809730",
 				})
@@ -226,7 +238,6 @@
 					this.$tools.toast('网络繁忙请稍后再试');
 					return;
 				}
-				this.showConfirm = false;
 				this.resetData();
 			},
 			async confirmAddress() {
@@ -265,6 +276,7 @@
 			
 			confirmDate() {
 				this.deliveryUserDay = this.currentDayIndex;
+				this.deliveryUserTime = this.currentTime;
 				this.showDate = false;
 			},
 			onsetCity(e) {
@@ -309,15 +321,19 @@
 						}
 					}
 				})
-			}
+			},
+			bindChange(e) {
+				const val = e.detail.value;
+				this.currentTime = this.hours[val[0]];
+			},
 
 		},
 		onShow() {
 			moment.locale('zh-cn');
 			let currentDay = new Date();
-			this.currentDifference = currentDay.getTime();
+			let currentDifference = currentDay.getTime();
 			for(let i = 0; i < this.daysDistance; i++) {
-				this.totalDays.push(moment(this.currentDifference + 1000 * 60 * 60 * 24 * i).format('MM-DD dd').split(" "));
+				this.totalDays.push(moment(currentDifference + 1000 * 60 * 60 * 24 * i).format('MM-DD dd').split(" "));
 			}
 		}
 	}
@@ -339,8 +355,8 @@
 		}
 		.classify-content {
 			transform: translateY(calc(30vw - 50%));
-			width: 90vw;
-			margin-left: 5vw;
+			width: 92vw;
+			margin-left: 4vw;
 			background-color: #fff;
 			border-radius: 10px;
 			padding: 10px;
@@ -353,7 +369,7 @@
 				margin-top: 10px;
 				align-items: flex-end;
 				.classify-item {
-					margin: 0 10px;
+					margin: 0 8px;
 				}
 				.classify-img {
 					width: 80%;
@@ -421,6 +437,8 @@
 			color: #fff;
 		}
 		.date-order {
+			display: flex;
+			flex-direction: column;
 			position: relative;
 			height: 60vh;
 			padding: 5vh 15px 10px;
@@ -462,16 +480,27 @@
 				}
 			}
 			.date-confirm {
-				position: absolute;
-				bottom: 10px;
-				left: 50%;
-				transform: translateX(-50%);
+				margin: 0 auto;
+				margin-top: auto;
+				margin-bottom: 10px;
+				// left: 50%;
+				// transform: translateX(-50%);
 				width: 70%;
 				padding: 10px 0;
 				color: #fff;
 				text-align: center;
 				background: rgba(120, 206, 162, 1);
 				border-radius: 10px;
+			}
+			.picker-view {
+				width: 80%;
+				flex-grow: 1;
+				margin: 0 auto;
+				margin-top: 20rpx;
+			}
+			.item-picker {
+				line-height: 100rpx;
+				text-align: center;
 			}
 		}
 		.address-order {

@@ -108,18 +108,11 @@
 			</view>
 		</view>
 		</view>
-			
-		<!-- <orderStatus :show="show" @closePopup="closePopup"></orderStatus> -->
 	</view>
 </template>
 
 <script>
-// import orderStatus from '../../components/onTakeOrder/onTakeOrder.vue';
-// import userVue from './user.vue';
 export default {
-	// components: {
-	// 	orderStatus
-	// },
 	data() {
 		return {
 			bgColor:'transparent',
@@ -237,6 +230,9 @@ export default {
 		}
 	},
 	methods: {
+		handleClick() {
+			console.log('1111');
+		},
 		closePopup() {
 			this.show = false;
 		},

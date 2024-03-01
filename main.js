@@ -25,8 +25,12 @@ Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
 })
 
+
 App.mpType = 'app'
 const app = new Vue({
 	...App
 })
+
+
+
 app.$mount()

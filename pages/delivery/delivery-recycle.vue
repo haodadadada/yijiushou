@@ -93,8 +93,8 @@
 		}
 		.classify-content {
 			transform: translateY(calc(50vw - 50%));
-			width: 90vw;
-			margin-left: 5vw;
+			width: 92vw;
+			margin-left: 4vw;
 			background-color: #fff;
 			border-radius: 10px;
 			padding: 10px;
@@ -107,7 +107,7 @@
 				align-items: flex-end;
 				margin-top: 10px;
 				.classify-item {
-					margin: 0 10px;
+					margin: 0 8px;
 				}
 				.classify-img {
 					width: 80%;

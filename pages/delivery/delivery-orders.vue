@@ -19,19 +19,14 @@
 					<view class="card-right">
 						<view class="card-info">回收品类: 四季衣物</view>
 						<view class="card-info">预估重量: {{judgeNull(item.recycleCategory)}}</view>
-						<view class="card-info">预约时间: {{judgeNull(initTime(item.reserveTime))}}</view>
+						<view class="card-info">预约时间: {{judgeNull(item.reserveTime)}}</view>
 						<view class="card-info">回收地址: {{judgeNull(item.userAddress + item.userAddressDetail)}}</view>
 						<view class="card-info">联系方式: {{judgeNull(item.phone)}}</view>
 					</view>
 				</view>
-				<view class="card-bottom" v-if="item.orderStatus === 1">
-					<view class="bottom-item" @click="handleChangeInfo(item)">修改信息</view>
-					<view class="bottom-item" @click="goLogistics">查看物流</view>
-					<view class="bottom-item">取消订单</view>
-				</view>
-				<view class="card-bottom" v-if="item.orderStatus === 2">
-					<view class="bottom-item" @click="goLogistics">查看物流</view>
-					<view class="bottom-item">评价</view>
+				<view class="card-bottom" >
+					<view class="bottom-item" @click="goLogistics(item)" v-if="item.orderStatus !== 1">查看物流</view>
+					<view class="bottom-item" v-if="item.orderStatus === 1">取消订单</view>
 				</view>
 			</view>
 		</view>
@@ -42,24 +37,6 @@
 		</view>
 		
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
-		<u-popup :show="showDate" :round="10" mode="bottom" @close="closeDate" @open="openDate">
-			<view class="date-order">
-				<view class="date-title flex-between">
-					<span class="title-left">请选择预约时间</span>
-					<span class="title-right">*可左右滑动选择其它时间</span>
-				</view>
-				<view class="date-scroll">
-					<scroll-view :scroll-x="true" style="white-space: nowrap;">
-						<view class="date-item flex-col flex-center" v-for="(item, index) in totalDays" :key="index" :class="currentDayIndex === index ? 'item-choosing' : 'item-notchoosing'" @click="currentDayIndex = index">
-							<view>{{item[0]}}</view>
-							<view>(周{{item[1]}})</view>
-						</view>
-					</scroll-view>
-				</view>
-				<view style="line-height: 23px; margin-top: 15px;">请选择预约时间段</view>
-				<view class="date-confirm" @click="confirmDate">确定</view>
-			</view>
-		</u-popup>
 	</view>
 </template>
 
@@ -72,6 +49,7 @@
 		},
 		data() {
 			return {
+				indicatorStyle: `height: 50px;`,
 				show:false,
 				tabs: [
 					{
@@ -80,16 +58,23 @@
 					},
 					{
 						id: 1,
-						name: '待回收'
+						name: '待取货'
 					},
 					{
 						id: 2,
-						name: '已完成'
+						name: '待收货'
 					},
 					{
 						id: 3,
 						name: '已取消'
-						
+					},
+					{
+						id: 4,
+						name: '已完成'
+					},
+					{
+						id: 5,
+						name: '已入库'
 					}
 				],
 				orderStatus: 1,
@@ -100,7 +85,7 @@
 				cancelId: '',
 				
 				showDate: false,
-				daysDistance: 7,
+				daysDistance: 3,
 				currentDifference: 0,
 				totalDays: [],
 				currentDayIndex: 0,
@@ -138,6 +123,12 @@
 		onReachBottom() {
 			this.getOrders();
 		},
+		computed: {
+			reserveTime() {
+				if(this.totalDays.length === 0) return '';
+				return this.totalDays[this.currentDayIndex][0] + ',' + this.currentTime;
+			}
+		},
 		methods:{
 			closePopup(){
 				this.show = false
@@ -160,19 +151,26 @@
 			},
 			getOrderStatus(status) {
 				if(status === 1) {
-					return '待回收';
+					return '待取货';
 				}
 				else if(status === 2) {
-					return '已完成';
+					return '待收货';
 				}
 				else if(status === 3) {
 					return '已取消';
+				}
+				else if(status === 4) {
+					return '已完成';
+				}
+				else if(status === 5) {
+					return '已入库';
 				}
 			},
 			async getOrders() {
 				let result = await this.$api.getOrders({
 					userId: uni.getStorageSync('openid')
 				})
+				console.log(result)
 				if(result.code === 200) {
 					this.orders = result.data;
 					this.orders = this.orders.reverse();
@@ -188,17 +186,12 @@
 				this.list = this.orders.filter(ele => {
 					return ele.orderStatus === id;
 				})
-				console.log(this.list);
-			},
-			initTime(time) {
-				return moment(time).format('lll');
 			},
 			handleChangeInfo(item) {
-				
 				this.currentDayIndex = 0;
 				this.showDate = true;
 				this.currentItem = item;
-				let time = moment(item.reserveTime).format('MM-DD dd').split(" ")[0];
+				let time = item.reserveTime.split(',')[0];
 				this.totalDays.some((ele, index) => {
 					if(ele[0] === time) {
 						this.currentDayIndex = index;
@@ -225,17 +218,19 @@
 			async confirmDate() {
 				let result = this.$api.updateInfo({
 					id: this.currentItem.id,
-					userAddressId: this.currentItem.userAddreessId,
-					reserveTime: moment().add(this.currentDayIndex, 'days').format()
+					reserveTime: this.reserveTime
 				})
-				console.log(result);
 				this.showDate = false;
 			},
-			goLogistics() {
+			async goLogistics(item) {
 				uni.navigateTo({
-					url: "/pages/delivery/delivery-logistics"
+					url: `/pages/delivery/delivery-logistics?id=${item.id}`
 				})
-			}
+			},
+			bindChange(e) {
+				const val = e.detail.value;
+				this.currentTime = this.hours[val[0]];
+			},
 		}
 	}
 </script>
@@ -313,59 +308,4 @@
 			}
 		}
 	}
-	.date-order {
-		position: relative;
-		height: 60vh;
-		padding: 5vh 15px 10px;
-		box-sizing: border-box;
-		.date-title {
-			margin-bottom: 15px;
-			.title-left {
-				font-size: 16px;
-				font-weight: 550;
-			}
-			.title-right {
-				font-size: 12px;
-				color: rgba(120, 206, 162, 1);
-			}
-		}
-		.date-scroll {
-			.date-item {
-				display: inline-block;
-				padding: 5px;
-				width: 65px;
-				line-height: 22.5px;
-				margin-right: 15px;
-				font-size: 14px;
-				text-align: center;
-				box-sizing: border-box;
-			}
-			.item-choosing {
-				opacity: 1;
-				border-radius: 2px;
-				background: rgba(120, 206, 162, 0.5);
-				border: 1px solid rgba(120, 206, 162, 1);
-				color: #34cd99;
-			}
-			.item-notchoosing {
-				opacity: 1;
-				border-radius: 2px;
-				background: rgba(229, 229, 229, 1);
-	
-			}
-		}
-		.date-confirm {
-			position: absolute;
-			bottom: 10px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 70%;
-			padding: 10px 0;
-			color: #fff;
-			text-align: center;
-			background: rgba(120, 206, 162, 1);
-			border-radius: 10px;
-		}
-	}
-
 </style>

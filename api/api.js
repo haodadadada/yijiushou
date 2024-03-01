@@ -842,9 +842,9 @@ const getUserAddress = data => {
 		data
 	})
 }
-const holdOrders = data => {
+const deliveryPlaceOrder = data => {
 	return http.post({
-		url: '/holdOrders',
+		url: '/placeOrder',
 		data,
 		header:'application/json',
 	})
@@ -860,6 +860,13 @@ const updateInfo = data => {
 const getInfo = data => {
 	return http.post({
 		url: '/getInfo',
+		data
+	})
+}
+
+const deliveryGetOrderInfo = data => {
+	return http.get({
+		url: '/getOrderInfo',
 		data
 	})
 }
@@ -955,7 +962,8 @@ export default {
 	getOrders,
 	saveUserAddress,
 	getUserAddress,
-	holdOrders,
+	deliveryPlaceOrder,
 	updateInfo,
-	getInfo
+	getInfo,
+	deliveryGetOrderInfo
 }
