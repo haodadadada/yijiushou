@@ -64,7 +64,6 @@
 			<view class="date-order">
 				<view class="date-title flex-between">
 					<span class="title-left">请选择预约时间</span>
-					<span class="title-right">*可左右滑动选择其它时间</span>
 				</view>
 				<view class="date-scroll">
 					<scroll-view :scroll-x="true" style="white-space: nowrap;">
@@ -132,6 +131,7 @@
 		data() {
 			return {
 				indicatorStyle: `height: 50px;`,
+				year: '',
 				hours: ['09:00-11:00', '11:00-13:00', '13:00-15:00', '17:00-19:00'],
 				currentTime: '09:00-11:00',
 				
@@ -219,10 +219,11 @@
 				this.showConfirm = false;
 				let result = await this.$api.deliveryPlaceOrder({
 					userId: uni.getStorageSync('openid'),
+					userName: this.deliveryUserName,
 					userAddress: this.deliveryUserAddress,
 					userAddressDetail: this.deliveryUserAddressDetail,
 					recycleCategory: this.weight[this.currentWeightIndex].toString(),
-					reserveTime: this.reserveTime,
+					reserveTime: this.year + '-' + this.reserveTime,
 					phone: this.deliveryUserPhone,
 					userAddreessId: "1751828914228809730",
 				})
@@ -335,6 +336,7 @@
 			for(let i = 0; i < this.daysDistance; i++) {
 				this.totalDays.push(moment(currentDifference + 1000 * 60 * 60 * 24 * i).format('MM-DD dd').split(" "));
 			}
+			this.year = moment().format('yyyy');
 		}
 	}
 </script>

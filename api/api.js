@@ -870,6 +870,13 @@ const deliveryGetOrderInfo = data => {
 		data
 	})
 }
+
+const deliveryCancelOrder = data => {
+	return http.post({
+		url : '/cancelOrder',
+		data
+	})
+}
 export default {
 	angelApply,
 	cancelOrder,
@@ -965,5 +972,6 @@ export default {
 	deliveryPlaceOrder,
 	updateInfo,
 	getInfo,
-	deliveryGetOrderInfo
+	deliveryGetOrderInfo,
+	deliveryCancelOrder
 }

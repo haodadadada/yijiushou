@@ -15,7 +15,9 @@
 			<view class="card-item" v-for="item in list" :key="item.id">
 				<view class="card-status">{{getOrderStatus(item.orderStatus)}}</view>
 				<view class="card-content">
-					<view class="card-left"></view>
+					<view class="card-left flex-center">
+						<img src="/static/delivery/yifu.png" alt="" style="width: 70%;" mode="widthFix" />
+					</view>
 					<view class="card-right">
 						<view class="card-info">回收品类: 四季衣物</view>
 						<view class="card-info">预估重量: {{judgeNull(item.recycleCategory)}}</view>
@@ -26,7 +28,7 @@
 				</view>
 				<view class="card-bottom" >
 					<view class="bottom-item" @click="goLogistics(item)" v-if="item.orderStatus !== 1">查看物流</view>
-					<view class="bottom-item" v-if="item.orderStatus === 1">取消订单</view>
+					<view class="bottom-item" v-if="item.orderStatus === 1" @click="cancelOrder(item)">取消订单</view>
 				</view>
 			</view>
 		</view>
@@ -37,6 +39,11 @@
 		</view>
 		
 		<orderStatus :show="show" @closePopup="closePopup"></orderStatus>
+		
+		<u-modal :show="isCancel" @confirm="confirmCancel()" @cancel="isCancel = false" showCancelButton=true>
+			<view style="font-size: 20px; margin: 0 auto;">你确定取消订单吗?</view>
+		</u-modal>
+		
 	</view>
 </template>
 
@@ -62,7 +69,7 @@
 					},
 					{
 						id: 2,
-						name: '待收货'
+						name: '物流中'
 					},
 					{
 						id: 3,
@@ -90,7 +97,10 @@
 				totalDays: [],
 				currentDayIndex: 0,
 				
-				currentItem: []
+				currentItem: [],
+				
+				isCancel: false,
+				currentId: null
 			};
 		},
 		onShareAppMessage() {},
@@ -170,7 +180,6 @@
 				let result = await this.$api.getOrders({
 					userId: uni.getStorageSync('openid')
 				})
-				console.log(result)
 				if(result.code === 200) {
 					this.orders = result.data;
 					this.orders = this.orders.reverse();
@@ -231,6 +240,22 @@
 				const val = e.detail.value;
 				this.currentTime = this.hours[val[0]];
 			},
+			cancelOrder(item) {
+				this.currentId = item.id;
+				this.isCancel = true;
+			},
+			async confirmCancel() {
+				let result = await this.$api.deliveryCancelOrder({
+					orderId: this.currentId
+				})
+				if(result.code === 200 && result.data) {
+					this.$tools.toast('取消成功');
+				}
+				else if(!result.data){
+					this.$tools.toast('快递已接单无法取消');
+				}
+				this.isCancel = false;
+			}
 		}
 	}
 </script>
@@ -278,7 +303,6 @@
 					width: 70px;
 					height: 70px;
 					border-radius: 10px;
-					background-color: #ddd;
 					margin-right: 20px;
 				}
 				.card-right {

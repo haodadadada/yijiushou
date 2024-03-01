@@ -429,7 +429,7 @@
 				"pagePath": "pages/placeOrder/placeOrder",
 				"iconPath": "static/new9.png",
 				"selectedIconPath": "static/new10.png",
-				"text": "预约"
+				"text": "校园回收"
 			}, 
 			{
 				"pagePath": "pages/delivery/delivery-recycle",

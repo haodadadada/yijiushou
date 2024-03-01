@@ -83,7 +83,6 @@ const verifyAddress = (param) => {
  icon	 图标样式	默认为空
  */
 const toast = (title, icon) => {
-	console.log('111')
 	uni.showToast({
 		title,
 		icon: icon || 'none'
