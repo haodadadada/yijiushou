@@ -85,7 +85,7 @@
 					<image :src="this.openid === '' ? countryOrders[0].icon1 : countryOrders[0].icon2" mode="aspectFill"></image>
 					<view>{{countryOrders[0].title}}</view>
 				</view>
-				<view class="item" @click="goCountryOrder(2)">
+				<view class="item" @click="goCountryOrder(4)">
 					<image :src="this.openid === '' ? countryOrders[1].icon1 : countryOrders[1].icon2" mode="aspectFill"></image>
 					<view>{{countryOrders[1].title}}</view>
 				</view>
