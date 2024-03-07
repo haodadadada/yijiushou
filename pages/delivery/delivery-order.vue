@@ -233,29 +233,29 @@
 			async handleConfirm() {
 				this.showConfirm = false;
 				console.log(this.year + '-' + this.reserveTime)
-				// let result = await this.$api.deliveryPlaceOrder({
-				// 	userId: uni.getStorageSync('openid'),
-				// 	userName: this.deliveryUserName,
-				// 	userAddress: this.deliveryUserAddress,
-				// 	userAddressDetail: this.deliveryUserAddressDetail,
-				// 	recycleCategory: this.weight[this.currentWeightIndex].toString(),
-				// 	reserveTime: this.year + '-' + this.reserveTime,
-				// 	phone: this.deliveryUserPhone,
-				// 	userAddreessId: "1751828914228809730",
-				// })
-				// if(result.code === 200) {
-				// 	this.$tools.toast('提交成功');
-				// 	setTimeout(() => {
-				// 		uni.navigateTo({
-				// 			url: '/pages/delivery/delivery-orders'
-				// 		})
-				// 	}, 500)
-				// }
-				// else {
-				// 	this.$tools.toast('网络繁忙请稍后再试');
-				// 	return;
-				// }
-				// this.resetData();
+				let result = await this.$api.deliveryPlaceOrder({
+					userId: uni.getStorageSync('openid'),
+					userName: this.deliveryUserName,
+					userAddress: this.deliveryUserAddress,
+					userAddressDetail: this.deliveryUserAddressDetail,
+					recycleCategory: this.weight[this.currentWeightIndex].toString(),
+					reserveTime: this.year + '-' + this.reserveTime,
+					phone: this.deliveryUserPhone,
+					userAddreessId: "1751828914228809730",
+				})
+				if(result.code === 200) {
+					this.$tools.toast('提交成功');
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/delivery/delivery-orders'
+						})
+					}, 500)
+				}
+				else {
+					this.$tools.toast('网络繁忙请稍后再试');
+					return;
+				}
+				this.resetData();
 			},
 			async confirmAddress() {
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
