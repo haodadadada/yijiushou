@@ -85,13 +85,9 @@
 					<image :src="this.openid === '' ? countryOrders[0].icon1 : countryOrders[0].icon2" mode="aspectFill"></image>
 					<view>{{countryOrders[0].title}}</view>
 				</view>
-				<view class="item" @click="goCountryOrder(4)">
-					<image :src="this.openid === '' ? countryOrders[1].icon1 : countryOrders[1].icon2" mode="aspectFill"></image>
-					<view>{{countryOrders[1].title}}</view>
-				</view>
-				<view class="item" @click="goCountryOrder(3)">
-					<image :src="this.openid === '' ? countryOrders[2].icon1 : countryOrders[2].icon2" mode="aspectFill"></image>
-					<view>{{countryOrders[2].title}}</view>
+				<view class="item" @click="goCountryAddress()">
+					<image :src="this.openid === '' ? schoolOrders[1].icon1 : schoolOrders[1].icon2" mode="aspectFill"></image>
+					<view>{{schoolOrders[1].title}}</view>
 				</view>
 			</view>
 		</view>
@@ -158,19 +154,14 @@ export default {
 					id: 1,
 					icon1: require('../../static/new-user9.png'),
 					icon2: require('../../static/new-user10.png'),
-					title: '待回收',
+					title: '我的订单',
 				},
 				{
 					id: 2,
-					icon1: require('../../static/new-user11.png'),
-					icon2: require('../../static/new-user12.png'),
-					title: '已完成',
-				},
-				{
-					id: 3,
-					icon1: require('../../static/new-user13.png'),
-					icon2: require('../../static/new-user14.png'),
-					title: '已取消',
+					icon1: require('../../static/new-user5.png'),
+					icon2: require('../../static/new-user6.png'),
+					title: '我的地址',
+					show: true
 				},
 			],
 			tools: [
@@ -292,6 +283,16 @@ export default {
 			}
 			uni.navigateTo({
 				url: `/pages/delivery/delivery-orders?status=${status}`
+			})
+		},
+		
+		goCountryAddress() {
+			if (!uni.getStorageSync('openid')) {
+				this.$tools.toast('请先登录');
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/delivery/delivery-addressbook'
 			})
 		},
 		

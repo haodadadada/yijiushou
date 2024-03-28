@@ -250,6 +250,7 @@
 				})
 				if(result.code === 200 && result.data) {
 					this.$tools.toast('取消成功');
+					this.getOrders();
 				}
 				else if(!result.data){
 					this.$tools.toast('快递已接单无法取消');

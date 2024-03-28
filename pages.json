@@ -119,13 +119,6 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		// {
-		// 	"path": "pages/questionnaire/questionnaire",
-		// 	"style": {
-		// 		"navigationBarTitleText": "问卷调查",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
 		{
 			"path": "pages/shop-detail/shop-detail",
 			"style": {
@@ -147,124 +140,6 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		// {
-		// 	"path": "pages/activity/activity",
-		// 	"style": {
-		// 		"navigationBarTitleText": "活动",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		
-		
-		// {
-		// 	"path": "pages/addCrowdFunding/addCrowdFunding",
-		// 	"style": {
-		// 		"navigationBarTitleText": "趣味众筹",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/addCrowdFundingSecond/addCrowdFundingSecond",
-		// 	"style": {
-		// 		"navigationBarTitleText": "趣味众筹",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationBarBackgroundColor": "#34cd99"
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/crowdFundingOrder/crowdFundingOrder",
-		// 	"style": {
-		// 		"navigationBarTitleText": "众筹订单",
-		// 		"enablePullDownRefresh": false,
-		// 		"navigationBarBackgroundColor": "#34cd99"
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/crowdFundingOrderDetail/crowdFundingOrderDetail",
-		// 	"style": {
-		// 		"navigationBarTitleText": "众筹订单",
-		// 		"enablePullDownRefresh": true,
-		// 		"navigationBarBackgroundColor": "#34cd99"
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/fundingSquare/fundingSquare",
-		// 	"style": {
-		// 		"navigationBarTitleText": "众筹广场",
-		// 		"enablePullDownRefresh": true,
-		// 		"navigationBarBackgroundColor": "#34cd99"
-		// 	}
-		// },
-		
-		// {
-		// 	"path": "pages/cat/cat-explain/cat-explain",
-		// 	"style": {
-		// 		"navigationBarTitleText": "校喵池",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/cat/cat-upload/cat-upload",
-		// 	"style": {
-		// 		"navigationBarTitleText": "校喵池",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/cat/cat-detail/cat-detail",
-		// 	"style": {
-		// 		"navigationBarTitleText": "校喵池",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/cat/cat-room/cat-room",
-		// 	"style": {
-		// 		"navigationBarTitleText": "校喵池",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// }
-  //       ,{
-  //           "path" : "pages/cat/cat-science/cat-science",
-  //           "style" :                                                                                    
-  //           {
-  //               "navigationBarTitleText": "",
-  //               "enablePullDownRefresh": false
-  //           }
-            
-  //       }
-  //       ,{
-  //           "path" : "pages/cat/cat-info/cat-info",
-  //           "style" :                                                                                    
-  //           {
-  //               "navigationBarTitleText": "",
-  //               "enablePullDownRefresh": false
-  //           }
-            
-  //       }
-  //       ,{
-  //           "path" : "pages/cat/cat-info-detail/cat-info-detail",
-  //           "style" :                                                                                    
-  //           {
-  //               "navigationBarTitleText": "",
-  //               "enablePullDownRefresh": false
-  //           }
-  //       },
-		// {
-		//     "path" : "pages/cat/cat-upload-img/cat-upload-img",
-		//     "style" :                                                                                    
-		//     {
-		//         "navigationBarTitleText": "图片上传栏",
-		//         "enablePullDownRefresh": false
-		//     }
-		// },
-		// {
-		// 	"path": "pages/cat/cat-feedback/cat-feedback",
-		// 	"style": {
-		// 		"navigationBarTitleText": "留言反馈",
-		// 		"enablePullDownRefresh": false
-		// 	}
-		// },
 		{
 			"path": "pages/delivery/delivery-recycle",
 			"style": {
@@ -290,6 +165,20 @@
 			"path": "pages/delivery/delivery-logistics",
 			"style": {
 				"navigationBarTitleText": "快递详情",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/delivery/delivery-addressbook",
+			"style": {
+				"navigationBarTitleText": "地址簿",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/delivery/delivery-edit",
+			"style": {
+				"navigationBarTitleText": "编辑地址",
 				"enablePullDownRefresh": true
 			}
 		}

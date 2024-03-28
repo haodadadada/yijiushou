@@ -82,11 +82,12 @@
 				<view class="date-confirm" @click="confirmDate">确定</view>
 			</view>
 		</u-popup>
-		<u-modal :show="showAddress" :closeOnClickOverlay="true" @close="showAddress = false" :showConfirmButton="false">
+		<u-modal :show="showAddress" :closeOnClickOverlay="false" @close="showAddress = false" :showConfirmButton="false">
 			<view class="address-order flex-col flex-between">
 				<view style="width: 100%;">
 					<view class="top-authroize flex-between">
-						<span @click="chooseAddress">使用微信地址</span>
+						<span>使用微信地址</span>
+						<span @click="handleCloseAddress">关闭</span>
 					</view>
 					<view class="address-title">新增回收信息</view>
 					<view class="address-content">
@@ -114,7 +115,10 @@
 					</view>
 				</view>
 				<!-- <view class="address-confirm" @click="saveAddressInfo">保存信息</view> -->
-				<view class="address-confirm" @click="confirmAddress">确认信息</view>
+				<view class="flex-between" style="width: 90%; margin: 0 auto;">
+					<view class="address-btn flex-1 mr-20" @click="chooseAddress">地址簿</view>
+					<view class="address-btn flex-1" @click="confirmAddress">确认信息</view>
+				</view>
 			</view>
 			<!-- 省市区选择 province city area初始省市区设置 show:是否显示  @changeClick：更改省市区事件 @sureSelectArea：确认事件 @hideShow：隐藏事件-->
 			<cc-selectDity :province="province" :city="city" :area="area" :show="showPicker" @sureSelectArea="onsetCity" @hideShow="onhideShow"  @changeClick="changeClick"></cc-selectDity>
@@ -122,6 +126,33 @@
 		<u-modal :show="showConfirm" @confirm="handleConfirm()" @cancel="showConfirm = false" confirmColor="#6cf" showCancelButton=true>
 			<view style="line-height: 15vh; font-size: 16px;">请确认提交信息</view>
 		</u-modal>
+		<u-popup :show="addressPopupShow" mode="bottom" @close="addressPopupShow = false" :closeOnClickOverlay="false">
+			<view class="p-30" style="border-top: 1px solid #ccc; max-height: 40vh; overflow: auto;">
+				<view class="header flex-end">
+					<span @click="addressPopupShow = false">关闭</span>
+				</view>
+				<view class="card">
+					<view class="item border-b" v-for="item in list" :key="item.id" >
+						<view @click="handleChooseBook(item)">
+							<view class="flex-between">
+								<view class="size-30">{{item.name}}<text class="ml-30 gray-2">{{item.phone}}</text></view>
+							</view>
+							<view class="address mb-15">
+								<view class="size-30 gray-9">{{item.address}} {{item.detailAddress}}</view>
+							</view>
+						</view>
+						<view class="flex-end mt-15">
+							<view class="size-30 mr-30" style="color: gray;" @click.stop="editAddress(item.id)">编辑</view>
+							<view class="size-30" style="color: gray;" @click.stop="delAddress(item.id)">删除</view>
+						</view>
+					</view>
+				</view>
+				<view class="btn" @click="addAddress">
+					<image src="../../static/address_btn_add_new@2x.png" mode="aspectFill"></image>
+					添加地址
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -161,7 +192,10 @@
 				area: '上城区',
 				showPicker: false,
 				
-				showConfirm: false
+				showConfirm: false,
+				
+				addressPopupShow: false,
+				list: [],
 			}
 		},
 		computed: {
@@ -232,7 +266,6 @@
 			
 			async handleConfirm() {
 				this.showConfirm = false;
-				console.log(this.year + '-' + this.reserveTime)
 				let result = await this.$api.deliveryPlaceOrder({
 					userId: uni.getStorageSync('openid'),
 					userName: this.deliveryUserName,
@@ -257,7 +290,12 @@
 				}
 				this.resetData();
 			},
+			
 			async confirmAddress() {
+				if(this.addressPopupShow) {
+					this.$tools.toast('请关闭地址簿');
+					return;
+				}
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
 					this.$tools.toast('请完整填写信息');
 					return;
@@ -269,13 +307,12 @@
 				this.showAddress = false;
 			},
 			
-			
 			async saveAddressInfo() {
 				if(!this.address || !this.addressDetail || !this.recycleName || !this.phone) {
 					this.$tools.toast('请完整填写信息');
 					return;
 				}
-				let result = await this.$api.saveUserAddress({
+				let result = await this.$api.deliverySaveAddress({
 					useId: uni.getStorageSync('openid'),
 					name: this.recycleName,
 					phone: this.phone,
@@ -288,6 +325,7 @@
 				else {
 					this.$tools.toast('网络繁忙请稍后再试');
 				}
+				this.showAddress = false;
 			},
 			
 			
@@ -324,30 +362,58 @@
 			
 			
 			async chooseAddress() {
-				wx.getSetting({
-					success:(result1)=>{
-						const scopeAddress = result1.authSetting["scope.address"];
-						if(scopeAddress === true || scopeAddress === undefined){
-							wx.chooseAddress({
-								success:(result2)=>{
-									this.address = result2.provinceName + result2.cityName + result2.countyName;
-									this.addressDetail = result2.detailInfo;
-									this.recycleName = result2.userName;
-									this.phone = result2.telNumber;
-								}
-							})
-						}
-						else {
-							this.$tools.toast('请授权获取地址信息');
-						}
-					}
-				})
+				// wx.getSetting({
+				// 	success:(result1)=>{
+				// 		const scopeAddress = result1.authSetting["scope.address"];
+				// 		if(scopeAddress === true || scopeAddress === undefined){
+				// 			wx.chooseAddress({
+				// 				success:(result2)=>{
+				// 					this.address = result2.provinceName + result2.cityName + result2.countyName;
+				// 					this.addressDetail = result2.detailInfo;
+				// 					this.recycleName = result2.userName;
+				// 					this.phone = result2.telNumber;
+				// 				}
+				// 			})
+				// 		}
+				// 		else {
+				// 			this.$tools.toast('请授权获取地址信息');
+				// 		}
+				// 	}
+				// })
+				
+				this.addressPopupShow = true;
 			},
 			bindChange(e) {
 				const val = e.detail.value;
 				this.currentTime = this.hours[val[0]];
 			},
-
+			
+			handleCloseAddress() {
+				if(this.addressPopupShow) {
+					this.$tools.toast('请关闭地址簿');
+					return;
+				}
+				this.showAddress = false;
+			},
+			async getUserAddress() {
+				let result = await this.$api.getUserAddress({
+					userId: uni.getStorageSync('openid')
+				});
+				if(result.code !== 200) {
+					this.$tools.toast('获取地址失败');
+					return;
+				}
+				else {
+					this.list = result.data;
+				}
+			},
+			handleChooseBook(item) {
+				this.address = item.address;
+				this.addressDetail = item.detailAddress;
+				this.recycleName = item.name;
+				this.phone = item.phone;
+				this.addressPopupShow = false;
+			}
 		},
 		onShow() {
 			moment.locale('zh-cn');
@@ -357,6 +423,7 @@
 				this.totalDays.push(moment(currentDifference + 1000 * 60 * 60 * 24 * i).format('MM-DD dd').split(" "));
 			}
 			this.year = moment().format('yyyy');
+			this.getUserAddress();
 		}
 	}
 </script>
@@ -564,17 +631,47 @@
 					border-bottom: 1px solid #ccc;
 				}
 			}
-			.address-confirm {
-				width: 70%;
-				border-radius: 15px;
+			.address-btn {
 				background: rgba(120, 206, 162, 1);
 				color: #fff;
 				box-sizing: border-box;
 				text-align: center;
 				margin-bottom: 15px;
 				margin-top: 15px;
-				padding: 5px 0;
+				padding: 10px 0;
 			}
 		}
+	}
+	
+	.card {
+		.item {
+			padding: 15upx;
+			border-radius: 12upx;
+			background-color: #fff;
+			.address {
+				display: flex;
+	
+				.icon {
+					margin-top: 4upx;
+				}
+			}
+	
+			.icon {
+				min-width: 32upx;
+				width: 32upx;
+				height: 32upx;
+			}
+	
+			.radio {
+				transform: scale(.9);
+			}
+		}
+	}
+	
+	.btn {
+		margin-top: 28upx;
+		background-color: #34cd99;
+		line-height: 0;
+		padding: 10px 0;
 	}
 </style>
