@@ -34,7 +34,7 @@
 			<view class="clearfix" style="">
 				<view class="menu" >
 					<view class="item" @click="goCatRoom">
-						<img src="../../static/new4.png" alt="指南">
+						<img src="../../static/cat/cat.png" alt="校喵">
 						<span class="title">校喵池</span>
 					</view>
 					<view class="item" @click="openPrice">

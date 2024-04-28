@@ -81,10 +81,8 @@
 								},
 								success: (uploadFileRes) => {
 									let res = JSON.parse(uploadFileRes.data);
-									console.log(res.data[0])
 									this.catImgs.push(res.data[0]);
 									this.catImgString = this.catImgs.toString();
-									console.log(this.catImgString);
 								},
 								fail: err => {
 									console.log(err);
@@ -106,12 +104,10 @@
 					uploadUser: this.userInfo.openid,
 					userPhone: this.userInfo.phone
 				})
-				console.log(res1);
 				let res2 = await this.$api.picturesToCat({
 					imgUrls: this.catImgString,
 					catUploadId: res1.data.id
 				})
-				console.log(res2);
 			}
 		},
 		onLoad() {

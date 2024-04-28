@@ -14,7 +14,7 @@
 					</view>
 				</view>
 				<view class="flex-end mt-15">
-					<view class="size-30 mr-30" style="color: gray;" @click.stop="editAddress(item.id)">编辑</view>
+					<view class="size-30 mr-30" style="color: gray;" @click.stop="editAddress(item)">编辑</view>
 					<view class="size-30" style="color: gray;" @click.stop="delAddress(item.id)">删除</view>
 				</view>
 			</view>
@@ -35,36 +35,36 @@
 			};
 		},
 		onLoad() {
-			this.getList()
 		},
 		onShow() {
 			this.getUserAddress()
 		},
 		onPullDownRefresh() {
 			this.list = []
-			this.getList()
 		},
 		methods: {
-			// 获取地址列表
-			getList() {
-				
-			},
 			// 删除地址
 			delAddress(id) {
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除地址吗？',
 					confirmColor: '#34cd99',
-					success: (res) => {
+					success: async (res) => {
 						if (res.confirm) {
-				
+							let result = await this.$api.deleteAddress({
+								id
+							})
+							if(result.code === 200) {
+								this.$tools.toast('删除成功');
+								this.getUserAddress();
+							}
 						}
 					}
 				})
 			},
-			editAddress(id) {
+			editAddress(item) {
 				uni.navigateTo({
-					url: '/pages/delivery/delivery-edit'
+					url: `/pages/delivery/delivery-edit?editInfo=${JSON.stringify(item)}`
 				})
 			},
 			addAddress() {

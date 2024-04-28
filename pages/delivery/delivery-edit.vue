@@ -7,7 +7,7 @@
 			</view>
 			<view class="input">
 				<text>手机号</text>
-				<input class="flex-1" type="text" value="" placeholder="请输入手机号码" v-model="userPhone" />
+				<input class="flex-1" type="number" value="" placeholder="请输入手机号码" v-model="userPhone" />
 			</view>
 			<view class="input" @click="handleShowPicker">
 			  <text>地区</text>
@@ -40,12 +40,24 @@
 				city: '杭州市',
 				area: '上城区',
 				showPicker: false,
+				
+				editInfo: {}
 			};
 		},
 		computed: {
 		},
 		onLoad(e) {
-
+			if('editInfo' in e) {
+				this.editInfo = JSON.parse(e.editInfo);
+				if('address' in this.editInfo && 'phone' in this.editInfo) {
+					this.userName = this.editInfo.name;
+					this.userPhone = this.editInfo.phone;
+					this.address = this.editInfo.address;
+					this.addressDetail = this.editInfo.detailAddress;
+					this.userId = this.editInfo.userId;
+					this.id = this.editInfo.id;
+				}
+			}
 		},
 		onShow() {
 
@@ -71,21 +83,35 @@
 						
 				} else {
 					uni.showToast({
-						title: '请填写地址信息',
+						title: '请填写完整信息',
 						icon: 'none'
 					});
 				}
 			},
 			// 修改地址
-			edit() {
+			async edit() {
 				if (this.userName && this.userPhone && this.address && this.addressDetail) {
 					if(!this.$tools.verifyTelPhone(this.userPhone)) {
 						this.$tools.toast('请输入正确的手机格式');
 						return
 					}
+					let result = await this.$api.updateAddress({
+						id: this.id,
+						userId: this.userId,
+						name: this.userName,
+						phone: this.userPhone,
+						address: this.address,
+						detailAddress: this.addressDetail
+					})
+					if(result.code === 200) {
+						this.$tools.toast('修改成功');
+						setTimeout(() => {
+							uni.navigateBack(-1);
+						}, 500)
+					}
 				} else {
 					uni.showToast({
-						title: '请填写地址信息',
+						title: '请填写完整信息',
 						icon: 'none'
 					});
 				}

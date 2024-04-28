@@ -2,7 +2,7 @@ import Vue from "vue"
 let startTestModel = true //开测试模式
 let BASE_URL=''
 const DEV_BASE_URL = 'http://110.42.228.141:10010'
-// const DEV_BASE_URL = 'http://192.168.1.219:10010'
+// const DEV_BASE_URL = 'https://www.19so.net/user'
 const PROD_BASE_URL = 'https://www.19so.net/user'// 接口域名
 const IMG_URL = ''  // 图片域名
 // 声明 测试模式
@@ -236,11 +236,92 @@ const put = async (options) => {
 	})
 }
 
+const del = async (options) => {
+	return new Promise((resolve, reject) => {
+		uni.showLoading({
+			title: '加载中..'
+		})
+		try {
+			if (process.env.NODE_ENV === 'development') {
+				BASE_URL=DEV_BASE_URL;
+			} else {
+				BASE_URL=PROD_BASE_URL;
+			}
+			uni.request({
+				url: (options.BASE_URL || BASE_URL) + options.url,
+				method: 'DELETE',
+				data: options.data,
+				header: {
+					'content-Type': options.header || 'application/x-www-form-urlencoded',
+				},
+				success: res => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+					if (res.statusCode == 200) {
+						if(res.data.code==-1){
+							uni.showModal({
+								title:'请先登录',
+								showCancel:false,
+								success: (res) => {
+									if(res.confirm){
+										uni.navigateTo({
+											url:'/pages/login/login'
+										})
+									}
+								}
+							})
+						}else{
+							resolve(res.data)
+						}
+					}
+					if (res.statusCode == 401) {
+						uni.showToast({
+							title: '请先登录',
+							icon: 'none'
+						})
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/user/user',
+							})
+						}, 50)
+					}
+					if (res.statusCode == 500) {
+						uni.showToast({
+							title: '系统错误，请稍后重试',
+							icon: 'none'
+						})
+					}
+					
+					if(res.statusCode == 400) {
+						reject(res);
+					}
+				},
+				fail: err => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+					reject(err.data)
+				},
+				complete: () => {
+					uni.stopPullDownRefresh()
+					uni.hideLoading()
+				}
+			})
+		} catch (e) {
+			uni.stopPullDownRefresh()
+			uni.hideLoading()
+			uni.showToast({
+				title: '服务器或网络异常，请稍候重试',
+				icon: 'none'
+			})
+		}
+	})
+}
 
 export default {
 	BASE_URL,
 	get,
 	post,
+	del,
 	put,
 	IMG_URL
 }

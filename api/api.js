@@ -878,6 +878,21 @@ const deliveryCancelOrder = data => {
 	})
 }
 
+const deleteAddress = data => {
+	return http.del({
+		url: '/deleteAddress',
+		data
+	})
+}
+
+const updateAddress = data => {
+	return http.put({
+		url: '/updateAddress',
+		data,
+		header:'application/json'
+	})
+}
+
 
 export default {
 	angelApply,
@@ -975,5 +990,7 @@ export default {
 	getInfo,
 	deliveryGetOrderInfo,
 	deliveryCancelOrder,
-	deliverySaveAddress
+	deliverySaveAddress,
+	deleteAddress,
+	updateAddress
 }

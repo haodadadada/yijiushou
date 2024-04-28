@@ -86,7 +86,7 @@
 			<view class="address-order flex-col flex-between">
 				<view style="width: 100%;">
 					<view class="top-authroize flex-between">
-						<span>使用微信地址</span>
+						<span @click="chooseWxAddress">使用微信地址</span>
 						<span @click="handleCloseAddress">关闭</span>
 					</view>
 					<view class="address-title">新增回收信息</view>
@@ -142,7 +142,7 @@
 							</view>
 						</view>
 						<view class="flex-end mt-15">
-							<view class="size-30 mr-30" style="color: gray;" @click.stop="editAddress(item.id)">编辑</view>
+							<view class="size-30 mr-30" style="color: gray;" @click.stop="editAddress(item)">编辑</view>
 							<view class="size-30" style="color: gray;" @click.stop="delAddress(item.id)">删除</view>
 						</view>
 					</view>
@@ -362,27 +362,30 @@
 			
 			
 			async chooseAddress() {
-				// wx.getSetting({
-				// 	success:(result1)=>{
-				// 		const scopeAddress = result1.authSetting["scope.address"];
-				// 		if(scopeAddress === true || scopeAddress === undefined){
-				// 			wx.chooseAddress({
-				// 				success:(result2)=>{
-				// 					this.address = result2.provinceName + result2.cityName + result2.countyName;
-				// 					this.addressDetail = result2.detailInfo;
-				// 					this.recycleName = result2.userName;
-				// 					this.phone = result2.telNumber;
-				// 				}
-				// 			})
-				// 		}
-				// 		else {
-				// 			this.$tools.toast('请授权获取地址信息');
-				// 		}
-				// 	}
-				// })
-				
 				this.addressPopupShow = true;
 			},
+			
+			chooseWxAddress() {
+				wx.getSetting({
+					success:(result1)=>{
+						const scopeAddress = result1.authSetting["scope.address"];
+						if(scopeAddress === true || scopeAddress === undefined){
+							wx.chooseAddress({
+								success:(result2)=>{
+									this.address = result2.provinceName + result2.cityName + result2.countyName;
+									this.addressDetail = result2.detailInfo;
+									this.recycleName = result2.userName;
+									this.phone = result2.telNumber;
+								}
+							})
+						}
+						else {
+							this.$tools.toast('请授权获取地址信息');
+						}
+					}
+				})
+			},
+			
 			bindChange(e) {
 				const val = e.detail.value;
 				this.currentTime = this.hours[val[0]];
@@ -404,7 +407,7 @@
 					return;
 				}
 				else {
-					this.list = result.data;
+					this.list = result.data.reverse();
 				}
 			},
 			handleChooseBook(item) {
@@ -413,7 +416,36 @@
 				this.recycleName = item.name;
 				this.phone = item.phone;
 				this.addressPopupShow = false;
-			}
+			},
+			
+			delAddress(id) {
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除地址吗？',
+					confirmColor: '#34cd99',
+					success: async (res) => {
+						if (res.confirm) {
+							let result = await this.$api.deleteAddress({
+								id
+							})
+							if(result.code === 200) {
+								this.$tools.toast('删除成功');
+								this.getUserAddress();
+							}
+						}
+					}
+				})
+			},
+			editAddress(item) {
+				uni.navigateTo({
+					url: `/pages/delivery/delivery-edit?editInfo=${JSON.stringify(item)}`
+				})
+			},
+			addAddress() {
+				uni.navigateTo({
+					url: '/pages/delivery/delivery-edit'
+				})
+			},
 		},
 		onShow() {
 			moment.locale('zh-cn');
